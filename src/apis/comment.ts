@@ -1,4 +1,4 @@
-import { PostCommentType, ResponseType, PatchCommentType, DeleteComment, ListItemType } from '../schema/commentSchema';
+import { PostCommentType, ResponseType, PatchCommentType, DeleteCommentType, ListItemType } from '../schema/commentSchema';
 import httpClient from '.';
 
 // 댓글 등록
@@ -23,7 +23,7 @@ export const patchComment = async (id: number, request: PatchCommentType): Promi
 };
 
 // 댓글 삭제
-export const deleteComment = async (request: DeleteComment): Promise<{ id: number }> => {
+export const deleteComment = async (request: DeleteCommentType): Promise<{ id: number }> => {
   const response = await httpClient.delete(`/comments/${request.id}`);
   return response.data;
 };

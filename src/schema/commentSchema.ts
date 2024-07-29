@@ -48,4 +48,4 @@ export type PostCommentType = z.infer<typeof PostComment>;
 export type ResponseType = z.infer<typeof ResponseSchema>;
 export type ListItemType = z.infer<typeof ListItemSchema>;
 export type PatchCommentType = z.infer<typeof PatchComment>;
-export type DeleteComment = z.infer<typeof DeleteComment>;
+export type DeleteCommentType = z.infer<typeof DeleteComment>;
