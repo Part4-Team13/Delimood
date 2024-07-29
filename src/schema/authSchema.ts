@@ -7,7 +7,10 @@ export const SignUpRequest = z.object({
   passwordConfirmation: z.string(),
 });
 
-export type SignUpRequestType = z.infer<typeof SignUpRequest>;
+export const LoginRequest = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
 export const UserSchema = z.object({
   id: z.number(),
@@ -25,5 +28,7 @@ export const LoginResponse = z.object({
   refreshToken: z.string(),
 });
 
+export type SignUpRequestType = z.infer<typeof SignUpRequest>;
+export type LoginRequestType = z.infer<typeof SignUpRequest>;
 export type LoginResponseType = z.infer<typeof LoginResponse>;
 export type SignUpResponseType = LoginResponseType;

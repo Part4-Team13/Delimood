@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { LoginResponseType, SignUpRequestType, SignUpResponseType } from '../schema/authSchema';
+import { LoginRequestType, LoginResponseType, SignUpRequestType, SignUpResponseType } from '../schema/authSchema';
 import { login, signUp } from '../apis/auth';
 import { MutationOptions } from '../types/query';
 
@@ -10,9 +10,9 @@ export const useSignUp = (options: MutationOptions<SignUpRequestType, SignUpResp
   });
 };
 
-export const useLogin = (options: MutationOptions<{ email: string; password: string }, LoginResponseType>) => {
+export const useLogin = (options: MutationOptions<LoginRequestType, LoginResponseType>) => {
   return useMutation({
-    mutationFn: ({ email, password }) => login(email, password),
+    mutationFn: (data: LoginRequestType) => login(data),
     ...options,
   });
 };

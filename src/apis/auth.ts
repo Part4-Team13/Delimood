@@ -1,4 +1,4 @@
-import { SignUpRequestType, SignUpResponseType, LoginResponseType } from '../schema/authSchema';
+import { SignUpRequestType, SignUpResponseType, LoginRequestType, LoginResponseType } from '../schema/authSchema';
 import httpClient from '.';
 
 export const signUp = async (data: SignUpRequestType): Promise<SignUpResponseType> => {
@@ -6,7 +6,7 @@ export const signUp = async (data: SignUpRequestType): Promise<SignUpResponseTyp
   return response.data;
 };
 
-export const login = async (email: string, password: string): Promise<LoginResponseType> => {
-  const response = await httpClient.post('/auth/signIn', { email, password });
+export const login = async (data: LoginRequestType): Promise<LoginResponseType> => {
+  const response = await httpClient.post('/auth/signIn', data);
   return response.data;
 };
