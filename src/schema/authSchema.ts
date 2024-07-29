@@ -1,5 +1,14 @@
 import * as z from 'zod';
 
+export const SignUpRequest = z.object({
+  email: z.string().email(),
+  nickname: z.string(),
+  password: z.string(),
+  passwordConfirmation: z.string(),
+});
+
+export type SignUpRequestType = z.infer<typeof SignUpRequest>;
+
 export const UserSchema = z.object({
   id: z.number(),
   nickname: z.string(),
@@ -17,3 +26,4 @@ export const LoginResponse = z.object({
 });
 
 export type LoginResponseType = z.infer<typeof LoginResponse>;
+export type SignUpResponseType = LoginResponseType;
