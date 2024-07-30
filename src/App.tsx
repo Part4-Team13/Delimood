@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import { useGetMeQuery } from './hooks/useUserQuery';
+// import { useGetMeQuery } from './hooks/useUserQuery';
 
 function App() {
   const [count, setCount] = useState(0);
-  const { data } = useGetMeQuery();
+  // const { data } = useGetMeQuery();
 
   return (
     <>

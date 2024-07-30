@@ -4,5 +4,5 @@ import { fetchFromApi } from '../common';
 
 export const likeEpigram = async (teamId: number, epigramId: number, data: z.infer<typeof epigramRequest>): Promise<z.infer<typeof epigramResponse>> => {
   const validatedData = epigramRequest.parse(data);
-  return fetchFromApi(`/teams/${teamId}/epigrams/${epigramId}/like`, epigramResponse, 'post', validatedData);
+  return fetchFromApi(`${teamId}/epigrams/${epigramId}/like`, epigramResponse, 'post', validatedData);
 };
