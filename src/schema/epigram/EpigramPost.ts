@@ -27,15 +27,20 @@ export const epigramList = z.object({
 });
 
 // 에피그램 좋아요 Post response 200
-export const epigramDetailType = z.object({
+export const epigramDetail = z.object({
   likeCount: z.number(),
-  tags: z.array(tagType),
-  writerId: z.number().int().min(1), // 최소값 1로 검증
-  referenceUrl: z.string().url().nullable(),
-  referenceTitle: z.string().max(100).nullable(),
+  tags: z.array(
+    z.object({
+      name: z.string(),
+      id: z.number().int(),
+    }),
+  ),
+  writerId: z.number().int().min(1),
+  referenceUrl: z.string().url().optional().nullable(),
+  referenceTitle: z.string().max(100).optional().nullable(),
   author: z.string().min(1).max(30),
   content: z.string().min(1).max(500),
-  id: z.number().int().min(1), // 최소값 1로 검증
+  id: z.number().int().min(1),
   isLiked: z.boolean(),
 });
 
