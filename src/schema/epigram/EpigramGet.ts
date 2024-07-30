@@ -7,18 +7,15 @@ const tagType = z.object({
 });
 
 // 에피그램 상세 조회, 오늘의 에피그램 GET 요청
-export const EpigramDetailType = z.object({
-  likeCount: z.number().positive(),
-  tags: z.array(tagType).min(1),
-  writerId: z.number().int().positive(),
-  referenceUrl: z
-    .string()
-    .url()
-    .regex(/^https?:\/\//),
+export const epigramDetailType = z.object({
+  likeCount: z.number(),
+  tags: z.array(tagType),
+  writerId: z.number().int().min(1),
+  referenceUrl: z.string().url().nullable(),
   referenceTitle: z.string().max(100).nullable(),
   author: z.string().min(1).max(30),
   content: z.string().min(1).max(500),
-  id: z.number().int().positive(),
+  id: z.number().int().min(1),
   isLiked: z.boolean(),
 });
 
@@ -42,23 +39,24 @@ const commentType = z.object({
 });
 
 // CursorBasedPaginationResponse_CommentType_ 정의
-export const CursorBasedPaginationResponse_CommentType_ = z.object({
+export const cursorBasedPaginationResponse_CommentType_ = z.object({
   totalCount: z.number().nonnegative(),
   nextCursor: z.number().nullable(),
   list: z.array(commentType),
 });
 
-// 에피그램 목록 조회 GET 요청, PATCH response 200
+// 에피그램 목록 조회 GET 요청
 // EpigramListType 정의
-const epigramListType = z.object({
-  likeCount: z.number().min(0),
-  tags: z.array(z.string()),
+export const epigramListType = z.object({
+  likeCount: z.number(),
+  tags: z.array(
+    z.object({
+      name: z.string().min(1).max(10),
+      id: z.number().int().min(1),
+    }),
+  ),
   writerId: z.number().int().min(1),
-  referenceUrl: z
-    .string()
-    .url()
-    .regex(/^https?:\/\//)
-    .nullable(),
+  referenceUrl: z.string().url().nullable(),
   referenceTitle: z.string().max(100).nullable(),
   author: z.string().min(1).max(30),
   content: z.string().min(1).max(500),
@@ -66,12 +64,13 @@ const epigramListType = z.object({
 });
 
 // CursorBasedPaginationResponse_EpigramListType_ 정의
-export const CursorBasedPaginationResponse_EpigramListType_ = z.object({
+export const cursorBasedPaginationResponse_EpigramListType_ = z.object({
   totalCount: z.number().positive(),
   nextCursor: z.number().nullable(),
   list: z.array(epigramListType),
 });
 
-export type EpigramDetailType = z.infer<typeof EpigramDetailType>;
-export type CursorBasedPaginationResponse_CommentType_ = z.infer<typeof CursorBasedPaginationResponse_CommentType_>;
-export type CursorBasedPaginationResponse_EpigramListType_ = z.infer<typeof CursorBasedPaginationResponse_EpigramListType_>;
+export type EpigramDetailType = z.infer<typeof epigramDetailType>;
+export type CursorBasedPaginationResponse_CommentType_ = z.infer<typeof cursorBasedPaginationResponse_CommentType_>;
+export type CursorBasedPaginationResponse_EpigramListType_ = z.infer<typeof cursorBasedPaginationResponse_EpigramListType_>;
+export type EpigramListType = z.infer<typeof epigramListType>;

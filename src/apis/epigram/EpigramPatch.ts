@@ -2,7 +2,9 @@ import * as z from 'zod';
 import { updateEpigramBody } from '../../schema/epigram/EpigramPatch';
 import { fetchFromApi } from '../common';
 
-export const updateEpigram = async (teamId: number, id: number, data: z.infer<typeof updateEpigramBody>): Promise<void> => {
+// 에피그램 수정 PATCH 요청
+export const updateEpigram = async (id: number, data: z.infer<typeof updateEpigramBody>): Promise<void> => {
   const validatedData = updateEpigramBody.parse(data);
-  await fetchFromApi(`/teams/${teamId}/epigrams/${id}`, z.void(), 'patch', validatedData);
+  const url = `/epigrams/${id}`;
+  await fetchFromApi(url, z.void(), 'patch', validatedData);
 };

@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import httpClient from './index';
 import axios, { AxiosError } from 'axios';
-import { postError } from '../schema/epigram/EpigramPost';
+import { errorResponse } from '../schema/epigram/EpigramPost';
 
 // 공통 API 요청 함수
 export async function fetchFromApi<T>(url: string, schema: z.ZodType<T>, method: 'get' | 'post' | 'patch' | 'delete' = 'get', data?: object, params?: object): Promise<T> {
@@ -21,7 +21,7 @@ const handleError = (error: unknown) => {
     const response = axiosError.response;
 
     if (response) {
-      const parsedError = postError.safeParse(response.data);
+      const parsedError = errorResponse.safeParse(response.data);
       if (parsedError.success) {
         console.error(`오류 ${response.status}: ${parsedError.data.message}`);
       } else {
