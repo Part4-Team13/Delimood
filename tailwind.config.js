@@ -18,7 +18,7 @@ export default {
       xs: ['12px', '18px'], // font-semibold : ["12px", "20px"]
     },
     colors: {
-      backgruond: '#F5F7FA',
+      background: '#F5F7FA',
       state: {
         alert: '#FF6577',
       },
@@ -51,6 +51,7 @@ export default {
         800: '#40516E',
         900: '#2D394E',
         950: '#1A212D',
+        default: '#5195EE',
       },
       gray: {
         100: '#DEDEDE',
@@ -63,7 +64,6 @@ export default {
       orange: '#E8AA26',
       green: '#48BB98',
       purple: '#8E80E3',
-      blue: '#5195EE',
       red: '#E46E80',
       brown: '#9A695E',
     },
