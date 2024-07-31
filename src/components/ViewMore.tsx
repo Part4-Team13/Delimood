@@ -7,9 +7,9 @@ interface ViewMoreProps extends PropsWithChildren {
 
 function ViewMore({ onClick, text }: ViewMoreProps) {
   return (
-    <button onClick={onClick} className='flex items-center gap-[4px] rounded-[100px]'>
-      <span>+</span>
-      <span>{text}</span>
+    <button onClick={onClick} className='flex items-center gap-[4px] rounded-[100px] bg-background border-[1px] border-line-darker'>
+      <span className='text-blue-400 text-md'>+</span>
+      <span className='text-blue-400 text-md'>{text}</span>
     </button>
   );
 }

@@ -2,18 +2,18 @@ interface EpigramCardProps {
   author: string;
   content: string;
   tags: string[];
-  isHeightfixed: boolean;
+  isSeperated: boolean;
 }
 
-const EpigramCard = ({ author, content, tags, isHeightfixed }: EpigramCardProps) => {
+const EpigramCard = ({ author, content, tags, isSeperated }: EpigramCardProps) => {
   return (
     <>
-      <div className='w-[312px]'>
-        <div className={`rounded-[16px] p-[23px] flex flex-col overflow-hidden bg-[linear-gradient(yellow_95%,_gray_0)] [background-size:100%_24px] ${isHeightfixed && 'h-[180px]'}`}>
-          <p className=''>{content}</p>
-          <span className='ml-auto'>- {author} -</span>
+      <div className={`font-paraph text-md tablet:text-lg desktop:text-2xl ${isSeperated ? 'w-[152px] tablet:w-[294px] desktop:w-[585px]' : 'w-[312px] tablet:w-[384px] desktop:w-[640px]'}`}>
+        <div className={`rounded-[16px] p-[23px] flex flex-col overflow-hidden bg-white ${isSeperated ? 'h-[110px] tablet:h-[180px] desktop:h-[259px] justify-between' : ''}`}>
+          <p className='text-black-600'>{content}</p>
+          <span className='ml-auto text-blue-400'>- {author} -</span>
         </div>
-        <ul className='flex flex-row-reverse gap-[8px] bg-red-100'>
+        <ul className='flex flex-row-reverse gap-[8px] text-blue-400'>
           {tags.map((tag, index) => (
             <li key={index}>#{tag}</li>
           ))}
