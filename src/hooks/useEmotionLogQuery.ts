@@ -1,34 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { PostEmotionLog, GetTodayEmotionLog, GetMonthlyEmotionLogs } from '../schema/emotionLogSchema';
+import quries from '../apis/queries';
+import { PostEmotionLog, GetTodayEmotionLog } from '../schema/emotionLogSchema';
+import { postEmotionLog } from '../apis/emotionLog';
 import { MutationOptions } from '../types/query';
-import { postEmotionLog, getTodayEmotionLog, getMonthlyEmotionLogs } from '../apis/emotionLog';
 
-export const usePostEmotionLogMutation = (options: MutationOptions<PostEmotionLog, GetTodayEmotionLog>) => {
+// 오늘의 감정 등록
+export const usePostEmotionLog = (options: MutationOptions<GetTodayEmotionLog>) => {
   const queryClient = useQueryClient();
-  return useMutation<GetTodayEmotionLog, AxiosError, PostEmotionLog>({
-    mutationFn: postEmotionLog,
+  return useMutation({
+    mutationFn: (request: PostEmotionLog) => postEmotionLog(request),
     ...options,
-    onSuccess: (...args) => {
-      queryClient.invalidateQueries({ queryKey: ['emotionLogs', 'today'] });
-      queryClient.invalidateQueries({ queryKey: ['emotionLogs', 'monthly'] });
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries(quries.emotionLogs.today());
       if (options?.onSuccess) {
-        options.onSuccess(...args);
+        options.onSuccess(data, variables, context);
       }
     },
   });
 };
 
-export const useGetTodayEmotionLogQuery = () => {
-  return useQuery<GetTodayEmotionLog>({
-    queryKey: ['emotionLogs', 'today'],
-    queryFn: getTodayEmotionLog,
-  });
+// 오늘의 감정 조회
+export const useGetTodayEmotionLog = () => {
+  return useQuery(quries.emotionLogs.today());
 };
 
-export const useGetMonthlyEmotionLogsQuery = () => {
-  return useQuery<GetMonthlyEmotionLogs[]>({
-    queryKey: ['emotionLogs', 'monthly'],
-    queryFn: getMonthlyEmotionLogs,
-  });
+// 월간 감정 조회
+export const useGetMonthlyEmotionLogs = () => {
+  return useQuery(quries.emotionLogs.monthly());
 };
