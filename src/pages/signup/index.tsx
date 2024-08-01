@@ -5,6 +5,7 @@ import { SignUpRequest, SignUpRequestType } from '../../schema/authSchema';
 import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
 import Logo from '../../assets/ico_logo.svg';
 import { useNavigate } from 'react-router-dom';
+import SocialLogin from '../../components/socialLogin';
 
 const SignUp: React.FC = () => {
   const form = useForm<SignUpRequestType>({
@@ -133,6 +134,7 @@ const SignUp: React.FC = () => {
           로그인하기
         </button>
       </div>
+      <SocialLogin />
     </div>
   );
 };

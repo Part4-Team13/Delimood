@@ -5,6 +5,7 @@ import { LoginRequest, LoginRequestType } from '../../schema/authSchema';
 import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
 import Logo from '../../assets/ico_logo.svg';
 import { useNavigate } from 'react-router-dom';
+import SocialLogin from '../../components/socialLogin';
 
 const Login: React.FC = () => {
   const form = useForm<LoginRequestType>({
@@ -89,6 +90,7 @@ const Login: React.FC = () => {
           회원가입하기
         </button>
       </div>
+      <SocialLogin />
     </div>
   );
 };
