@@ -11,18 +11,18 @@ interface CommentCardProps {
 
 function CommentCard({ updatedAt, content, writer }: CommentCardProps) {
   return (
-    <div className='flex gap-[16px] items-start w-[360px] py-[16px] px-[24px] border-t-[1px] border-t-black'>
+    <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background'>
       <span className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0'>이미지</span>
-      <div className='flex flex-col gap-[8px] bg-gray-300 w-full'>
-        <div className='relative w-full bg-green-300 flex gap-[8px]'>
-          <span>{writer.nickname}</span>
-          <span>{updatedAt}시간 전</span>
-          <div className='absolute top-0 right-0 flex gap-[16px]'>
-            <a>수정</a>
-            <a>삭제</a>
+      <div className='flex flex-col gap-[8px] w-full'>
+        <div className='relative w-full bg-green-300 flex gap-[8px] text-black-300'>
+          <span className='text-xs tablet:text-md desktop:text-lg'>{writer.nickname}</span>
+          <span className='text-xs tablet:text-md desktop:text-lg'>{updatedAt}시간 전</span>
+          <div className='underline text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px]'>
+            <a className='text-black-600'>수정</a>
+            <a className='text-state-alert'>삭제</a>
           </div>
         </div>
-        <p>{content}</p>
+        <p className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600'>{content}</p>
       </div>
     </div>
   );

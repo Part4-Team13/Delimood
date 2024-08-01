@@ -13,7 +13,7 @@ const MockData = [
 
 function CommentList({ isInfiniteScroll }: CommentListProps) {
   return (
-    <div className='w-screen bg-blue-300'>
+    <div className='bg-background'>
       <ul className='mx-auto bg-yellow-300 w-fit'>
         {MockData.map((data) => (
           <li key={data.id}>
