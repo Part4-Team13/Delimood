@@ -44,8 +44,16 @@ export const DeleteComment = z.object({
   id: z.number(),
 });
 
+// 댓글 목록 조회 요청
+export const GetCommentsRequest = z.object({
+  epigramId: z.number(),
+  limit: z.number(),
+  cursor: z.number().optional(),
+});
+
 export type PostCommentType = z.infer<typeof PostComment>;
 export type ResponseType = z.infer<typeof ResponseSchema>;
 export type ListItemType = z.infer<typeof ListItemSchema>;
 export type PatchCommentType = z.infer<typeof PatchComment>;
 export type DeleteCommentType = z.infer<typeof DeleteComment>;
+export type GetCommentsRequestType = z.infer<typeof GetCommentsRequest>;

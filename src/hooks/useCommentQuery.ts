@@ -1,6 +1,5 @@
-// useCommentQuery.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { PostCommentType, ResponseType, PatchCommentType, DeleteCommentType, ListItemType } from '../schema/commentSchema';
+import { PostCommentType, ResponseType, PatchCommentType, DeleteCommentType, ListItemType, GetCommentsRequestType } from '../schema/commentSchema';
 import { postComment, getComments, patchComment, deleteComment } from '../apis/comment';
 import { MutationOptions } from '../types/query';
 
@@ -20,7 +19,7 @@ export const usePostCommentMutation = (options: MutationOptions<PostCommentType,
 };
 
 // 댓글 목록 조회
-export const useGetCommentsQuery = (params: { epigramId: number; cursor?: number }) => {
+export const useGetCommentsQuery = (params: GetCommentsRequestType) => {
   return useQuery<ResponseType>({
     queryKey: ['comments', params],
     queryFn: () => getComments(params),
