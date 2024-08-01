@@ -4,6 +4,7 @@ import { TextInput, PasswordInput, Button, Container } from '@mantine/core';
 import { SignUpRequest, SignUpRequestType } from '../../schema/authSchema';
 import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
 import Logo from '../../assets/ico_logo.svg';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp: React.FC = () => {
   const form = useForm<SignUpRequestType>({
@@ -27,13 +28,17 @@ const SignUp: React.FC = () => {
   });
 
   const isFormValid = form.isValid();
+  const navigate = useNavigate();
 
   return (
     <div className='flex flex-col items-center justify-center mt-[110px] tablet:mt-[140px] desktop:mt-[160px]'>
-      <img src={Logo} alt='Logo' />
+      <button onClick={() => navigate('/')}>
+        <img src={Logo} alt='Logo' />
+      </button>
       <Container className='flex items-center justify-center mt-[61px]'>
         <form
           onSubmit={form.onSubmit((values) => {
+            //TODO:회원가입 API 연동하기
             console.log(values);
           })}
           className='w-[312px] flex flex-col gap-5 tablet:w-[384px]  tablet:gap-10 desktop:w-[640px]'
@@ -114,7 +119,6 @@ const SignUp: React.FC = () => {
           />
           <Button
             type='submit'
-            fullWidth
             mt='md'
             className={`h-[44px] rounded-2xl px-3 w-full text-white text-base font-semibold desktop:h-[64px] desktop:text-xl ${isFormValid ? 'bg-black-500' : 'bg-blue-300'}`}
             disabled={!isFormValid}
@@ -123,6 +127,12 @@ const SignUp: React.FC = () => {
           </Button>
         </form>
       </Container>
+      <div className='mt-2.5 text-sm font-medium text-blue-400 w-[312px] tablet:w-[384px] desktop:w-[640px] flex justify-end tablet:text-base desktop:text-xl'>
+        이미 가입하셨나요?
+        <button className='ml-1 underline text-black-500' onClick={() => navigate('/login')}>
+          로그인하기
+        </button>
+      </div>
     </div>
   );
 };
