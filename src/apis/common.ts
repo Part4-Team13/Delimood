@@ -1,21 +1,10 @@
-import * as z from 'zod';
-import httpClient from './index';
 import axios, { AxiosError } from 'axios';
 import { errorResponse } from '../schema/epigram/EpigramPost';
-
-// 공통 API 요청 함수
-export async function fetchFromApi<T>(url: string, schema: z.ZodType<T>, method: 'get' | 'post' | 'patch' | 'delete' = 'get', data?: object, params?: object): Promise<T> {
-  try {
-    const response = await httpClient[method](url, data, { params });
-    return schema.parse(response.data);
-  } catch (error) {
-    handleError(error);
-    throw error;
-  }
-}
+// import * as z from 'zod';
+// import httpClient from './index';
 
 // 에러 핸들링 함수
-const handleError = (error: unknown) => {
+export const handleError = (error: unknown) => {
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError;
     const response = axiosError.response;
@@ -34,3 +23,14 @@ const handleError = (error: unknown) => {
     console.error('예상치 못한 오류가 발생했습니다:', error);
   }
 };
+
+// 공통 API 요청 함수
+// export async function fetchFromApi<T>(url: string, schema: z.ZodType<T>, method: 'get' | 'post' | 'patch' | 'delete' = 'get', data?: object, params?: object): Promise<T> {
+//   try {
+//     const response = await httpClient[method](url, data, { params });
+//     return schema.parse(response.data);
+//   } catch (error) {
+//     handleError(error);
+//     throw error;
+//   }
+// }
