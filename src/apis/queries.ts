@@ -27,7 +27,6 @@ const quries = createQueryKeyStore({
       queryFn: getMonthlyEmotionLogs,
     }),
   },
-
   comments: {
     getComments: (request: GetCommentsRequestType) => ({
       queryKey: ['getComments', request],
