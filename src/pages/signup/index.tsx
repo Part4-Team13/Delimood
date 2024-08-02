@@ -6,6 +6,8 @@ import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
 import Logo from '../../assets/ico_logo.svg';
 import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
+import { useSignUp } from '../../hooks/authQuery';
+import { toast } from 'react-toastify';
 
 const SignUp: React.FC = () => {
   const form = useForm<SignUpRequestType>({
@@ -30,6 +32,24 @@ const SignUp: React.FC = () => {
 
   const isFormValid = form.isValid();
   const navigate = useNavigate();
+  const signUpMutation = useSignUp({
+    onSuccess: (data) => {
+      toast.success('회원가입이 완료되었습니다.');
+      console.log('회원가입 성공!', data);
+      navigate('/login');
+    },
+    onError: (error) => {
+      toast.error('죄송합니다. 다시 시도해주세요.');
+      if (error.response) {
+        if (error.response.status === 400) {
+          form.setErrors({ email: '이미 존재하는 이메일입니다.' });
+        } else if (error.response.status === 500) {
+          form.setErrors({ nickname: '이미 존재하는 닉네임입니다.' });
+        }
+      }
+      console.error('회원가입 실패:', error);
+    },
+  });
 
   return (
     <div className='flex flex-col items-center justify-center mt-[110px] tablet:mt-[140px] desktop:mt-[160px]'>
@@ -39,10 +59,9 @@ const SignUp: React.FC = () => {
       <Container className='flex items-center justify-center mt-[61px]'>
         <form
           onSubmit={form.onSubmit((values) => {
-            //TODO:회원가입 API 연동하기
-            console.log(values);
+            signUpMutation.mutate(values);
           })}
-          className='w-[312px] flex flex-col gap-5 tablet:w-[384px]  tablet:gap-10 desktop:w-[640px]'
+          className='w-[312px] flex flex-col gap-5 tablet:w-[384px] tablet:gap-10 desktop:w-[640px]'
         >
           <TextInput
             label='이메일'

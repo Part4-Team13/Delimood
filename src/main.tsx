@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <App />
-        <ToastContainer />
+        <ToastContainer autoClose={3000} />
       </BrowserRouter>
       <ReactQueryDevtools />
     </QueryClientProvider>
