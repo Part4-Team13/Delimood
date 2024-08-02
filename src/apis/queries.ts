@@ -25,12 +25,13 @@ const quries = createQueryKeyStore({
     monthly: () => ({
       queryKey: ['emotionLogs', 'monthly'],
       queryFn: getMonthlyEmotionLogs,
+    }),
+  },
 
   comments: {
     getComments: (request: GetCommentsRequestType) => ({
       queryKey: ['getComments', request],
       queryFn: () => getComments(request),
-
     }),
   },
 });
