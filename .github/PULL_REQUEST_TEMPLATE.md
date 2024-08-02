@@ -1,6 +1,6 @@
 ## :bookmark: Issue Ticket
 <!-- Issue Ticket이 있을 경우, 해당 링크를 연결해주세요 -->
-[Ticket](https://trello.com/)
+[Ticket](https://ohbread-210713.atlassian.net/browse/)
 
 ## :writing_hand: Description
 <!-- 어떤 내용의 PR인지 간단하게 작성해주세요. (ex. 메인 페이지 레이아웃 작업) -->
