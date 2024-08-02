@@ -1,5 +1,6 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
 import { getMe, getUser } from './user';
+import { getTodayEmotionLog, getMonthlyEmotionLogs } from './emotionLog';
 import { getComments } from './comment';
 import { GetUserRequestType } from '../schema/userSchema';
 import { GetCommentsRequestType } from '../schema/commentSchema';
