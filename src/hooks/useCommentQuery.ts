@@ -1,6 +1,5 @@
-// useCommentQuery.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { PostCommentType, ResponseType, PatchCommentType, DeleteCommentType, ListItemType } from '../schema/commentSchema';
+import { PostCommentType, ResponseType, PatchCommentType, DeleteCommentType, ListItemType, GetCommentsRequestType } from '../schema/commentSchema';
 import { postComment, getComments, patchComment, deleteComment } from '../apis/comment';
 import { MutationOptions } from '../types/query';
 
@@ -18,14 +17,23 @@ export const usePostCommentMutation = (options: MutationOptions<PostCommentType,
     },
   });
 };
+// NOTE: 사용 방법
+// const mutation = usePostCommentMutation({
+//   onSuccess: (data) => {
+//     // 댓글 등록 후 실행할 코드
+//   },
+// });
+// mutation.mutate({ epigramId: 1, isPrivate: false, content: '댓글 내용' });
 
 // 댓글 목록 조회
-export const useGetCommentsQuery = (params: { epigramId: number; cursor?: number }) => {
+export const useGetCommentsQuery = (params: GetCommentsRequestType) => {
   return useQuery<ResponseType>({
     queryKey: ['comments', params],
     queryFn: () => getComments(params),
   });
 };
+// NOTE: 사용 방법
+// const { data, error, isLoading } = useGetCommentsQuery({ epigramId: 1, limit: 10, cursor: 0 });
 
 // 댓글 수정
 export const usePatchCommentMutation = (options: MutationOptions<{ id: number; data: PatchCommentType }, ListItemType>) => {
@@ -41,6 +49,13 @@ export const usePatchCommentMutation = (options: MutationOptions<{ id: number; d
     },
   });
 };
+// NOTE: 사용 방법
+// const mutation = usePatchCommentMutation({
+//   onSuccess: (data) => {
+//     // 댓글 수정 후 실행할 코드
+//   },
+// });
+// mutation.mutate({ id: 1, data: { isPrivate: false, content: '수정된 댓글 내용' } });
 
 // 댓글 삭제
 export const useDeleteCommentMutation = (options: MutationOptions<DeleteCommentType, { id: number }>) => {
@@ -56,3 +71,10 @@ export const useDeleteCommentMutation = (options: MutationOptions<DeleteCommentT
     },
   });
 };
+// NOTE: 사용 방법
+// const mutation = useDeleteCommentMutation({
+//   onSuccess: (data) => {
+//     // 댓글 삭제 후 실행할 코드
+//   },
+// });
+// mutation.mutate({ id: 1 });
