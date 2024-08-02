@@ -6,6 +6,14 @@ import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
 import Logo from '../../assets/ico_logo.svg';
 import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
+import { useLogin } from '../../hooks/authQuery';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+
+type ErrorResponse = {
+  message: string;
+  details: Record<string, { message: string }>;
+};
 
 const Login: React.FC = () => {
   const form = useForm<LoginRequestType>({
@@ -29,6 +37,27 @@ const Login: React.FC = () => {
   const isFormValid = form.isValid();
   const navigate = useNavigate();
 
+  const loginMutation = useLogin({
+    onSuccess: (data) => {
+      toast.success('성공적으로 로그인되었습니다.');
+      console.log('로그인 성공!', data);
+      navigate('/');
+    },
+    onError: (error) => {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      const response = axiosError.response?.data;
+      if (response?.details) {
+        const errors: Record<string, string> = {};
+        for (const [key, value] of Object.entries(response.details)) {
+          errors[key] = value.message;
+        }
+        form.setErrors(errors);
+      } else {
+        toast.error('다시 로그인부탁드립니다.');
+      }
+    },
+  });
+
   return (
     <div className='flex flex-col items-center justify-center mt-[110px] tablet:mt-[140px] desktop:mt-[160px]'>
       <button onClick={() => navigate('/')}>
@@ -37,8 +66,7 @@ const Login: React.FC = () => {
       <Container className='flex items-center justify-center mt-[50px] tablet:mt-[60px]'>
         <form
           onSubmit={form.onSubmit((values) => {
-            //TODO:로그인 API 연동하기
-            console.log(values);
+            loginMutation.mutate(values);
           })}
           className='w-[312px] flex flex-col gap-2.5 tablet:w-[384px] desktop:gap-4 desktop:w-[640px]'
         >

@@ -18,7 +18,7 @@ export const SignUpRequest = z
 
 export const LoginRequest = z.object({
   email: z.string().nonempty({ message: '이메일은 필수 입력입니다.' }).email({ message: '이메일 형식으로 작성해 주세요.' }),
-  password: z.string().nonempty({ message: '비밀번호는 필수 입력입니다.' }).min(8, { message: '비밀번호는 최소 8자 이상입니다.' }),
+  password: z.string().nonempty({ message: '비밀번호는 필수 입력입니다.' }),
 });
 
 export const UserSchema = z.object({
