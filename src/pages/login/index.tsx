@@ -1,13 +1,13 @@
 import React from 'react';
 import { useForm } from '@mantine/form';
-import { TextInput, PasswordInput, Button, Container } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Container, rem } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { LoginRequest, LoginRequestType } from '../../schema/authSchema';
-import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
+import { IconEyeCheck, IconEyeOff, IconX, IconCheck } from '@tabler/icons-react';
 import Logo from '../../assets/ico_logo.svg';
 import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
 import { useLogin } from '../../hooks/authQuery';
-import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 type ErrorResponse = {
@@ -16,6 +16,9 @@ type ErrorResponse = {
 };
 
 const Login: React.FC = () => {
+  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
+
   const form = useForm<LoginRequestType>({
     initialValues: {
       email: '',
@@ -36,11 +39,15 @@ const Login: React.FC = () => {
 
   const isFormValid = form.isValid();
   const navigate = useNavigate();
-
   const loginMutation = useLogin({
     onSuccess: (data) => {
-      toast.success('성공적으로 로그인되었습니다.');
       console.log('로그인 성공!', data);
+      showNotification({
+        title: '로그인 완료되었습니다.',
+        message: '성공적으로 로그인되었습니다.',
+        icon: checkIcon,
+        color: 'teal',
+      });
       navigate('/');
     },
     onError: (error) => {
@@ -53,7 +60,13 @@ const Login: React.FC = () => {
         }
         form.setErrors(errors);
       } else {
-        toast.error('다시 로그인부탁드립니다.');
+        console.error('회원가입 실패:', error);
+        showNotification({
+          title: '죄송합니다. 다시 시도해주세요.',
+          message: '로그인 중 문제가 발생했습니다.',
+          icon: xIcon,
+          color: 'red',
+        });
       }
     },
   });
@@ -87,6 +100,7 @@ const Login: React.FC = () => {
               error={form.errors.password}
               onBlur={() => form.validateField('password')}
               classNames={{
+                input: 'bg-blue-200 rounded-2xl',
                 error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
                 innerInput: `h-[44px] bg-blue-200 rounded-2xl px-3 w-full text-black-950 tablet:px-4 desktop:h-[64px] desktop:text-xl ${form.errors.password ? 'border border-state-alert' : ''}`,
                 section: 'absolute right-4 transform -translate-y-9 desktop:-translate-y-11',

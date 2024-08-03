@@ -1,15 +1,18 @@
 import React from 'react';
 import { useForm } from '@mantine/form';
-import { TextInput, PasswordInput, Button, Container } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Container, rem } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { SignUpRequest, SignUpRequestType } from '../../schema/authSchema';
-import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
+import { IconEyeCheck, IconEyeOff, IconX, IconCheck } from '@tabler/icons-react';
 import Logo from '../../assets/ico_logo.svg';
 import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
 import { useSignUp } from '../../hooks/authQuery';
-import { toast } from 'react-toastify';
 
 const SignUp: React.FC = () => {
+  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
+
   const form = useForm<SignUpRequestType>({
     initialValues: {
       email: '',
@@ -34,12 +37,23 @@ const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const signUpMutation = useSignUp({
     onSuccess: (data) => {
-      toast.success('회원가입이 완료되었습니다.');
       console.log('회원가입 성공!', data);
+      showNotification({
+        title: '회원가입이 완료되었습니다.',
+        message: '회원가입이 성공적으로 완료되었습니다.',
+        icon: checkIcon,
+        color: 'teal',
+      });
       navigate('/login');
     },
     onError: (error) => {
-      toast.error('죄송합니다. 다시 시도해주세요.');
+      console.error('회원가입 실패:', error);
+      showNotification({
+        title: '죄송합니다. 다시 시도해주세요.',
+        message: '회원가입 중 문제가 발생했습니다.',
+        icon: xIcon,
+        color: 'red',
+      });
       if (error.response) {
         if (error.response.status === 400) {
           form.setErrors({ email: '이미 존재하는 이메일입니다.' });
@@ -47,7 +61,6 @@ const SignUp: React.FC = () => {
           form.setErrors({ nickname: '이미 존재하는 닉네임입니다.' });
         }
       }
-      console.error('회원가입 실패:', error);
     },
   });
 
