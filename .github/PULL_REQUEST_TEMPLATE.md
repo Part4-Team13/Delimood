@@ -1,10 +1,14 @@
 ## :bookmark: Issue Ticket
 <!-- Issue Ticket이 있을 경우, 해당 링크를 연결해주세요 -->
 <<<<<<< HEAD
+<<<<<<< HEAD
 [Ticket](https://trello.com/)
 =======
 [Ticket](https://ohbread-210713.atlassian.net/browse/)
 >>>>>>> 1424a7e8745c3b7f91f47964bcfa2e1412dc9e80
+=======
+[Ticket](https://ohbread-210713.atlassian.net/browse/)
+>>>>>>> e73b6e864065a9dad2d9e5155ceafc8fb7e7510c
 
 ## :writing_hand: Description
 <!-- 어떤 내용의 PR인지 간단하게 작성해주세요. (ex. 메인 페이지 레이아웃 작업) -->
