@@ -46,7 +46,7 @@ const HeaderLeft: React.FC<HeaderButtonsProps> = ({ pathNow, navigate }) => {
       <Drawer opened={opened} onClose={drawerClose} radius='md' padding='md'>
         <ul className='flex flex-col'>
           {MenuItems.map((menu, index) => (
-            <li className='cursor-pointer py-[10px] text-lg' key={index} onClick={() => navigate(menu.path)}>
+            <li className='cursor-pointer p-[24px_20px] text-lg' key={index} onClick={() => navigate(menu.path)}>
               {menu.name}
             </li>
           ))}
