@@ -6,7 +6,7 @@ import Epigrams from './pages/epigrams';
 import Search from './pages/search';
 import Addepigram from './pages/addepigram';
 import Mypage from './pages/mypage';
-import Layout from './layout/Layout';
+import Layout from './laytout/Layout';
 
 function App() {
   return (
