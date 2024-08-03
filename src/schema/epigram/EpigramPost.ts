@@ -49,6 +49,7 @@ export const errorResponse = z.object({
   message: z.string(),
 });
 
-export type createEpigramType = z.infer<typeof createEpigram>;
-export type epigramListType = z.infer<typeof epigramList>;
+export type CreateEpigramType = z.infer<typeof createEpigram>;
+export type EpigramListType = z.infer<typeof epigramList>;
 export type ErrorType = z.infer<typeof errorResponse>;
+export type EpigramDetailType = z.infer<typeof epigramDetail>;

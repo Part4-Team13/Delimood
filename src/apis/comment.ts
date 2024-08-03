@@ -1,4 +1,4 @@
-import { PostCommentType, ResponseType, PatchCommentType, DeleteCommentType, ListItemType } from '../schema/commentSchema';
+import { PostCommentType, ResponseType, PatchCommentType, DeleteCommentType, ListItemType, GetCommentsRequestType } from '../schema/commentSchema';
 import httpClient from '.';
 
 // 댓글 등록
@@ -8,10 +8,9 @@ export const postComment = async (request: PostCommentType): Promise<ListItemTyp
 };
 
 // 댓글 목록 조회
-export const getComments = async (params: { epigramId: number; cursor?: number }): Promise<ResponseType> => {
-  const { epigramId, cursor } = params;
+export const getComments = async (params: GetCommentsRequestType): Promise<ResponseType> => {
   const response = await httpClient.get('/comments', {
-    params: { epigramId, cursor },
+    params: { ...params },
   });
   return response.data;
 };

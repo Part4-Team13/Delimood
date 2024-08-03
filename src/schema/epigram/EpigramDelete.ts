@@ -30,6 +30,6 @@ export const errorResponse = z.object({
   message: z.string(),
 });
 
-export type deleteEpigramResponseType = z.infer<typeof deleteEpigramResponse>;
+export type DeleteEpigramResponseType = z.infer<typeof deleteEpigramResponse>;
 export type ErrorResponseSchemaType = z.infer<typeof errorResponse>;
 export type DeleteEpigramDetailType = z.infer<typeof epigramDetailType>;
