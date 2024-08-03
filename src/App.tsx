@@ -1,5 +1,3 @@
-import '@mantine/core/styles.css';
-import '../global.css';
 import { Routes, Route } from 'react-router-dom';
 import Main from './pages/main';
 import Signup from './pages/signup';
