@@ -44,7 +44,7 @@ interface ModalProps {
  * @param icon - (선택적) 모달 상단에 표시될 아이콘입니다.
  * @param message - 모달에 표시될 메시지입니다.
  * @param secondaryMessage - (선택적) 모달에 표시될 추가 메시지입니다.
- * @param buttons - 모달 하단에 표시될 버튼들의 설정입니다. 각 버튼은 text(버튼 텍스트), onClick(클릭 핸들러), variant(스타일 변형) 속성을 가집니다.
+ * @param buttons - 모달 하단에 표시될 버튼들의 설정입니다.
  */
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, icon, message, secondaryMessage, buttons }) => {
   if (!isOpen) return null;
