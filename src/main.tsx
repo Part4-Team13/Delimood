@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { MantineProvider } from '@mantine/core';
 import App from './App.tsx';
 import './index.css';
 import '../global.css';
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        <MantineProvider>
+          <App />
+        </MantineProvider>
       </BrowserRouter>
       <ReactQueryDevtools />
     </QueryClientProvider>
