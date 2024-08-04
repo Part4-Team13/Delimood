@@ -13,12 +13,17 @@ function EpigramList({ isWide = false }: EpigramListProps) {
   const [epigramList, setEpigramList] = useState<EpigramListType[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
   const [limit, setLimit] = useState<number>(LIMIT);
+  const [showButton, setShowButton] = useState(false);
   const { data, isLoading } = useGetEpigrams(limit, nextCursor);
 
   useEffect(() => {
     if (data) {
       const epigrams = data.list;
-      setEpigramList((prevList) => [...prevList, ...epigrams]);
+      setEpigramList((prev) => {
+        const newList = [...prev, ...epigrams];
+        setShowButton(!(data.totalCount == newList.length));
+        return newList;
+      });
     }
   }, [data]);
 
@@ -45,7 +50,7 @@ function EpigramList({ isWide = false }: EpigramListProps) {
           <ViewMore text='로딩 중...' disabled={isLoading} />
         </div>
       )}
-      {data && epigramList.length < data?.totalCount && (
+      {showButton && (
         <div className='mx-auto'>
           <ViewMore text={isWide ? '에피그램 더보기' : '더보기'} onClick={handleClickViewMore} disabled={isLoading} />
         </div>
