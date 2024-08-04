@@ -11,20 +11,22 @@ interface EpigramListProps {
 
 function EpigramList({ isWide = false }: EpigramListProps) {
   const LIMIT = !isWide ? 3 : 6;
+
   const [epigramList, setEpigramList] = useState<EpigramListType[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
-  const { data } = useGetEpigrams(LIMIT, nextCursor);
+  const [limit, setLimit] = useState<number>(LIMIT);
+  const { data } = useGetEpigrams(limit, nextCursor);
+
   useEffect(() => {
     if (data) {
       const epigrams = data.list;
-      console.log(data.nextCursor);
-      console.log(data.totalCount);
       setEpigramList((prevList) => [...prevList, ...epigrams]);
     }
   }, [data]);
 
   const handleViewMore = () => {
-    if (data && data.nextCursor) {
+    if (!isWide) setLimit(5);
+    if (data) {
       setNextCursor(data.nextCursor);
     }
   };
@@ -40,7 +42,7 @@ function EpigramList({ isWide = false }: EpigramListProps) {
           </li>
         ))}
       </ul>
-      {data?.nextCursor && (
+      {data && epigramList.length < data?.totalCount && (
         <div className='mx-auto'>
           <ViewMore text={isWide ? '에피그램 더보기' : '더보기'} onClick={handleViewMore} />
         </div>
