@@ -48,14 +48,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileId }) => {
 
   return (
     <div className='fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50' onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className='bg-white p-10 rounded-3xl w-[364px] h-[208px] text-center shadow-md' onClick={(e) => e.stopPropagation()}>
+      <div className='bg-white p-10 rounded-3xl text-center shadow-md w-[328px] h-[166px] desktop:w-[360px] desktop:h-[188px]' onClick={(e) => e.stopPropagation()}>
         <div className='flex flex-col items-center justify-center h-full'>
           {loading && <p>프로필 로딩 중...</p>}
           {error && <p className='text-red-500'>{error}</p>}
           {profile && (
-            <div className='flex flex-col items-center mb-4'>
-              <img src={profile.image} alt={`${profile.nickname}`} className='w-16 h-16 rounded-full mb-2' />
-              <p className='text-xl font-semibold'>{profile.nickname}</p>
+            <div className='flex flex-col items-center mb-1'>
+              <img src={profile.image} alt={`${profile.nickname}`} className='w-12 :h-12  rounded-full mb-6' />
+              <p className='text-lg desktop:text-xl font-semibold'>{profile.nickname}</p>
             </div>
           )}
         </div>
