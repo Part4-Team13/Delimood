@@ -3,13 +3,13 @@ import { EpigramListType } from '../schema/epigram/EpigramGet';
 import { useNavigate } from 'react-router-dom';
 import like from '../assets/ico_like.svg';
 
-type EpigramCardProps = Pick<EpigramListType, 'id' | 'author' | 'content' | 'tags' | 'likeCount'> & { isSeperated: boolean };
+type EpigramCardProps = Pick<EpigramListType, 'id' | 'author' | 'content' | 'tags'> & { isSeperated: boolean };
 // type LikeButtonProps = Pick<EpigramCardProps, 'id'>;
 
 // 클릭 시 해당 epigram의 like +1
 const onClickLikeButton = () => {};
 
-const LikeButton = (): JSX.Element => {
+const LikeButton: React.FC = () => {
   return (
     <button onClick={onClickLikeButton} className={`bg-button-diabled hover:bg-button-hover w-[20px] tablet:w-[24px] rounded-full p-[2px] absolute  right-[6px] top-[6px] z-10`}>
       {/* {${*isMine ? 'bg-button-default cursor-pointer hover:bg-button-hover' : 'bg-button-diabled cursor-default' }} */}
@@ -18,7 +18,7 @@ const LikeButton = (): JSX.Element => {
   );
 };
 
-function EpigramCard({ id, author, content, tags, isSeperated = false }: EpigramCardProps): JSX.Element {
+const EpigramCard = ({ id, author, content, tags, isSeperated = false }: EpigramCardProps) => {
   const navigate = useNavigate();
   const onClickEpigramCard = () => {
     navigate(`/epigrams/${id}`);
@@ -47,7 +47,7 @@ function EpigramCard({ id, author, content, tags, isSeperated = false }: Epigram
       </div>
     </>
   );
-}
+};
 
 const MemoizedCard = React.memo(EpigramCard);
 

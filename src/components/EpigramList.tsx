@@ -10,7 +10,6 @@ interface EpigramListProps {
 
 function EpigramList({ isWide = false }: EpigramListProps) {
   const LIMIT = !isWide ? 3 : 6;
-
   const [epigramList, setEpigramList] = useState<EpigramListType[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
   const [limit, setLimit] = useState<number>(LIMIT);
@@ -23,7 +22,6 @@ function EpigramList({ isWide = false }: EpigramListProps) {
     }
   }, [data]);
 
-  // 더보기 클릭 시 5개씩 로드
   const handleClickViewMore = () => {
     if (!isWide) setLimit(5);
     if (data) {
@@ -38,7 +36,7 @@ function EpigramList({ isWide = false }: EpigramListProps) {
       >
         {epigramList.map((data) => (
           <li key={data.id}>
-            <EpigramCard id={data.id} author={data.author} content={data.content} tags={data.tags} isSeperated={isWide} likeCount={data.likeCount} />
+            <EpigramCard id={data.id} author={data.author} content={data.content} tags={data.tags} isSeperated={isWide} />
           </li>
         ))}
       </ul>
