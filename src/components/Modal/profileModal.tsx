@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../apis/user';
 
-interface ButtonProps {
-  text: string;
-  onClick: () => void;
-  variant?: 'primary' | 'secondary';
-}
-
 interface ProfileProps {
   nickname: string;
   image: string;
@@ -16,9 +10,6 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   icon?: React.ReactNode;
-  message: string;
-  secondaryMessage?: string;
-  button: ButtonProps;
   profileId?: number;
 }
 
