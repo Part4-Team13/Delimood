@@ -10,9 +10,10 @@ interface EpigramListProps {
 }
 
 function EpigramList({ isWide = false }: EpigramListProps) {
+  const LIMIT = !isWide ? 3 : 6;
   const [epigramList, setEpigramList] = useState<EpigramListType[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
-  const { data } = useGetEpigrams(3, nextCursor);
+  const { data } = useGetEpigrams(LIMIT, nextCursor);
   useEffect(() => {
     if (data) {
       const epigrams = data.list;
