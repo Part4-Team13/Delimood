@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import plus from '../assets/ico_plus.svg';
 
 interface ViewMoreProps extends PropsWithChildren {
