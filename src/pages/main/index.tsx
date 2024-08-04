@@ -1,9 +1,3 @@
-import EpigramList from '../../components/EpigramList';
-
 export default function Main() {
-  return (
-    <div>
-      <EpigramList isWide />
-    </div>
-  );
+  return <div>여기는 랜딩페이지입니다.</div>;
 }
