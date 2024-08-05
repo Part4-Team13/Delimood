@@ -38,7 +38,7 @@ function EpigramCard({ id, author, content, tags, isSeperated = false }: Epigram
           </div>
           <span className='text-blue-400 ml-auto'>- {author} -</span>
         </div>
-        <ul className='flex flex-row gap-[8px] text-blue-400 ml-auto w-fit'>
+        <ul className={`flex text-blue-400 ml-auto w-fit ${isSeperated ? 'flex-col gap-0' : 'flex-row gap-[8px]'}`}>
           {tags.map((tag) => (
             <li key={tag.id}>#{tag.name}</li>
           ))}
