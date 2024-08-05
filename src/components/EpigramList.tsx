@@ -3,6 +3,7 @@ import EpigramCard from './EpigramCard';
 import ViewMore from './ViewMore';
 import { useGetEpigrams } from '../hooks/useGetEpigrams';
 import { EpigramListType } from '../schema/epigram/EpigramGet';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface EpigramListProps {
   isWide?: boolean;
@@ -16,6 +17,8 @@ function EpigramList({ isWide = false }: EpigramListProps) {
   const [showButton, setShowButton] = useState(false);
   const { data, isLoading } = useGetEpigrams(limit, nextCursor);
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     if (data) {
       const epigrams = data.list;
@@ -26,6 +29,12 @@ function EpigramList({ isWide = false }: EpigramListProps) {
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries({ queryKey: ['epigrams', { cursor: nextCursor, limit: limit }] });
+    };
+  }, [queryClient, limit, nextCursor]);
 
   const handleClickViewMore = () => {
     if (!isWide) setLimit(5);
@@ -50,7 +59,7 @@ function EpigramList({ isWide = false }: EpigramListProps) {
           <ViewMore text='로딩 중...' disabled={isLoading} />
         </div>
       )}
-      {showButton && (
+      {!isLoading && showButton && (
         <div className='mx-auto'>
           <ViewMore text={isWide ? '에피그램 더보기' : '더보기'} onClick={handleClickViewMore} disabled={isLoading} />
         </div>

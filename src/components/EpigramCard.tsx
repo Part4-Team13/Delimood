@@ -18,7 +18,7 @@ const LikeButton: React.FC = () => {
   );
 };
 
-const EpigramCard = ({ id, author, content, tags, isSeperated = false }: EpigramCardProps) => {
+function EpigramCard({ id, author, content, tags, isSeperated = false }: EpigramCardProps) {
   const navigate = useNavigate();
   const onClickEpigramCard = () => {
     navigate(`/epigrams/${id}`);
@@ -47,7 +47,7 @@ const EpigramCard = ({ id, author, content, tags, isSeperated = false }: Epigram
       </div>
     </>
   );
-};
+}
 
 const MemoizedCard = React.memo(EpigramCard);
 

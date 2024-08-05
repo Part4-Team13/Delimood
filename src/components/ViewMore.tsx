@@ -1,7 +1,6 @@
-import { PropsWithChildren } from 'react';
 import plus from '../assets/ico_plus.svg';
 
-interface ViewMoreProps extends PropsWithChildren {
+interface ViewMoreProps {
   onClick?: () => void;
   text?: string;
   disabled?: boolean;
