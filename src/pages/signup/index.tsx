@@ -39,10 +39,22 @@ const SignUp: React.FC = () => {
     onSuccess: (data) => {
       console.log('회원가입 성공!', data);
       showNotification({
-        title: '회원가입이 완료되었습니다.',
-        message: '회원가입이 성공적으로 완료되었습니다.',
+        title: '회원가입이 성공적으로 완료되었습니다.',
+        message: '로그인 이후 사용가능합니다.',
         icon: checkIcon,
         color: 'teal',
+        autoClose: 2000,
+        styles: () => ({
+          root: {
+            position: 'fixed',
+            top: '10%',
+            right: '30%',
+            transform: 'translate(-50%, -50%)',
+            minWidth: '300px',
+            width: '40%',
+            maxWidth: '90vw',
+          },
+        }),
       });
       navigate('/login');
     },
@@ -53,6 +65,18 @@ const SignUp: React.FC = () => {
         message: '회원가입 중 문제가 발생했습니다.',
         icon: xIcon,
         color: 'red',
+        autoClose: 2000,
+        styles: () => ({
+          root: {
+            position: 'fixed',
+            top: '10%',
+            right: '30%',
+            transform: 'translate(-50%, -50%)',
+            minWidth: '300px',
+            width: '40%',
+            maxWidth: '90vw',
+          },
+        }),
       });
       if (error.response) {
         if (error.response.status === 400) {

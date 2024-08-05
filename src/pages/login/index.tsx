@@ -50,6 +50,18 @@ const Login: React.FC = () => {
         message: '성공적으로 로그인되었습니다.',
         icon: checkIcon,
         color: 'teal',
+        autoClose: 2000,
+        styles: () => ({
+          root: {
+            position: 'fixed',
+            top: '10%',
+            right: '30%',
+            transform: 'translate(-50%, -50%)',
+            minWidth: '300px',
+            width: '40%',
+            maxWidth: '90vw',
+          },
+        }),
       });
       navigate('/');
     },
@@ -69,6 +81,18 @@ const Login: React.FC = () => {
           message: '로그인 중 문제가 발생했습니다.',
           icon: xIcon,
           color: 'red',
+          autoClose: 2000,
+          styles: () => ({
+            root: {
+              position: 'fixed',
+              top: '10%',
+              right: '30%',
+              transform: 'translate(-50%, -50%)',
+              minWidth: '300px',
+              width: '40%',
+              maxWidth: '90vw',
+            },
+          }),
         });
       }
     },
@@ -93,7 +117,7 @@ const Login: React.FC = () => {
             onBlur={() => form.validateField('email')}
             classNames={{
               input: ` h-[44px] text-base bg-blue-200 rounded-2xl px-3 w-full text-base text-black-950 tablet:px-4 desktop:h-[64px] desktop:text-xl ${form.errors.email ? 'border border-state-alert' : ''}`,
-              error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
+              error: 'pl-2 text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
             }}
           />
           <div className='relative mb-2.5'>
@@ -104,8 +128,8 @@ const Login: React.FC = () => {
               onBlur={() => form.validateField('password')}
               classNames={{
                 input: 'bg-blue-200 rounded-2xl h-[44px] desktop:h-[64px]',
-                error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
-                innerInput: `px-3 w-full text-black-950 tablet:px-4 desktop:text-xl ${form.errors.password ? 'border border-state-alert' : ''}`,
+                error: 'pl-2 text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
+                innerInput: `px-3 w-full text-black-950 tablet:px-4 desktop:text-xl `,
                 section: 'absolute right-4',
                 visibilityToggle: 'text-gray-200',
               }}

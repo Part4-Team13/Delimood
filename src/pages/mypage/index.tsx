@@ -13,10 +13,22 @@ export default function Mypage() {
     Cookies.remove('refreshToken');
 
     showNotification({
-      title: '로그아웃',
-      message: '성공적으로 로그아웃되었습니다.',
+      title: '성공적으로 로그아웃되었습니다.',
+      message: '다시 이용하시려면 로그인부탁드립니다.',
       icon: checkIcon,
       color: 'teal',
+      autoClose: 2000,
+      styles: () => ({
+        root: {
+          position: 'fixed',
+          top: '10%',
+          right: '30%',
+          transform: 'translate(-50%, -50%)',
+          minWidth: '300px',
+          width: '40%',
+          maxWidth: '90vw',
+        },
+      }),
     });
 
     navigate('/login');
