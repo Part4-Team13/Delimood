@@ -20,10 +20,10 @@ export const usePostEpigramMutation = (options?: UseMutationOptions<PostEpigramR
 };
 
 // 에피그램 목록 조회
-export const useGetEpigramListQuery = (options?: UseQueryOptions<GetEpigramListResponseType>) => {
+export const useGetEpigramListQuery = (limit: number, cursor: number | null = null, options?: UseQueryOptions<GetEpigramListResponseType>) => {
   return useQuery<GetEpigramListResponseType>({
-    queryKey: ['epigrams'],
-    queryFn: getEpigramList,
+    queryKey: ['epigrams', { limit, cursor }],
+    queryFn: () => getEpigramList(limit, cursor),
     ...options,
   });
 };
@@ -79,10 +79,10 @@ export const useDeleteEpigramMutation = (id: number, options?: UseMutationOption
 };
 
 // 에피그램 댓글 목록 조회
-export const useGetCommentListQuery = (id: number, options?: UseQueryOptions<PaginationResponseType>) => {
+export const useGetCommentListQuery = (id: number, limit: number, cursor: number | null = null, options?: UseQueryOptions<PaginationResponseType>) => {
   return useQuery<PaginationResponseType>({
-    queryKey: ['epigrams', id, 'comments'],
-    queryFn: () => getCommentList(id),
+    queryKey: ['epigrams', id, 'comments', { limit, cursor }],
+    queryFn: () => getCommentList(id, limit, cursor),
     ...options,
   });
 };
