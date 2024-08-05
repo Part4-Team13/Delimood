@@ -42,10 +42,8 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const loginMutation = useLogin({
     onSuccess: (data) => {
-      console.log('로그인 성공!', data);
-
-      Cookies.set('accessToken', data.accessToken, { expires: 1 });
-      Cookies.set('refreshToken', data.refreshToken, { expires: 7 });
+      Cookies.set('accessToken', data.accessToken, { expires: new Date(Date.now() + 1800 * 1000) });
+      Cookies.set('refreshToken', data.refreshToken);
 
       showNotification({
         title: '로그인 완료되었습니다.',
