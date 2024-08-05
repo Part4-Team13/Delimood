@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
 import { useLogin } from '../../hooks/authQuery';
 import { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
 
 type ErrorResponse = {
   message: string;
@@ -42,6 +43,10 @@ const Login: React.FC = () => {
   const loginMutation = useLogin({
     onSuccess: (data) => {
       console.log('로그인 성공!', data);
+
+      Cookies.set('accessToken', data.accessToken, { expires: 1 });
+      Cookies.set('refreshToken', data.refreshToken, { expires: 7 });
+
       showNotification({
         title: '로그인 완료되었습니다.',
         message: '성공적으로 로그인되었습니다.',
@@ -60,7 +65,7 @@ const Login: React.FC = () => {
         }
         form.setErrors(errors);
       } else {
-        console.error('회원가입 실패:', error);
+        console.error('로그인 실패:', error);
         showNotification({
           title: '죄송합니다. 다시 시도해주세요.',
           message: '로그인 중 문제가 발생했습니다.',
