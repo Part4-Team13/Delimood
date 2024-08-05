@@ -22,11 +22,11 @@ export default function Mypage() {
         root: {
           position: 'fixed',
           top: '10%',
-          right: '30%',
+          right: '3%',
           transform: 'translate(-50%, -50%)',
           minWidth: '300px',
           width: '40%',
-          maxWidth: '90vw',
+          maxWidth: '70%',
         },
       }),
     });

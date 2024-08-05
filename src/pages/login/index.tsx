@@ -55,11 +55,11 @@ const Login: React.FC = () => {
           root: {
             position: 'fixed',
             top: '10%',
-            right: '30%',
+            right: '3%',
             transform: 'translate(-50%, -50%)',
             minWidth: '300px',
             width: '40%',
-            maxWidth: '90vw',
+            maxWidth: '70%',
           },
         }),
       });
@@ -68,6 +68,24 @@ const Login: React.FC = () => {
     onError: (error) => {
       const axiosError = error as AxiosError<ErrorResponse>;
       const response = axiosError.response?.data;
+      showNotification({
+        title: '죄송합니다. 다시 시도해주세요.',
+        message: '로그인 중 문제가 발생했습니다.',
+        icon: xIcon,
+        color: 'red',
+        autoClose: 2000,
+        styles: () => ({
+          root: {
+            position: 'fixed',
+            top: '10%',
+            right: '3%',
+            transform: 'translate(-50%, -50%)',
+            minWidth: '300px',
+            width: '40%',
+            maxWidth: '70%',
+          },
+        }),
+      });
       if (response?.details) {
         const errors: Record<string, string> = {};
         for (const [key, value] of Object.entries(response.details)) {
@@ -76,24 +94,6 @@ const Login: React.FC = () => {
         form.setErrors(errors);
       } else {
         console.error('로그인 실패:', error);
-        showNotification({
-          title: '죄송합니다. 다시 시도해주세요.',
-          message: '로그인 중 문제가 발생했습니다.',
-          icon: xIcon,
-          color: 'red',
-          autoClose: 2000,
-          styles: () => ({
-            root: {
-              position: 'fixed',
-              top: '10%',
-              right: '30%',
-              transform: 'translate(-50%, -50%)',
-              minWidth: '300px',
-              width: '40%',
-              maxWidth: '90vw',
-            },
-          }),
-        });
       }
     },
   });
@@ -116,10 +116,11 @@ const Login: React.FC = () => {
             error={form.errors.email}
             onBlur={() => form.validateField('email')}
             classNames={{
-              input: ` h-[44px] text-base bg-blue-200 rounded-2xl px-3 w-full text-base text-black-950 tablet:px-4 desktop:h-[64px] desktop:text-xl ${form.errors.email ? 'border border-state-alert' : ''}`,
+              input: 'focus:border-black-600 focus:border-2 h-[44px] text-base bg-blue-200 rounded-2xl px-3 w-full text-base text-black-950 tablet:px-4 desktop:h-[64px] desktop:text-xl',
               error: 'pl-2 text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
             }}
           />
+
           <div className='relative mb-2.5'>
             <PasswordInput
               placeholder='비밀번호'
@@ -127,9 +128,9 @@ const Login: React.FC = () => {
               error={form.errors.password}
               onBlur={() => form.validateField('password')}
               classNames={{
-                input: 'bg-blue-200 rounded-2xl h-[44px] desktop:h-[64px]',
+                input: 'hover:border-black-600 hover:border-2 bg-blue-200 rounded-2xl h-[44px] desktop:h-[64px]',
                 error: 'pl-2 text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
-                innerInput: `px-3 w-full text-black-950 tablet:px-4 desktop:text-xl `,
+                innerInput: 'px-3 w-full text-black-950 tablet:px-4 desktop:text-xl',
                 section: 'absolute right-4',
                 visibilityToggle: 'text-gray-200',
               }}
@@ -140,7 +141,7 @@ const Login: React.FC = () => {
           <Button
             type='submit'
             mt='md'
-            className={`h-[44px] rounded-2xl px-3 w-full text-white text-base font-semibold desktop:h-[64px] desktop:text-xl ${isFormValid ? 'bg-black-500' : 'bg-blue-300'}`}
+            className={`h-[44px] rounded-2xl px-3 w-full text-white text-base font-semibold desktop:h-[64px] desktop:text-xl ${isFormValid ? 'bg-black-500 hover:bg-black-500' : 'bg-blue-300'}`}
             disabled={!isFormValid}
           >
             로그인

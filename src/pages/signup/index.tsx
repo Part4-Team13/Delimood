@@ -48,11 +48,11 @@ const SignUp: React.FC = () => {
           root: {
             position: 'fixed',
             top: '10%',
-            right: '30%',
+            right: '3%',
             transform: 'translate(-50%, -50%)',
             minWidth: '300px',
             width: '40%',
-            maxWidth: '90vw',
+            maxWidth: '70%',
           },
         }),
       });
@@ -70,11 +70,11 @@ const SignUp: React.FC = () => {
           root: {
             position: 'fixed',
             top: '10%',
-            right: '30%',
+            right: '3%',
             transform: 'translate(-50%, -50%)',
             minWidth: '300px',
             width: '40%',
-            maxWidth: '90vw',
+            maxWidth: '70%',
           },
         }),
       });
@@ -109,9 +109,7 @@ const SignUp: React.FC = () => {
             classNames={{
               root: 'tablet:text-sm desktop:text-base',
               label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
-              input: `mt-[16px] h-[44px] bg-blue-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl ${
-                form.errors.email ? 'border border-state-alert' : ''
-              }`,
+              input: 'focus:border-black-600 focus:border-2 mt-[16px] h-[44px] bg-blue-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl',
               error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
             }}
           />
@@ -123,10 +121,10 @@ const SignUp: React.FC = () => {
               error={form.errors.password}
               onBlur={() => form.validateField('password')}
               classNames={{
-                input: 'h-[44px] mt-[16px] bg-blue-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
+                input: 'hover:border-black-600 hover:border-2 h-[44px] mt-[16px] bg-blue-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
                 label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
                 error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
-                innerInput: `px-3 w-full text-black tablet:px-4 desktop:text-xl ${form.errors.password ? 'border border-state-alert' : ''}`,
+                innerInput: 'px-3 w-full text-black tablet:px-4 desktop:text-xl ',
                 section: 'absolute right-4',
                 visibilityToggle: 'text-gray-200',
               }}
@@ -139,9 +137,9 @@ const SignUp: React.FC = () => {
               onBlur={() => form.validateField('passwordConfirmation')}
               classNames={{
                 root: 'mt-[10px] tablet:mt-[16px]',
-                input: 'h-[44px] mt-[16px] bg-blue-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
+                input: 'hover:border-black-600 hover:border-2 h-[44px] mt-[16px] bg-blue-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
                 error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
-                innerInput: `px-3 w-full text-black tablet:px-4 desktop:text-xl ${form.errors.passwordConfirmation ? 'border border-state-alert' : ''}`,
+                innerInput: 'px-3 w-full text-black tablet:px-4 desktop:text-xl ',
                 section: 'absolute right-4',
                 visibilityToggle: 'text-gray-200',
               }}
@@ -156,16 +154,14 @@ const SignUp: React.FC = () => {
             onBlur={() => form.validateField('nickname')}
             classNames={{
               label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
-              input: `mt-[16px] h-[44px] bg-blue-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl ${
-                form.errors.nickname ? 'border border-state-alert' : ''
-              }`,
+              input: 'focus:border-black-600 focus:border-2 mt-[16px] h-[44px] bg-blue-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl',
               error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
             }}
           />
           <Button
             type='submit'
             mt='md'
-            className={`h-[44px] rounded-2xl px-3 w-full text-white text-base font-semibold desktop:h-[64px] desktop:text-xl ${isFormValid ? 'bg-black-500' : 'bg-blue-300'}`}
+            className={`h-[44px] rounded-2xl px-3 w-full text-white text-base font-semibold desktop:h-[64px] desktop:text-xl ${isFormValid ? 'bg-black-500 hover:bg-black-500' : 'bg-blue-300'}`}
             disabled={!isFormValid}
           >
             가입하기
