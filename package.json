@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.51.13",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.0.2",
     "@types/qs": "^6.9.15",
     "@types/react": "^18.3.3",
