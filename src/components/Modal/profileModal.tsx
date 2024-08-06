@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getUser } from '../../apis/user';
+import defaultUserImage from '../../assets/ico_profile.svg';
 
 interface ProfileProps {
   nickname: string;
@@ -45,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileId }) => {
           {error && <p className='text-red-500'>{error}</p>}
           {profile && (
             <div className='flex flex-col items-center mb-1'>
-              <img src={profile.image} alt={`${profile.nickname}`} className='w-12 :h-12  rounded-full mb-6' />
+              <img src={profile.image || defaultUserImage} alt={`${profile.nickname}`} className='w-12 h-12 rounded-full mb-6' />
               <p className='text-lg desktop:text-xl font-semibold'>{profile.nickname}</p>
             </div>
           )}
