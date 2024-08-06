@@ -6,7 +6,7 @@ export const signUp = async (data: SignUpRequestType): Promise<SignUpResponseTyp
   return response.data;
 };
 
-export const login = async (data: LoginRequestType): Promise<LoginResponseType> => {
+export const signIn = async (data: LoginRequestType): Promise<LoginResponseType> => {
   const response = await httpClient.post('/auth/signIn', data);
   return response.data;
 };
