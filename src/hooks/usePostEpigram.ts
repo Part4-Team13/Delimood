@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient, UseMutationOptions } from '@tanstack/react-query';
 import { createEpigramRequest, likeEpigram } from '../apis/epigram/EpigramPost';
-import { createEpigramType, epigramListType, epigramDetail } from '../schema/epigram/EpigramPost';
+import { CreateEpigramType, EpigramListType, epigramDetail } from '../schema/epigram/EpigramPost';
 import * as z from 'zod';
 
 // 에피그램 생성
-export const useCreateEpigram = (options: Omit<UseMutationOptions<epigramListType, unknown, createEpigramType>, 'mutationFn'> = {}) => {
+export const useCreateEpigram = (options: Omit<UseMutationOptions<EpigramListType, unknown, CreateEpigramType>, 'mutationFn'> = {}) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createEpigramRequest,
