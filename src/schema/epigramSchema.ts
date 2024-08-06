@@ -137,3 +137,7 @@ export type UpdateEpigramRequestType = z.infer<typeof UpdateEpigramRequest>;
 export type DeleteResponseType = z.infer<typeof DeleteResponse>;
 export type PaginationResponseType = z.infer<typeof PaginationResponse>;
 export type ErrorResponseType = z.infer<typeof ErrorResponse>;
+export type PaginationRequest = {
+  limit: number;
+  cursor?: number;
+};

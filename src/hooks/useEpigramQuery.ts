@@ -8,32 +8,14 @@ import {
   DeleteResponseType,
   PaginationResponseType,
   ErrorResponseType,
-} from '../schema/epigramSchema';
-import {
-  postEpigram,
-  getEpigramList,
-  getTodayEpigram,
-  getEpigramDetail,
-  postEpigramLike,
-  postEpigramLikeDelete,
-  updateEpigram,
-  deleteEpigram,
-  getCommentList,
-  ErrorResponse,
   PaginationRequest,
-} from '../apis/epigram';
-
-export const epigramKeys = {
-  default: ['epigrams'] as const,
-  list: (params: PaginationRequest) => [...epigramKeys.default, 'list', params] as const,
-  today: () => [...epigramKeys.default, 'today'] as const,
-  detail: (id: number) => [...epigramKeys.default, 'detail', id] as const,
-  comments: (id: number, { limit, cursor }: PaginationRequest) => [...epigramKeys.detail(id), 'comments', { limit, cursor }] as const,
-};
+} from '../schema/epigramSchema';
+import { postEpigram, getEpigramList, getTodayEpigram, getEpigramDetail, postEpigramLike, postEpigramLikeDelete, updateEpigram, deleteEpigram, getCommentList, ErrorResponse } from '../apis/epigram';
+import quries from '../apis/queries';
 
 // 에피그램 작성
-export const usePostEpigramMutation = (options?: UseMutationOptions<PostEpigramResponseType, unknown, PostEpigramRequestType>) => {
-  return useMutation<PostEpigramResponseType, unknown, PostEpigramRequestType>({
+export const usePostEpigramMutation = (options: UseMutationOptions<PostEpigramResponseType, unknown, PostEpigramRequestType> = {}) => {
+  return useMutation({
     mutationFn: postEpigram,
     ...options,
   });
@@ -42,7 +24,7 @@ export const usePostEpigramMutation = (options?: UseMutationOptions<PostEpigramR
 // 에피그램 목록 조회
 export const useGetEpigramListQuery = (params: PaginationRequest, options?: UseQueryOptions<GetEpigramListResponseType>) => {
   return useQuery<GetEpigramListResponseType>({
-    queryKey: epigramKeys.list(params),
+    queryKey: quries.epigrams.list(params).queryKey,
     queryFn: () => getEpigramList(params),
     ...options,
   });
@@ -51,7 +33,7 @@ export const useGetEpigramListQuery = (params: PaginationRequest, options?: UseQ
 // 오늘의 에피그램 조회
 export const useGetTodayEpigramQuery = (options?: UseQueryOptions<EpigramDetailType>) => {
   return useQuery<EpigramDetailType>({
-    queryKey: epigramKeys.today(),
+    queryKey: quries.epigrams.todayEpigram().queryKey,
     queryFn: getTodayEpigram,
     ...options,
   });
@@ -60,7 +42,7 @@ export const useGetTodayEpigramQuery = (options?: UseQueryOptions<EpigramDetailT
 // 에피그램 상세 조회
 export const useGetEpigramDetailQuery = (id: number, options?: UseQueryOptions<EpigramDetailType>) => {
   return useQuery<EpigramDetailType>({
-    queryKey: epigramKeys.detail(id),
+    queryKey: quries.epigrams.detailEpigram(id).queryKey,
     queryFn: () => getEpigramDetail(id),
     ...options,
   });
@@ -88,8 +70,8 @@ export const useUpdateEpigramMutation = (id: number, options?: UseMutationOption
   return useMutation<EpigramDetailType, unknown, UpdateEpigramRequestType>({
     mutationFn: (data: UpdateEpigramRequestType) => updateEpigram(id, data),
     onSuccess: (...args) => {
-      queryClient.invalidateQueries({ queryKey: epigramKeys.detail(id) });
-      queryClient.invalidateQueries({ queryKey: epigramKeys.list({ limit: 10, cursor: undefined }) });
+      queryClient.invalidateQueries({ queryKey: quries.epigrams.detailEpigram(id).queryKey });
+      queryClient.invalidateQueries({ queryKey: quries.epigrams.list({ limit: 10, cursor: undefined }).queryKey });
       if (options?.onSuccess) {
         options.onSuccess(...args);
       }
@@ -109,7 +91,7 @@ export const useDeleteEpigramMutation = (id: number, options?: UseMutationOption
 // 에피그램 댓글 목록 조회
 export const useGetCommentListQuery = (id: number, paginationRequest: PaginationRequest, options?: UseQueryOptions<PaginationResponseType>) => {
   return useQuery<PaginationResponseType>({
-    queryKey: epigramKeys.comments(id, paginationRequest),
+    queryKey: quries.epigrams.comments(id, paginationRequest).queryKey,
     queryFn: () => getCommentList(id, paginationRequest),
     ...options,
   });

@@ -7,14 +7,10 @@ import {
   DeleteResponseType,
   PaginationResponseType,
   ErrorResponseType,
+  PaginationRequest,
 } from '../schema/epigramSchema';
 
 import httpClient from '.';
-
-export type PaginationRequest = {
-  limit: number;
-  cursor?: number;
-};
 
 // Post 에피그램 작성
 export const postEpigram = async (data: PostEpigramRequestType): Promise<PostEpigramResponseType> => {
@@ -23,8 +19,8 @@ export const postEpigram = async (data: PostEpigramRequestType): Promise<PostEpi
 };
 
 // 에피그램 목록 조회
-export const getEpigramList = async ({ limit, cursor }: PaginationRequest): Promise<GetEpigramListResponseType> => {
-  const response = await httpClient.get('/epigrams', { params: { limit, cursor } });
+export const getEpigramList = async (params: PaginationRequest): Promise<GetEpigramListResponseType> => {
+  const response = await httpClient.get('/epigrams', { params });
   return response.data;
 };
 
@@ -65,8 +61,8 @@ export const deleteEpigram = async (id: number): Promise<DeleteResponseType> => 
 };
 
 // 에피그램 댓글 목록 조회
-export const getCommentList = async (id: number, { limit, cursor }: PaginationRequest): Promise<PaginationResponseType> => {
-  const response = await httpClient.get(`/epigrams/${id}/comments`, { params: { limit, cursor } });
+export const getCommentList = async (id: number, params: PaginationRequest): Promise<PaginationResponseType> => {
+  const response = await httpClient.get(`/epigrams/${id}/comments`, { params });
   return response.data;
 };
 
