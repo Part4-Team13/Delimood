@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { getEpigrams, getTodayEpigram, getEpigramDetail, getEpigramComments } from '../apis/epigram/EpigramGet';
 
 //에피그램 목록 조회
-export const useGetEpigrams = (options = {}) => {
+export const useGetEpigrams = (limit: number, cursor: number | null, options = {}) => {
   return useQuery({
-    queryKey: ['epigrams'],
-    queryFn: getEpigrams,
+    queryKey: ['epigrams', { limit, cursor }],
+    queryFn: () => getEpigrams(limit, cursor),
     ...options,
   });
 };
