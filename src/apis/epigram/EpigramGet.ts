@@ -10,9 +10,11 @@ import {
 } from '../../schema/epigram/EpigramGet';
 
 // 에피그램 목록 조회 GET 요청
-export const getEpigrams = async (): Promise<CursorBasedPaginationResponse_EpigramListType_> => {
+export const getEpigrams = async (limit: number, cursor: number | null): Promise<CursorBasedPaginationResponse_EpigramListType_> => {
   try {
-    const response = await httpClient.get('/epigrams');
+    let queries = `limit=${limit}`;
+    if (cursor) queries += `&cursor=${cursor}`;
+    const response = await httpClient.get(`/epigrams?${queries}`);
     return cursorBasedPaginationResponse_EpigramListType_.parse(response.data);
   } catch (error) {
     handleError(error);
