@@ -36,7 +36,7 @@ const EmotionCard: React.FC<EmotionCardProps> = ({ emotion, describe, color, isS
     <div className='flex flex-col gap-[8px] items-center'>
       <button
         onClick={() => onClick(color)}
-        className={`rounded-[16px] w-[56px] h-[56px] tablet:w-[64px] tablet:h-[64px] desktop:w-[96px] desktop:h-[96px] bg-line-darker relative cursor-pointer ${isSelected ? `border-[3px] ${getBorderClass(color)}` : ''}`}
+        className={`rounded-[16px] w-[56px] h-[56px] tablet:w-[64px] tablet:h-[64px] desktop:w-[96px] desktop:h-[96px] bg-line-darker relative cursor-pointer ${isSelected ? `border-[3px] bg-opacity-0 ${getBorderClass(color)}` : ''}`}
       >
         <img className='w-[32px] h-[32px] desktop:w-[48px] desktop:h-[48px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' src={emotion} alt={describe} />
       </button>
