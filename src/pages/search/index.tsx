@@ -5,7 +5,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchCard from './SearchCard';
 import RecentSearches from './RecentSearches';
-import { data } from './data'; //데이터더미
+import { useGetEpigramListQuery } from '../../hooks/useEpigramQuery';
 
 const Search = () => {
   const SearchIcon = <IconSearch style={{ width: '20px', height: '20px' }} />;
@@ -14,7 +14,6 @@ const Search = () => {
 
   const [value, setValue] = useState('');
   const [debounced] = useDebouncedValue(value, 200);
-  const [filteredData, setFilteredData] = useState(data.list);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   //NOTE : URL 쿼리 파라미터에서 검색어 읽기 위한 useEffect로 컴포넌트가 렌더링될 때마다 location.search가 변경되면 실행됨.
@@ -30,21 +29,11 @@ const Search = () => {
     setRecentSearches(searches);
   }, []);
 
-  //FIX : 검색어에 따른 필터링 및 URL 업데이트인 useEffect인데 API에 검색 키워드 파라미터가 있어서 연동할때 수정예정.
-  useEffect(() => {
-    if (debounced.trim() === '') {
-      setFilteredData([]);
-    } else {
-      const filtered = data.list.filter((item) => {
-        const contentMatch = item.content.includes(debounced);
-        const authorMatch = item.author.includes(debounced);
-        const tagsMatch = item.tags.some((tag) => tag.name.includes(debounced));
-        return contentMatch || authorMatch || tagsMatch;
-      });
-      setFilteredData(filtered);
-    }
+  //API에 검색어 전달
+  const { data, isLoading, error } = useGetEpigramListQuery({ limit: 10, cursor: 0, keyword: debounced });
 
-    //저장 URL에 검색어 저장
+  //저장 URL에 검색어 저장
+  useEffect(() => {
     if (debounced.trim() !== '') {
       navigate(`?query=${encodeURIComponent(debounced)}`, { replace: true });
     } else {
@@ -95,8 +84,12 @@ const Search = () => {
         <div className='flex flex-col items-center justify-center'>
           {debounced.trim() === '' ? (
             <p className='font-medium text-blue-800'>검색어를 입력해주세요.</p>
-          ) : filteredData.length > 0 ? (
-            filteredData.map((item) => <SearchCard key={item.id} content={item.content} author={item.author} tags={item.tags} searchTerm={debounced} />)
+          ) : isLoading ? (
+            <p className='font-medium text-blue-800'>입력중</p>
+          ) : error ? (
+            <p className='font-medium text-blue-800'>오류가 발생했습니다 : {error.message}</p>
+          ) : data && data.list.length > 0 ? (
+            data.list.map((item) => <SearchCard key={item.id} content={item.content} author={item.author} tags={item.tags} searchTerm={debounced} />)
           ) : (
             <p className='font-medium text-blue-800'>검색 결과가 없습니다.</p>
           )}
