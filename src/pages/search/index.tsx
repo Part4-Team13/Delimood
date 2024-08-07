@@ -69,7 +69,7 @@ const Search = () => {
   };
 
   return (
-    <div className='h-screen bg-white'>
+    <div className='h-full min-h-screen bg-white pb-[20px]'>
       <div className='flex flex-col items-center justify-center gap-6 tablet:gap-8 desktop:gap-10'>
         <TextInput
           placeholder='검색어를 입력하세요.'
