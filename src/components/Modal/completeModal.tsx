@@ -19,7 +19,7 @@ function Modal({ isOpen, onClose, message, button }: ModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50' onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div className='fixed inset-0 bg-black-600 bg-opacity-50 flex items-center justify-center z-50' onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className='bg-white p-10 rounded-3xl text-center shadow-md w-[304px] h-[146px] desktop:w-[364px] desktop:h-[208px] tablet:w-[316px] tablet:h-[180px]' onClick={(e) => e.stopPropagation()}>
         <div className='flex flex-col items-center justify-center h-full'>
           <p className='text-lg font-semibold text-gray-800 mb-6 tablet:text-xl tablet:mb-9 desktop:text-2xl desktop:mb-12'>{message}</p>

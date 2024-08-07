@@ -52,7 +52,7 @@ function Modal({ isOpen, onClose, icon, message, secondaryMessage, buttons }: Mo
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50' onClick={onClose}>
+    <div className='fixed inset-0 bg-black-600 bg-opacity-50 flex items-center justify-center z-50' onClick={onClose}>
       <div className='bg-white p-10 rounded-3xl w-[320px] h-[238px] text-center shadow-md tablet:w-[372px] tablet:h-[282px] desktop:w-[452px] desktop:h-[332px]' onClick={(e) => e.stopPropagation()}>
         <div className='flex flex-col items-center justify-center h-full'>
           {icon && <div className='mb-6 w-[44px] h-[44px] desktop:w-[56px] desktop:h-[56px]'>{icon}</div>}
