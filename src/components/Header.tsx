@@ -62,7 +62,7 @@ const HeaderLeft: React.FC<HeaderButtonsProps> = ({ pathNow, navigate }) => {
         <li>
           <ul className='hidden tablet:flex gap-[24px] items-center mt-[3px]'>
             {MenuItems.map((menu, index) => (
-              <li className='tablet:text-[14px] desktop:text-[16px] ttablet:leading-[24px] desktop:leading-[26px]' key={index} onClick={() => navigate(menu.path)}>
+              <li className='tablet:text-[14px] desktop:text-[16px] tablet:leading-[24px] desktop:leading-[26px]' key={index} onClick={() => navigate(menu.path)}>
                 <button>{menu.name}</button>
               </li>
             ))}
