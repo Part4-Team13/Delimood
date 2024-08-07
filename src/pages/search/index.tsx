@@ -89,7 +89,7 @@ const Search = () => {
           ) : error ? (
             <p className='font-medium text-blue-800'>오류가 발생했습니다 : {error.message}</p>
           ) : data && data.list.length > 0 ? (
-            data.list.map((item) => <SearchCard key={item.id} content={item.content} author={item.author} tags={item.tags} searchTerm={debounced} />)
+            data.list.map((item) => <SearchCard key={item.id} id={item.id} content={item.content} author={item.author} tags={item.tags} searchTerm={debounced} />)
           ) : (
             <p className='font-medium text-blue-800'>검색 결과가 없습니다.</p>
           )}
