@@ -6,6 +6,7 @@ import Epigrams from './pages/epigrams';
 import Search from './pages/search';
 import Addepigram from './pages/addepigram';
 import Mypage from './pages/mypage';
+import EpigramDetail from './pages/epigramDetail'; // 추가한 컴포넌트 임포트
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path='signup' element={<Signup />} />
       <Route path='login' element={<Login />} />
       <Route path='epigrams' element={<Epigrams />} />
+      <Route path='epigrams/:id' element={<EpigramDetail />} />
       <Route path='search' element={<Search />} />
       <Route path='addepigram' element={<Addepigram />} />
       <Route path='mypage' element={<Mypage />} />
