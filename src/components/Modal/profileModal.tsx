@@ -40,7 +40,7 @@ function Modal({ isOpen, onClose, profileId }: ModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50' onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div className='fixed inset-0 bg-black-600 bg-opacity-50 flex items-center justify-center z-50' onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className='relative bg-white p-10 rounded-3xl text-center shadow-md w-[328px] h-[166px] desktop:w-[360px] desktop:h-[188px]' onClick={(e) => e.stopPropagation()}>
         <button className='absolute top-4 right-8' onClick={onClose}>
           <img src={closeButton} alt='Close' className='w-5 h-5' />
