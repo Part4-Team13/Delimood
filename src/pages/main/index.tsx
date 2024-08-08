@@ -29,6 +29,7 @@ export default function Main() {
         style={{
           backgroundImage: `url(src/assets/img_bg_top.png)`,
           backgroundSize: 'cover',
+          backgroundPosition: 'bottom',
         }}
       >
         <div className={`${basicStyle} mb-[168px] text-center tablet:mb-[106px] desktop:mb-[214px]`}>
