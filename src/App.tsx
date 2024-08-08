@@ -6,7 +6,7 @@ import Epigrams from './pages/epigrams';
 import Search from './pages/search';
 import Addepigram from './pages/addepigram';
 import Mypage from './pages/mypage';
-import EpigramDetail from './pages/epigramDetail'; // 추가한 컴포넌트 임포트
+import EpigramDetail from './pages/epigramDetail';
 
 function App() {
   return (
