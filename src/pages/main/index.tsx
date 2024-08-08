@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
 const basicStyle = 'flex flex-col items-center';
 
 const buttonStyle = 'px-[28px] py-[10px] rounded-xl bg-black-500 text-lg text-white desktop:px-[108px] desktop:py-[16px]';
@@ -8,6 +11,17 @@ const sectionHeadingStyle = 'mb-[16px] font-bold text-2xl desktop:text-3xl';
 const sectionParagraphStyle = 'text-blue-600 desktop:text-2xl';
 
 export default function Main() {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    const accessToken = Cookies.get('accessToken');
+    if (accessToken) {
+      navigate('/epigrams');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <>
       <header
@@ -22,7 +36,9 @@ export default function Main() {
             나만 갖고 있기엔 <br /> 아까운 글이 있지 않나요?
           </h1>
           <span className='mb-[24px] text-md font-paraph text-black-300 tablet:text-xl tablet:mb-[32px] desktop:mb-[48px]'>다른 사람들과 감정을 공유해보세요.</span>
-          <button className={buttonStyle}>시작하기</button>
+          <button className={buttonStyle} onClick={handleButtonClick}>
+            시작하기
+          </button>
         </div>
         <div className={`${basicStyle} gap-[4px]`}>
           <span className='text-xs text-blue-400 tablet:text-lg'>더 알아보기</span>
@@ -80,7 +96,9 @@ export default function Main() {
         }}
       >
         <img src='src/assets/img_paraph.png' alt='에피그램 텍스트 로고' className='mb-[32px] w-[122px] desktop:w-[184px] desktop:mb-[48px]' />
-        <button className={buttonStyle}>시작하기</button>
+        <button className={buttonStyle} onClick={handleButtonClick}>
+          시작하기
+        </button>
       </footer>
     </>
   );
