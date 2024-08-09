@@ -1,6 +1,6 @@
-import Kakao from '../../assets/img_logo_kakao.png';
-import Google from '../../assets/img_logo_google.png';
-import Naver from '../../assets/img_logo_naver.png';
+import Kakao from '../../assets/logo_kakao.svg';
+import Google from '../../assets/logo_google.svg';
+import Naver from '../../assets/logo_naver.svg';
 
 const SocialButton: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   return (
@@ -13,11 +13,11 @@ const SocialButton: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
 const SocialLogin: React.FC = () => {
   return (
     <div className='my-[50px] w-[312px] tablet:w-[384px] desktop:w-[640px]'>
-      <div className='flex items-center text-xs font-normal text-blue-400 space-between desktop:text-xl'>
-        <div className='flex-grow mx-2 border-t border-blue-400' />
+      <h2 className='flex items-center text-xs font-normal text-blue-400 space-between desktop:text-xl'>
+        <span className='flex-grow mx-2 border-t border-blue-400' />
         SNS 계정으로 간편 로그인하기
-        <div className='flex-grow mx-2 border-t border-blue-400' />
-      </div>
+        <span className='flex-grow mx-2 border-t border-blue-400' />
+      </h2>
 
       <div className='flex items-center justify-center gap-4 mt-[24px] desktop:mt-[40px]'>
         <SocialButton src={Kakao} alt='Kakao' />
