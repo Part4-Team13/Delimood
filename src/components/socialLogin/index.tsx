@@ -1,6 +1,6 @@
-import Kakao from '../../assets/logo_kakao.svg';
-import Google from '../../assets/logo_google.svg';
-import Naver from '../../assets/logo_naver.svg';
+import Kakao from '../../assets/ico_logo_kakao.svg';
+import Google from '../../assets/ico_logo_google.svg';
+import Naver from '../../assets/ico_logo_naver.svg';
 
 const SocialButton: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   return (
