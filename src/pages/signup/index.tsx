@@ -1,6 +1,5 @@
 import React from 'react';
-import { useForm } from '@mantine/form';
-import { TextInput, PasswordInput, Button, Container, rem } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Container, rem, ActionIcon } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { SignUpRequest, SignUpRequestType } from '../../schema/authSchema';
 import { IconEyeCheck, IconEyeOff, IconX, IconCheck } from '@tabler/icons-react';
@@ -8,36 +7,29 @@ import Logo from '../../assets/ico_logo.svg';
 import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
 import { useSignUp } from '../../hooks/authQuery';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm as useReactHookForm } from 'react-hook-form';
 
 const SignUp: React.FC = () => {
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
 
-  const form = useForm<SignUpRequestType>({
-    initialValues: {
-      email: '',
-      password: '',
-      passwordConfirmation: '',
-      nickname: '',
-    },
-    validate: (values) => {
-      const result = SignUpRequest.safeParse(values);
-      if (!result.success) {
-        const errors: Record<string, string> = {};
-        result.error.errors.forEach((error) => {
-          errors[error.path[0]] = error.message;
-        });
-        return errors;
-      }
-      return {};
-    },
+  const initialValues: SignUpRequestType = {
+    email: '',
+    password: '',
+    passwordConfirmation: '',
+    nickname: '',
+  };
+
+  const form = useReactHookForm<SignUpRequestType>({
+    defaultValues: initialValues,
+    resolver: zodResolver(SignUpRequest),
   });
 
-  const isFormValid = form.isValid();
+  const isFormValid = form.formState.isValid;
   const navigate = useNavigate();
   const signUpMutation = useSignUp({
-    onSuccess: (data) => {
-      console.log('회원가입 성공!', data);
+    onSuccess: () => {
       showNotification({
         title: '회원가입이 성공적으로 완료되었습니다.',
         message: '로그인 이후 사용가능합니다.',
@@ -59,7 +51,6 @@ const SignUp: React.FC = () => {
       navigate('/login');
     },
     onError: (error) => {
-      console.error('회원가입 실패:', error);
       showNotification({
         title: '죄송합니다. 다시 시도해주세요.',
         message: '회원가입 중 문제가 발생했습니다.',
@@ -80,9 +71,9 @@ const SignUp: React.FC = () => {
       });
       if (error.response) {
         if (error.response.status === 400) {
-          form.setErrors({ email: '이미 존재하는 이메일입니다.' });
+          form.setError('email', { type: 'manual', message: '이미 존재하는 이메일입니다.' });
         } else if (error.response.status === 500) {
-          form.setErrors({ nickname: '이미 존재하는 닉네임입니다.' });
+          form.setError('nickname', { type: 'manual', message: '이미 존재하는 닉네임입니다.' });
         }
       }
     },
@@ -90,12 +81,12 @@ const SignUp: React.FC = () => {
 
   return (
     <div className='flex flex-col items-center justify-center mt-[110px] tablet:mt-[140px] desktop:mt-[160px]'>
-      <button onClick={() => navigate('/')}>
+      <ActionIcon style={{ width: '172px', height: '48px', backgroundColor: 'transparent' }} onClick={() => navigate('/')}>
         <img src={Logo} alt='Logo' />
-      </button>
+      </ActionIcon>
       <Container className='flex items-center justify-center mt-[61px]'>
         <form
-          onSubmit={form.onSubmit((values) => {
+          onSubmit={form.handleSubmit((values) => {
             signUpMutation.mutate(values);
           })}
           className='w-[312px] flex flex-col gap-5 tablet:w-[384px] tablet:gap-10 desktop:w-[640px]'
@@ -103,9 +94,9 @@ const SignUp: React.FC = () => {
           <TextInput
             label='이메일'
             placeholder='이메일'
-            {...form.getInputProps('email')}
-            error={form.errors.email}
-            onBlur={() => form.validateField('email')}
+            {...form.register('email')}
+            error={form.formState.errors.email?.message}
+            onBlur={() => form.trigger('email')}
             classNames={{
               root: 'tablet:text-sm desktop:text-base',
               label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
@@ -117,9 +108,9 @@ const SignUp: React.FC = () => {
             <PasswordInput
               label='비밀번호'
               placeholder='비밀번호'
-              {...form.getInputProps('password')}
-              error={form.errors.password}
-              onBlur={() => form.validateField('password')}
+              {...form.register('password')}
+              error={form.formState.errors.password?.message}
+              onBlur={() => form.trigger('password')}
               classNames={{
                 input: 'hover:border-black-600 hover:border-2 h-[44px] mt-[16px] bg-blue-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
                 label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
@@ -132,9 +123,9 @@ const SignUp: React.FC = () => {
             />
             <PasswordInput
               placeholder='비밀번호 확인'
-              {...form.getInputProps('passwordConfirmation')}
-              error={form.errors.passwordConfirmation}
-              onBlur={() => form.validateField('passwordConfirmation')}
+              {...form.register('passwordConfirmation')}
+              error={form.formState.errors.passwordConfirmation?.message}
+              onBlur={() => form.trigger('passwordConfirmation')}
               classNames={{
                 root: 'mt-[10px] tablet:mt-[16px]',
                 input: 'hover:border-black-600 hover:border-2 h-[44px] mt-[16px] bg-blue-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
@@ -149,15 +140,16 @@ const SignUp: React.FC = () => {
           <TextInput
             label='닉네임'
             placeholder='닉네임'
-            {...form.getInputProps('nickname')}
-            error={form.errors.nickname}
-            onBlur={() => form.validateField('nickname')}
+            {...form.register('nickname')}
+            error={form.formState.errors.nickname?.message}
+            onBlur={() => form.trigger('nickname')}
             classNames={{
               label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
               input: 'focus:border-black-600 focus:border-2 mt-[16px] h-[44px] bg-blue-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl',
               error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
             }}
           />
+
           <Button
             type='submit'
             mt='md'
