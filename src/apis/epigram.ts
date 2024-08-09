@@ -32,19 +32,19 @@ export const getTodayEpigram = async (): Promise<EpigramDetailType> => {
 
 // 에피그램 상세 조회
 export const getEpigramDetail = async (id: number): Promise<EpigramDetailType> => {
-  const response = await httpClient.get(`/epigram/${id}`);
+  const response = await httpClient.get(`/epigrams/${id}`);
   return response.data;
 };
 
 // 에피그램 좋아요
 export const postEpigramLike = async (id: number): Promise<EpigramDetailType> => {
-  const response = await httpClient.post(`/epigram/${id}/like`);
+  const response = await httpClient.post(`/epigrams/${id}/like`);
   return response.data;
 };
 
 // 에피그램 좋아요 취소
 export const postEpigramLikeDelete = async (id: number): Promise<EpigramDetailType> => {
-  const response = await httpClient.delete(`/epigram/${id}/like`);
+  const response = await httpClient.delete(`/epigrams/${id}/like`);
   return response.data;
 };
 
