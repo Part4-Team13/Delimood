@@ -1,4 +1,4 @@
-const TimeFormatter = (getTime: string) => {
+const TimeFormatter = (getTime: string | Date) => {
   const initialTime = new Date(getTime);
   const currentTime = new Date();
 
