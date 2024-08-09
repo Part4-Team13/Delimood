@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
 // 댓글 등록
-export const PostComment = z.object({
+export const PostCommentSchema = z.object({
   epigramId: z.number(),
   isPrivate: z.boolean(),
   content: z.string(),
@@ -34,26 +34,26 @@ export const ResponseSchema = z.object({
 });
 
 // 댓글 수정
-export const PatchComment = z.object({
+export const PatchCommentSchema = z.object({
   isPrivate: z.boolean(),
   content: z.string(),
 });
 
 // 댓글 삭제
-export const DeleteComment = z.object({
+export const DeleteCommentSchema = z.object({
   id: z.number(),
 });
 
 // 댓글 목록 조회 요청
-export const GetCommentsRequest = z.object({
+export const GetCommentsRequestSchema = z.object({
   epigramId: z.number(),
   limit: z.number(),
   cursor: z.number().optional(),
 });
 
-export type PostCommentType = z.infer<typeof PostComment>;
+export type PostCommentType = z.infer<typeof PostCommentSchema>;
 export type ResponseType = z.infer<typeof ResponseSchema>;
 export type ListItemType = z.infer<typeof ListItemSchema>;
-export type PatchCommentType = z.infer<typeof PatchComment>;
-export type DeleteCommentType = z.infer<typeof DeleteComment>;
-export type GetCommentsRequestType = z.infer<typeof GetCommentsRequest>;
+export type PatchCommentType = z.infer<typeof PatchCommentSchema>;
+export type DeleteCommentType = z.infer<typeof DeleteCommentSchema>;
+export type GetCommentsRequestType = z.infer<typeof GetCommentsRequestSchema>;
