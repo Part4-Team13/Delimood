@@ -1,5 +1,7 @@
 import React from 'react';
 import CommentCard from './CommentCard';
+import { ListItemType } from '../../schema/commentSchema';
+import { CommentList } from '.';
 
 export interface CommentProps {
   id: number;
@@ -9,19 +11,19 @@ export interface CommentProps {
     image: string | null;
     nickname: string;
   };
-  updatedAt: string;
-  createdAt: string;
+  updatedAt: string | Date;
+  createdAt: string | Date;
   isPrivate: boolean;
   content: string;
 }
 
-interface CommentListProps {
-  commentList: CommentProps[];
+interface CommentListStyleProps {
+  commentList: ListItemType[] | CommentList[];
 }
 
 const MemoizedCard = React.memo(CommentCard);
 
-function CommentList({ commentList }: CommentListProps) {
+function CommentListStyle({ commentList }: CommentListStyleProps) {
   return (
     <div className='bg-background'>
       <ul className='mx-auto bg-yellow-300 w-fit'>
@@ -35,4 +37,4 @@ function CommentList({ commentList }: CommentListProps) {
   );
 }
 
-export default CommentList;
+export default CommentListStyle;

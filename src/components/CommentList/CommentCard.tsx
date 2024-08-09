@@ -1,9 +1,8 @@
-import React from 'react';
 import TimeFormatter from '../../utils/TimeFormatter';
 
 interface CommentCardProps {
   // id: number;
-  updatedAt: string;
+  updatedAt: string | Date;
   // isPrivate: boolean;
   content: string;
   writer: {
