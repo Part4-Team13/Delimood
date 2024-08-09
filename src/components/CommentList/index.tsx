@@ -79,3 +79,10 @@ function CommentList_({ id, isMine = false, isInfiniteScroll = false }: CommentL
 }
 
 export default CommentList_;
+
+/**
+ *  <CommentList id={} /> : 특정 에피그램 댓글 리스트 , 더보기 버튼 형식
+ *  <CommentList isMine /> : 내가 작성한 댓글 리스트 , 더보기 버튼 형식
+ *  <CommentList /> : 전체 댓글 리스트 , 더보기 버튼 형식
+ *  isInfiniteScroll prop 추가 시 무한 스크롤 형태로 보여줌
+ */
