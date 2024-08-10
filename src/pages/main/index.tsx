@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 const basicStyle = 'flex flex-col items-center';
 
-const buttonStyle = 'px-[28px] py-[10px] rounded-xl bg-black-500 text-lg text-white desktop:px-[108px] desktop:py-[16px]';
+const buttonStyle = 'px-[28px] py-[10px] rounded-xl bg-button-default text-lg text-white desktop:px-[108px] desktop:py-[16px] desktop:text-xl hover:bg-button-hover';
 
 const sectionStyle = 'mb-[196px] desktop:flex desktop:items-end desktop:gap-[80px]';
 const sectionImgStyle = 'mb-[40px] desktop:mb-0 desktop:shrink-0 desktop:max-w-[50%]';
