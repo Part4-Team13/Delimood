@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import quries from '../apis/queries';
-import { PostEmotionLog, GetTodayEmotionLog } from '../schema/emotionLogSchema';
+import { PostEmotionLog } from '../schema/emotionLogSchema';
 import { postEmotionLog } from '../apis/emotionLog';
 import { MutationOptions } from '../types/query';
 
 // 오늘의 감정 등록
-export const usePostEmotionLog = (options: MutationOptions<GetTodayEmotionLog>) => {
+export const usePostEmotionLog = (options: MutationOptions<PostEmotionLog>) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (request: PostEmotionLog) => postEmotionLog(request),
