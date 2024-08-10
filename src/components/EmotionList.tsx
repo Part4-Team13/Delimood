@@ -6,11 +6,11 @@ import angry from '../assets/ico_face_angry.svg';
 import { useState } from 'react';
 
 const emotions = [
-  { emotion: heart, describe: '감동', color: 'yellow' },
-  { emotion: smiling, describe: '기쁨', color: 'green' },
-  { emotion: thinking, describe: '고민', color: 'purple' },
-  { emotion: sad, describe: '슬픔', color: 'blue' },
-  { emotion: angry, describe: '분노', color: 'red' },
+  { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },
+  { icon: smiling, describe: '기쁨', color: 'green', emotion: 'HAPPY' },
+  { icon: thinking, describe: '고민', color: 'purple', emotion: 'WORRIED' },
+  { icon: sad, describe: '슬픔', color: 'blue', emotion: 'SAD' },
+  { icon: angry, describe: '분노', color: 'red', emotion: 'ANGRY' },
 ];
 
 const colorMap: { [color: string]: string } = {
@@ -24,14 +24,14 @@ const colorMap: { [color: string]: string } = {
 const getBorderClass = (color: string) => colorMap[color] || '';
 
 interface EmotionCardProps {
-  emotion: string;
+  icon: string;
   describe: string;
   color: string;
   isSelected: boolean;
   onClick: (color: string) => void;
 }
 
-const EmotionCard: React.FC<EmotionCardProps> = ({ emotion, describe, color, isSelected, onClick }) => {
+const EmotionCard: React.FC<EmotionCardProps> = ({ icon: emotion, describe, color, isSelected, onClick }) => {
   return (
     <div className='flex flex-col gap-[8px] items-center'>
       <button
@@ -55,7 +55,7 @@ function EmotionList() {
     <ul className='flex gap-[16px]'>
       {emotions.map((emotion, index) => (
         <li key={index}>
-          <EmotionCard emotion={emotion.emotion} describe={emotion.describe} color={emotion.color} isSelected={emotion.color === selectexColor} onClick={emotionCardClick} />
+          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.color === selectexColor} onClick={emotionCardClick} />
         </li>
       ))}
     </ul>
