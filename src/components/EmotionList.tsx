@@ -48,7 +48,7 @@ const EmotionCard: React.FC<EmotionCardProps> = ({ icon, describe, color, isSele
 };
 
 function EmotionList() {
-  const [selectexEmotion, setSelectedEmotion] = useState('');
+  const [selectedEmotion, setSelectedEmotion] = useState('');
   const mutation = usePostEmotionLog({
     onError: () => {
       console.error('감정 등록에 실패하였습니다.');
@@ -64,7 +64,7 @@ function EmotionList() {
     <ul className='flex gap-[16px]'>
       {emotions.map((emotion, index) => (
         <li key={index}>
-          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.emotion === selectexEmotion} onClick={emotionCardClick} emotion={emotion.emotion} />
+          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.emotion === selectedEmotion} onClick={emotionCardClick} emotion={emotion.emotion} />
         </li>
       ))}
     </ul>
