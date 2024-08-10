@@ -4,6 +4,7 @@ import thinking from '../assets/ico_face_thinking.svg';
 import sad from '../assets/ico_face_sad.svg';
 import angry from '../assets/ico_face_angry.svg';
 import { useState } from 'react';
+import { usePostEmotionLog } from '../hooks/useEmotionLogQuery';
 
 const emotions = [
   { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },
@@ -29,16 +30,17 @@ interface EmotionCardProps {
   color: string;
   isSelected: boolean;
   onClick: (color: string) => void;
+  emotion: string;
 }
 
-const EmotionCard: React.FC<EmotionCardProps> = ({ icon: emotion, describe, color, isSelected, onClick }) => {
+const EmotionCard: React.FC<EmotionCardProps> = ({ icon, describe, color, isSelected, onClick, emotion }) => {
   return (
     <div className='flex flex-col gap-[8px] items-center'>
       <button
-        onClick={() => onClick(color)}
+        onClick={() => onClick(emotion)}
         className={`rounded-[16px] w-[56px] h-[56px] tablet:w-[64px] tablet:h-[64px] desktop:w-[96px] desktop:h-[96px] bg-[#AFBACD] relative cursor-pointer ${isSelected ? `border-[3px] bg-opacity-0 ${getBorderClass(color)}` : 'bg-opacity-[0.15]'}`}
       >
-        <img className='w-[32px] h-[32px] desktop:w-[48px] desktop:h-[48px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' src={emotion} alt={describe} />
+        <img className='w-[32px] h-[32px] desktop:w-[48px] desktop:h-[48px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' src={icon} alt={describe} />
       </button>
       <span className='text-xs tablet:text-lg desktop:text-xl'>{describe}</span>
     </div>
@@ -46,16 +48,24 @@ const EmotionCard: React.FC<EmotionCardProps> = ({ icon: emotion, describe, colo
 };
 
 function EmotionList() {
-  const [selectexColor, setSelectedColor] = useState('');
-  const emotionCardClick = (color: string) => {
-    setSelectedColor(color);
+  const [selectexEmotion, setSelectedEmotion] = useState('');
+  const mutation = usePostEmotionLog({
+    onError: () => {
+      console.error('감정 등록에 실패하였습니다.');
+    },
+  });
+
+  const emotionCardClick = (emotion: string) => {
+    setSelectedEmotion(emotion);
+    console.log({ emotion });
+    mutation.mutate({ emotion });
   };
 
   return (
     <ul className='flex gap-[16px]'>
       {emotions.map((emotion, index) => (
         <li key={index}>
-          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.color === selectexColor} onClick={emotionCardClick} />
+          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.emotion === selectexEmotion} onClick={emotionCardClick} emotion={emotion.emotion} />
         </li>
       ))}
     </ul>
