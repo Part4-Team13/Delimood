@@ -57,7 +57,6 @@ function EmotionList() {
 
   const emotionCardClick = (emotion: string) => {
     setSelectedEmotion(emotion);
-    console.log({ emotion });
     mutation.mutate({ emotion });
   };
 
