@@ -15,6 +15,7 @@ interface ModalProps {
   buttons: ButtonProps[];
 }
 
+//NOTE: 모달 사용법
 /**
  * 조건부로 사용 가능한 Modal 컴포넌트
  *
@@ -46,11 +47,12 @@ interface ModalProps {
  * @param secondaryMessage - (선택적) 모달에 표시될 추가 메시지입니다.
  * @param buttons - 모달 하단에 표시될 버튼들의 설정입니다. 각 버튼은 text(버튼 텍스트), onClick(클릭 핸들러), variant(스타일 변형) 속성을 가집니다.
  */
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, icon, message, secondaryMessage, buttons }) => {
+
+function Modal({ isOpen, onClose, icon, message, secondaryMessage, buttons }: ModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50' onClick={onClose}>
+    <div className='fixed inset-0 bg-black-600 bg-opacity-50 flex items-center justify-center z-50' onClick={onClose}>
       <div className='bg-white p-10 rounded-3xl w-[320px] h-[238px] text-center shadow-md tablet:w-[372px] tablet:h-[282px] desktop:w-[452px] desktop:h-[332px]' onClick={(e) => e.stopPropagation()}>
         <div className='flex flex-col items-center justify-center h-full'>
           {icon && <div className='mb-6 w-[44px] h-[44px] desktop:w-[56px] desktop:h-[56px]'>{icon}</div>}
@@ -75,6 +77,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, icon, message, secondary
       </div>
     </div>
   );
-};
+}
 
 export default Modal;
