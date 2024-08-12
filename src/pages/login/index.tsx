@@ -1,6 +1,5 @@
 import React from 'react';
-import { useForm } from '@mantine/form';
-import { TextInput, PasswordInput, Button, Container, rem } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Container, rem, ActionIcon } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { LoginRequest, LoginRequestType } from '../../schema/authSchema';
 import { IconEyeCheck, IconEyeOff, IconX, IconCheck } from '@tabler/icons-react';
@@ -9,7 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
 import { useLogin } from '../../hooks/authQuery';
 import { AxiosError } from 'axios';
-import Cookies from 'js-cookie';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm as useReactHookForm } from 'react-hook-form';
 
 type ErrorResponse = {
   message: string;
@@ -20,31 +20,20 @@ const Login: React.FC = () => {
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
 
-  const form = useForm<LoginRequestType>({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validate: (values) => {
-      const result = LoginRequest.safeParse(values);
-      if (!result.success) {
-        const errors: Record<string, string> = {};
-        result.error.errors.forEach((error) => {
-          errors[error.path[0]] = error.message;
-        });
-        return errors;
-      }
-      return {};
-    },
+  const initialValues: LoginRequestType = {
+    email: '',
+    password: '',
+  };
+
+  const form = useReactHookForm<LoginRequestType>({
+    defaultValues: initialValues,
+    resolver: zodResolver(LoginRequest),
   });
 
-  const isFormValid = form.isValid();
+  const isFormValid = form.formState.isValid;
   const navigate = useNavigate();
   const loginMutation = useLogin({
-    onSuccess: (data) => {
-      Cookies.set('accessToken', data.accessToken, { expires: new Date(Date.now() + 1800 * 1000) });
-      Cookies.set('refreshToken', data.refreshToken);
-
+    onSuccess: () => {
       showNotification({
         title: '로그인 완료되었습니다.',
         message: '성공적으로 로그인되었습니다.',
@@ -87,11 +76,12 @@ const Login: React.FC = () => {
         }),
       });
       if (response?.details) {
-        const errors: Record<string, string> = {};
         for (const [key, value] of Object.entries(response.details)) {
-          errors[key] = value.message;
+          form.setError(key as keyof LoginRequestType, {
+            type: 'manual',
+            message: value.message,
+          });
         }
-        form.setErrors(errors);
       } else {
         console.error('로그인 실패:', error);
       }
@@ -100,21 +90,21 @@ const Login: React.FC = () => {
 
   return (
     <div className='flex flex-col items-center justify-center mt-[110px] tablet:mt-[140px] desktop:mt-[160px]'>
-      <button onClick={() => navigate('/')}>
+      <ActionIcon style={{ width: '172px', height: '48px', backgroundColor: 'transparent' }} onClick={() => navigate('/')}>
         <img src={Logo} alt='Logo' />
-      </button>
+      </ActionIcon>
       <Container className='flex items-center justify-center mt-[50px] tablet:mt-[60px]'>
         <form
-          onSubmit={form.onSubmit((values) => {
+          onSubmit={form.handleSubmit((values) => {
             loginMutation.mutate(values);
           })}
           className='w-[312px] flex flex-col gap-2.5 tablet:w-[384px] desktop:gap-4 desktop:w-[640px]'
         >
           <TextInput
             placeholder='이메일'
-            {...form.getInputProps('email')}
-            error={form.errors.email}
-            onBlur={() => form.validateField('email')}
+            {...form.register('email')}
+            error={form.formState.errors.email?.message}
+            onBlur={() => form.trigger('email')}
             classNames={{
               input: 'focus:border-black-600 focus:border-2 h-[44px] text-base bg-blue-200 rounded-2xl px-3 w-full text-base text-black-950 tablet:px-4 desktop:h-[64px] desktop:text-xl',
               error: 'pl-2 text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
@@ -124,9 +114,9 @@ const Login: React.FC = () => {
           <div className='relative mb-2.5'>
             <PasswordInput
               placeholder='비밀번호'
-              {...form.getInputProps('password')}
-              error={form.errors.password}
-              onBlur={() => form.validateField('password')}
+              {...form.register('password')}
+              error={form.formState.errors.password?.message}
+              onBlur={() => form.trigger('password')}
               classNames={{
                 input: 'hover:border-black-600 hover:border-2 bg-blue-200 rounded-2xl h-[44px] desktop:h-[64px]',
                 error: 'pl-2 text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',

@@ -9,6 +9,7 @@ const httpClient = axios.create({
   paramsSerializer: (parameters) => qs.stringify(parameters, { arrayFormat: 'repeat', encode: false }),
 });
 
+//Refactor : 쿠키에서 스토리지로 변경하기 작업하기
 httpClient.interceptors.request.use(
   (config) => {
     const accessToken = Cookies.get('accessToken');
@@ -44,7 +45,7 @@ httpClient.interceptors.response.use(
 
         return httpClient(originalRequest);
       } catch (refreshError) {
-        // FIX: refreshToken이 만료되었거나 다른 오류 발생 시 로그아웃 처리, 알림메시지 후 로그인창으로 이동
+        //Refactor : refreshToken이 만료되었거나 다른 오류 발생 시 로그아웃 처리, 알림메시지 후 로그인창으로 이동
         console.error('Refresh token failed:', refreshError);
         Cookies.remove('accessToken');
         Cookies.remove('refreshToken');
