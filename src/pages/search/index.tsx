@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { TextInput, CloseButton } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useDebouncedValue } from '@mantine/hooks';
@@ -6,7 +6,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SearchCard from './SearchCard';
 import RecentSearches from './RecentSearches';
 import { useGetEpigramListQuery } from '../../hooks/useEpigramQuery';
+import { hexConverter } from '../../utils/hexConverter';
+import { GetEpigramListType } from '../../schema/epigramSchema';
 
+//refactor : useInfiniteQuery 사용해서 무한 스크롤 구현하기
 const Search = () => {
   const SearchIcon = <IconSearch style={{ width: '20px', height: '20px' }} />;
   const location = useLocation();
@@ -15,8 +18,10 @@ const Search = () => {
   const [value, setValue] = useState('');
   const [debounced] = useDebouncedValue(value, 200);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [cursor, setCursor] = useState<number | undefined>(0);
+  const [epigrams, setEpigrams] = useState<GetEpigramListType[]>([]);
 
-  //NOTE : URL 쿼리 파라미터에서 검색어 읽기 위한 useEffect로 컴포넌트가 렌더링될 때마다 location.search가 변경되면 실행됨.
+  //NOTE : URL의 쿼리 파라미터에서 'query' 값을 읽어 검색어 상태를 업데이트하는 useEffect로, location.search가 변경되면 실행됨.
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const query = queryParams.get('query') || '';
@@ -29,19 +34,25 @@ const Search = () => {
     setRecentSearches(searches);
   }, []);
 
-  //API에 검색어 전달
-  const { data, isLoading, error } = useGetEpigramListQuery({ limit: 10, cursor: 0, keyword: debounced });
+  //변환된 검색어를 API에 전달
+  const { data, isLoading, error } = useGetEpigramListQuery({
+    limit: 10,
+    cursor,
+    keyword: hexConverter(debounced),
+  });
 
-  //저장 URL에 검색어 저장
+  //NOTE : 검색어 변경 시 URL 업데이트 및 상태 초기화
   useEffect(() => {
     if (debounced.trim() !== '') {
       navigate(`?query=${encodeURIComponent(debounced)}`, { replace: true });
+      setEpigrams([]);
+      setCursor(0);
     } else {
       navigate('/search', { replace: true });
     }
   }, [debounced, navigate]);
 
-  //검색어 핸들링 함수
+  //NOTE : 검색어를 처리하고 최근 검색어를 로컬 스토리지에 저장하는 핸들러
   const handleSearch = (term: string) => {
     setValue(term);
     if (term.trim() === '') return;
@@ -56,6 +67,33 @@ const Search = () => {
     //검색어를 URL에 저장
     navigate(`?query=${encodeURIComponent(term)}`);
   };
+
+  //스크롤 이벤트를 핸들링하여 페이지 끝에 도달하면 다음 데이터를 가져옴
+  const handleScroll = useCallback(() => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2) {
+      if (data && data.nextCursor !== null) {
+        setCursor(data.nextCursor);
+      }
+    }
+  }, [data]);
+
+  //NOTE : API로부터 받은 데이터를 업데이트하는 useEffect
+  useEffect(() => {
+    if (data && data.list.length > 0) {
+      setEpigrams((prevEpigrams) => {
+        const existingIds = new Set(prevEpigrams.map((epigram) => epigram.id));
+        const newEpigrams = data.list.filter((epigram) => !existingIds.has(epigram.id));
+        return [...prevEpigrams, ...newEpigrams];
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   return (
     <div className='h-full min-h-screen bg-white pb-[20px]'>
@@ -81,17 +119,17 @@ const Search = () => {
 
         {recentSearches.length > 0 && <RecentSearches onSearch={handleSearch} searches={recentSearches} />}
 
-        <div className='flex flex-col items-center justify-center'>
+        <div className='flex flex-col items-center justify-center font-medium text-blue-800'>
           {debounced.trim() === '' ? (
-            <p className='font-medium text-blue-800'>검색어를 입력해주세요.</p>
+            <p>검색어를 입력해주세요.</p>
           ) : isLoading ? (
-            <p className='font-medium text-blue-800'>입력중</p>
+            <p>로딩중</p>
           ) : error ? (
-            <p className='font-medium text-blue-800'>오류가 발생했습니다 : {error.message}</p>
-          ) : data && data.list.length > 0 ? (
-            data.list.map((item) => <SearchCard key={item.id} id={item.id} content={item.content} author={item.author} tags={item.tags} searchTerm={debounced} />)
+            <p>오류가 발생했습니다. 다시 시도해주세요.</p>
+          ) : epigrams.length === 0 ? (
+            <p>검색 결과가 없습니다.</p>
           ) : (
-            <p className='font-medium text-blue-800'>검색 결과가 없습니다.</p>
+            epigrams.map((epigram) => <SearchCard key={epigram.id} id={epigram.id} content={epigram.content} author={epigram.author} tags={epigram.tags} searchTerm={debounced} />)
           )}
         </div>
       </div>
