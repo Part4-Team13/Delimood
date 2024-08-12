@@ -1,31 +1,17 @@
 import React, { useEffect } from 'react';
 import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../assets/ico_logo.svg';
-import menu from '../assets/ico_gnb_menu.svg';
+import logo from '../../assets/ico_logo.svg';
+import menu from '../../assets/ico_gnb_menu.svg';
+import user from '../../assets/ico_user.svg';
 import { useDisclosure } from '@mantine/hooks';
 import { Drawer } from '@mantine/core';
-
-interface User {
-  image: string;
-  nickname: string;
-  id: number;
-}
-
-interface HeaderProps {
-  user?: User;
-}
+import { useGetMeQuery } from '../../hooks/useUserQuery';
+import Cookies from 'js-cookie';
 
 interface HeaderButtonsProps {
-  user?: User;
   pathNow: string;
   navigate: NavigateFunction;
 }
-
-const mockUser = {
-  image: 'https://picsum.photos/200/300',
-  nickname: '김코드',
-  id: 1,
-};
 
 // 헤더 좌측 버튼
 const HeaderLeft: React.FC<HeaderButtonsProps> = ({ pathNow, navigate }) => {
@@ -88,36 +74,43 @@ const HeaderMiddle: React.FC<HeaderButtonsProps> = ({ pathNow, navigate }) => {
   );
 };
 
-// 헤더 오른쪽 버튼
-const HeaderRight: React.FC<HeaderButtonsProps> = ({ pathNow, user, navigate }) => {
-  if (user) {
+// 헤더 오른쪽 버튼 (로그인o)
+const HeaderRight: React.FC<HeaderButtonsProps> = ({ pathNow, navigate }) => {
+  const { data } = useGetMeQuery();
+  if (data) {
+    const src = data.image ? data.image : user;
     return (
       <button className='flex items-center gap-[6px] ml-auto' onClick={() => navigate('/mypage')}>
-        <img className='w-[25px] h-[25px] tablet:w-[30px] tablet:h-[30px] object-cover rounded-full' src={user.image} alt={pathNow} />
-        <span className='hidden tablet:inline'>{user.nickname}</span>
+        <img className='w-[25px] h-[25px] tablet:w-[30px] tablet:h-[30px] object-cover rounded-full' src={src} alt={pathNow} />
+        <span className='hidden tablet:inline'>{data.nickname}</span>
       </button>
     );
-  } else {
-    if (pathNow !== '/login') {
-      return (
-        <span className='cursor-pointer text-md tablet:text-lg ml-auto' onClick={() => navigate('/login')}>
-          로그인
-        </span>
-      );
-    }
   }
   return null;
 };
 
-function Header({ user = mockUser }: HeaderProps) {
+// 헤더 오른쪽 버튼 (로그인x)
+const HeaderRightUnAuthenticated: React.FC<Pick<HeaderButtonsProps, 'pathNow' | 'navigate'>> = ({ pathNow, navigate }) => {
+  if (pathNow !== '/login') {
+    return (
+      <span className='cursor-pointer text-md tablet:text-lg ml-auto' onClick={() => navigate('/login')}>
+        로그인
+      </span>
+    );
+  }
+  return null;
+};
+
+function Header() {
   const { pathname: pathNow } = useLocation();
   const navigate = useNavigate();
+  const accessToken = Cookies.get('accessToken');
 
   return (
     <div className='bg-white flex h-[52px] px-[24px] tablet:h-[60px] tablet:px-[72px] desktop:px-[120px] desktop:h-[80px] items-center relative'>
       <HeaderLeft pathNow={pathNow} navigate={navigate} />
       <HeaderMiddle pathNow={pathNow} navigate={navigate} />
-      <HeaderRight pathNow={pathNow} user={user} navigate={navigate} />
+      {accessToken ? <HeaderRight pathNow={pathNow} navigate={navigate} /> : <HeaderRightUnAuthenticated pathNow={pathNow} navigate={navigate} />}
     </div>
   );
 }
