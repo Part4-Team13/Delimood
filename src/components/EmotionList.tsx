@@ -5,6 +5,9 @@ import sad from '../assets/ico_face_sad.svg';
 import angry from '../assets/ico_face_angry.svg';
 import { useState } from 'react';
 import { usePostEmotionLog } from '../hooks/useEmotionLogQuery';
+import { showNotification } from '@mantine/notifications';
+import { IconX } from '@tabler/icons-react';
+import { rem } from '@mantine/core';
 
 const emotions = [
   { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },
@@ -48,10 +51,28 @@ const EmotionCard: React.FC<EmotionCardProps> = ({ icon, describe, color, isSele
 };
 
 function EmotionList() {
+  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
   const [selectedEmotion, setSelectedEmotion] = useState('');
   const mutation = usePostEmotionLog({
     onError: () => {
-      console.error('감정 등록에 실패하였습니다.');
+      showNotification({
+        title: '죄송합니다. 다시 시도해주세요.',
+        message: '감정 등록에 실패했습니다.',
+        icon: xIcon,
+        color: 'red',
+        autoClose: 2000,
+        styles: () => ({
+          root: {
+            position: 'fixed',
+            top: '10%',
+            right: '3%',
+            transform: 'translate(-50%, -50%)',
+            minWidth: '300px',
+            width: '40%',
+            maxWidth: '70%',
+          },
+        }),
+      });
     },
   });
 
