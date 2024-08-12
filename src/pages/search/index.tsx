@@ -1,15 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { TextInput, CloseButton } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useDebouncedValue } from '@mantine/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SearchCard from './SearchCard';
 import RecentSearches from './RecentSearches';
-import { useGetEpigramListQuery } from '../../hooks/useEpigramQuery';
+import { useGetEpigramListInfiniteQuery } from '../../hooks/useEpigramQuery';
 import { hexConverter } from '../../utils/hexConverter';
 import { GetEpigramListType } from '../../schema/epigramSchema';
 
-//refactor : useInfiniteQuery 사용해서 무한 스크롤 구현하기
 const Search = () => {
   const SearchIcon = <IconSearch style={{ width: '20px', height: '20px' }} />;
   const location = useLocation();
@@ -18,10 +17,9 @@ const Search = () => {
   const [value, setValue] = useState('');
   const [debounced] = useDebouncedValue(value, 200);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [cursor, setCursor] = useState<number | undefined>(0);
   const [epigrams, setEpigrams] = useState<GetEpigramListType[]>([]);
 
-  //NOTE : URL의 쿼리 파라미터에서 'query' 값을 읽어 검색어 상태를 업데이트하는 useEffect로, location.search가 변경되면 실행됨.
+  //NOTE : URL의 쿼리 파라미터에서 'query' 값을 읽어 검색어 상태를 업데이트
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const query = queryParams.get('query') || '';
@@ -34,10 +32,10 @@ const Search = () => {
     setRecentSearches(searches);
   }, []);
 
-  //변환된 검색어를 API에 전달
-  const { data, isLoading, error } = useGetEpigramListQuery({
+  //변환된 검색어를 API에 전달하여 데이터 가져오기
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetEpigramListInfiniteQuery({
     limit: 10,
-    cursor,
+    cursor: undefined,
     keyword: hexConverter(debounced),
   });
 
@@ -46,7 +44,6 @@ const Search = () => {
     if (debounced.trim() !== '') {
       navigate(`?query=${encodeURIComponent(debounced)}`, { replace: true });
       setEpigrams([]);
-      setCursor(0);
     } else {
       navigate('/search', { replace: true });
     }
@@ -69,31 +66,26 @@ const Search = () => {
   };
 
   //스크롤 이벤트를 핸들링하여 페이지 끝에 도달하면 다음 데이터를 가져옴
-  const handleScroll = useCallback(() => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2) {
-      if (data && data.nextCursor !== null) {
-        setCursor(data.nextCursor);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2 && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
       }
-    }
-  }, [data]);
+    };
 
-  //NOTE : API로부터 받은 데이터를 업데이트하는 useEffect
-  useEffect(() => {
-    if (data && data.list.length > 0) {
-      setEpigrams((prevEpigrams) => {
-        const existingIds = new Set(prevEpigrams.map((epigram) => epigram.id));
-        const newEpigrams = data.list.filter((epigram) => !existingIds.has(epigram.id));
-        return [...prevEpigrams, ...newEpigrams];
-      });
-    }
-  }, [data]);
-
-  useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [handleScroll]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  //NOTE : API로부터 받은 데이터를 업데이트하는 useEffect
+  useEffect(() => {
+    if (data) {
+      const newEpigrams = data.pages.flatMap((page) => page.list);
+      setEpigrams(newEpigrams);
+    }
+  }, [data]);
 
   return (
     <div className='h-full min-h-screen bg-white pb-[20px]'>
@@ -131,6 +123,7 @@ const Search = () => {
           ) : (
             epigrams.map((epigram) => <SearchCard key={epigram.id} id={epigram.id} content={epigram.content} author={epigram.author} tags={epigram.tags} searchTerm={debounced} />)
           )}
+          {isFetchingNextPage && <p>더 불러오는 중...</p>}
         </div>
       </div>
     </div>

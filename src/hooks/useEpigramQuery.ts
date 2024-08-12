@@ -1,13 +1,14 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { GetEpigramListResponseType, PaginationRequest } from '../schema/epigramSchema';
 import { getEpigramList } from '../apis/epigram';
 import quries from '../apis/queries';
 
-// 에피그램 목록 조회
-export const useGetEpigramListQuery = (params: PaginationRequest, options?: UseQueryOptions<GetEpigramListResponseType>) => {
-  return useQuery<GetEpigramListResponseType>({
+//무한 스크롤을 위한 useInfiniteQuery 훅
+export const useGetEpigramListInfiniteQuery = (params: PaginationRequest) => {
+  return useInfiniteQuery<GetEpigramListResponseType>({
     queryKey: quries.epigrams.list(params).queryKey,
-    queryFn: () => getEpigramList(params),
-    ...options,
+    queryFn: ({ pageParam = 0 }) => getEpigramList({ ...params, cursor: pageParam as number }),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    initialPageParam: 0,
   });
 };
