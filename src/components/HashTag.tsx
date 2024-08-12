@@ -9,7 +9,7 @@ function HashTag({ tags, removeTag }: HashTagProps) {
       <div className='flex flex-wrap gap-2 mb-2'>
         {tags.map((tag, idx) => (
           <div key={idx} className='flex items-center bg-background px-2 py-1 rounded-[22px] text-xl'>
-            <span className='p-1 text-2xl'>{tag}</span>
+            <span className='p-1 text- tablet:text-xl desktop:text-2xl'>{tag}</span>
             <button onClick={() => removeTag(idx)} className='ml-2 text-button-default'>
               &times;
             </button>
