@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CommentCard from './CommentCard';
 import ViewMore from '../ViewMore';
 import { InfiniteData } from '@tanstack/react-query';
@@ -9,21 +9,62 @@ interface CommentListProps {
   fetchNextPage: () => void;
   isFetching: boolean;
   userId?: number;
+  isInfiniteScroll?: boolean;
 }
 
-function CommentList({ data, fetchNextPage, isFetching, userId }: CommentListProps) {
+function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll = false }: CommentListProps) {
   const [commentList, setCommentList] = useState<ListItemType[]>([]);
-  const [showButton, setShowButton] = useState<boolean>(false);
+  const [loadMore, setLoadMore] = useState<boolean>(false);
+  const loader = useRef(null);
 
   useEffect(() => {
     if (data) {
       const allComments = data.pages.flatMap((page) => page.list || []);
       setCommentList(() => {
-        data.pages[0].totalCount === allComments.length ? setShowButton(false) : setShowButton(true);
+        data.pages[0].totalCount === allComments.length ? setLoadMore(false) : setLoadMore(true);
         return allComments;
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    if (data && isInfiniteScroll) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && loadMore) {
+              fetchNextPage();
+              const allComments = data.pages.flatMap((page) => page.list || []);
+
+              setCommentList(() => {
+                data.pages[0].totalCount === allComments.length ? setLoadMore(false) : setLoadMore(true);
+                return allComments;
+              });
+              observer.unobserve(entry.target);
+              if (loader.current) observer.observe(loader.current);
+            }
+          });
+        },
+        {
+          root: null,
+          rootMargin: '0px',
+          threshold: 1.0,
+        },
+      );
+
+      const currentLoader = loader.current;
+
+      if (currentLoader) {
+        observer.observe(currentLoader);
+      }
+
+      return () => {
+        if (currentLoader) {
+          observer.unobserve(currentLoader);
+        }
+      };
+    }
+  }, [data, fetchNextPage, loadMore, isInfiniteScroll]);
 
   return (
     <div className='bg-background'>
@@ -35,9 +76,15 @@ function CommentList({ data, fetchNextPage, isFetching, userId }: CommentListPro
             </li>
           ))}
       </ul>
-      {showButton && (
-        <div className='flex justify-center mt-[40px] desktop:mt-[70px]'>
-          <ViewMore onClick={fetchNextPage} text='더보기' disabled={isFetching} />
+      {!isInfiniteScroll ? (
+        loadMore && (
+          <div className='flex justify-center mt-[40px] desktop:mt-[70px]'>
+            <ViewMore onClick={fetchNextPage} text='더보기' disabled={isFetching} />
+          </div>
+        )
+      ) : (
+        <div ref={loader} id='loader' className='flex justify-center mt-[40px] desktop:mt-[70px]'>
+          Loading...
         </div>
       )}
     </div>
