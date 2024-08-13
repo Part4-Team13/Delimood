@@ -2,12 +2,13 @@ import TimeFormatter from '../../utils/TimeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
 import { useDeleteCommentMutation } from '../../hooks/useCommentQuery';
 import React from 'react';
+import { CiLock } from 'react-icons/ci';
 
 interface CommentCardProps {
   userId?: number;
   id: number;
   updatedAt: string | Date;
-  // isPrivate: boolean;
+  isPrivate: boolean;
   content: string;
   writer: {
     id: number;
@@ -16,7 +17,7 @@ interface CommentCardProps {
   };
 }
 
-function CommentCard({ updatedAt, id, content, writer, userId }: CommentCardProps) {
+function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
   const mutation = useDeleteCommentMutation({
     onError: () => {
       console.log('실패');
@@ -31,9 +32,14 @@ function CommentCard({ updatedAt, id, content, writer, userId }: CommentCardProp
     <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background'>
       <span className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>{<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} />}</span>
       <div className='flex flex-col gap-[8px] w-full'>
-        <div className='relative w-full bg-green-300 flex gap-[8px] text-black-300'>
+        <div className='relative w-full bg-green-300 flex gap-[8px] text-black-300 items-center'>
           <span className='text-xs tablet:text-md desktop:text-lg'>{writer.nickname}</span>
           <span className='text-xs tablet:text-md desktop:text-lg'>{time}</span>
+          {isPrivate && (
+            <span>
+              <CiLock />
+            </span>
+          )}
           {userId === writer.id && (
             <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px]'>
               <a className='text-black-600 hover:underline cursor-pointer'>수정</a>

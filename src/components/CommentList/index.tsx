@@ -61,12 +61,12 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
   }, [data, fetchNextPage, loadMore, isInfiniteScroll, isFetching]);
 
   return (
-    <div className='bg-background'>
+    <div>
       <ul className='mx-auto bg-yellow-300 w-fit'>
         {commentList &&
           commentList.map((comment) => (
             <li key={comment.id}>
-              <CommentCard userId={userId} id={comment.id} updatedAt={comment.updatedAt} content={comment.content} writer={comment.writer} />
+              <CommentCard userId={userId} id={comment.id} updatedAt={comment.updatedAt} content={comment.content} writer={comment.writer} isPrivate={comment.isPrivate} />
             </li>
           ))}
       </ul>
