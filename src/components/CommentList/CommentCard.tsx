@@ -1,8 +1,10 @@
 import TimeFormatter from '../../utils/TimeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
+import { useDeleteCommentMutation } from '../../hooks/useCommentQuery';
 
 interface CommentCardProps {
-  id?: number;
+  userId?: number;
+  id: number;
   updatedAt: string | Date;
   // isPrivate: boolean;
   content: string;
@@ -13,10 +15,16 @@ interface CommentCardProps {
   };
 }
 
-function CommentCard({ updatedAt, content, writer, id }: CommentCardProps) {
-  if (!writer.image) writer.image = '';
-
+function CommentCard({ updatedAt, id, content, writer, userId }: CommentCardProps) {
+  const mutation = useDeleteCommentMutation({
+    onError: () => {
+      console.log('실패');
+    },
+  });
   const time = TimeFormatter(updatedAt);
+  const handleClickDelete = () => {
+    mutation.mutate({ id });
+  };
 
   return (
     <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background'>
@@ -25,10 +33,12 @@ function CommentCard({ updatedAt, content, writer, id }: CommentCardProps) {
         <div className='relative w-full bg-green-300 flex gap-[8px] text-black-300'>
           <span className='text-xs tablet:text-md desktop:text-lg'>{writer.nickname}</span>
           <span className='text-xs tablet:text-md desktop:text-lg'>{time}</span>
-          {id === writer.id && (
+          {userId === writer.id && (
             <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px]'>
               <a className='text-black-600 hover:underline cursor-pointer'>수정</a>
-              <a className='text-state-alert hover:underline cursor-pointer'>삭제</a>
+              <a className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
+                삭제
+              </a>
             </div>
           )}
         </div>

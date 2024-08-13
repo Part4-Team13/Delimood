@@ -8,10 +8,10 @@ interface CommentListProps {
   data: InfiniteData<ResponseType> | undefined;
   fetchNextPage: () => void;
   isFetching: boolean;
-  id?: number;
+  userId?: number;
 }
 
-function CommentList({ data, fetchNextPage, isFetching, id }: CommentListProps) {
+function CommentList({ data, fetchNextPage, isFetching, userId }: CommentListProps) {
   const [commentList, setCommentList] = useState<ListItemType[]>([]);
   const [showButton, setShowButton] = useState<boolean>(false);
 
@@ -31,7 +31,7 @@ function CommentList({ data, fetchNextPage, isFetching, id }: CommentListProps) 
         {commentList &&
           commentList.map((comment) => (
             <li key={comment.id}>
-              <CommentCard id={id} updatedAt={comment.updatedAt} content={comment.content} writer={comment.writer} />
+              <CommentCard userId={userId} id={comment.id} updatedAt={comment.updatedAt} content={comment.content} writer={comment.writer} />
             </li>
           ))}
       </ul>
