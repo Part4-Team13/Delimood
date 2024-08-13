@@ -3,6 +3,8 @@ import quries from '../apis/queries';
 import { PaginationRequest } from '../schema/epigramSchema';
 import { getComments } from '../apis/comment';
 import { getCommentList } from '../apis/epigram';
+import { GetUserCommentRequestType } from '../schema/userSchema';
+import { getUserComment } from '../apis/user';
 
 export const useGetAllCommentsInfiniteQuery = (params: PaginationRequest) => {
   return useInfiniteQuery({
@@ -17,6 +19,15 @@ export const useEpigramCommentsInfiniteQuery = (id: number, params: PaginationRe
   return useInfiniteQuery({
     queryKey: quries.epigrams.comments(id, params).queryKey,
     queryFn: ({ pageParam = 1 }) => getCommentList(id, { ...params, cursor: pageParam }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextCursor || null,
+  });
+};
+
+export const useMyCommentInfiniteQuery = (params: GetUserCommentRequestType) => {
+  return useInfiniteQuery({
+    queryKey: quries.user.getUserComment(params).queryKey,
+    queryFn: ({ pageParam = 1 }) => getUserComment({ ...params, cursor: pageParam }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextCursor || null,
   });
