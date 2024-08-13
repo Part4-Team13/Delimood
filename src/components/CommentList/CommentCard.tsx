@@ -1,7 +1,7 @@
 import TimeFormatter from '../../utils/TimeFormatter';
 
 interface CommentCardProps {
-  // id: number;
+  id?: number;
   updatedAt: string | Date;
   // isPrivate: boolean;
   content: string;
@@ -12,7 +12,7 @@ interface CommentCardProps {
   };
 }
 
-function CommentCard({ updatedAt, content, writer }: CommentCardProps) {
+function CommentCard({ updatedAt, content, writer, id }: CommentCardProps) {
   if (!writer.image) writer.image = '';
 
   const time = TimeFormatter(updatedAt);
@@ -26,10 +26,12 @@ function CommentCard({ updatedAt, content, writer }: CommentCardProps) {
         <div className='relative w-full bg-green-300 flex gap-[8px] text-black-300'>
           <span className='text-xs tablet:text-md desktop:text-lg'>{writer.nickname}</span>
           <span className='text-xs tablet:text-md desktop:text-lg'>{time}</span>
-          <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px]'>
-            <a className='text-black-600 hover:underline cursor-pointer'>수정</a>
-            <a className='text-state-alert hover:underline cursor-pointer'>삭제</a>
-          </div>
+          {id === writer.id && (
+            <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px]'>
+              <a className='text-black-600 hover:underline cursor-pointer'>수정</a>
+              <a className='text-state-alert hover:underline cursor-pointer'>삭제</a>
+            </div>
+          )}
         </div>
         <p className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600'>{content}</p>
       </div>
