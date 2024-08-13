@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import { rem } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
+import EmotionController from './emotionController';
 
 export default function Mypage() {
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
@@ -40,6 +41,7 @@ export default function Mypage() {
       <button onClick={handleLogout} className='h-[40px] w-[200px] bg-blue-default rounded-lg text-white'>
         로그아웃
       </button>
+      <EmotionController />
     </div>
   );
 }
