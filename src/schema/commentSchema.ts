@@ -26,8 +26,8 @@ export const ListItemSchema = z.object({
   id: z.number(),
 });
 
-// 3. 전체 응답
-export const ResponseSchema = z.object({
+// 3. 댓글 전체 응답
+export const CommentResponseSchema = z.object({
   totalCount: z.number(),
   nextCursor: z.number(),
   list: z.array(ListItemSchema),
@@ -51,7 +51,7 @@ export const GetCommentsRequestSchema = z.object({
 });
 
 export type PostCommentType = z.infer<typeof PostCommentSchema>;
-export type ResponseType = z.infer<typeof ResponseSchema>;
+export type CommentResponseType = z.infer<typeof CommentResponseSchema>;
 export type ListItemType = z.infer<typeof ListItemSchema>;
 export type PatchCommentType = z.infer<typeof PatchCommentSchema>;
 export type DeleteCommentType = z.infer<typeof DeleteCommentSchema>;
