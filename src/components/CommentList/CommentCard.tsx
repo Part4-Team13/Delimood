@@ -1,10 +1,11 @@
 import TimeFormatter from '../../utils/TimeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
 import { useDeleteCommentMutation } from '../../hooks/useCommentQuery';
-import React from 'react';
+import React, { useState } from 'react';
 import { IconLock, IconX } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
 import { rem } from '@mantine/core';
+import Modal from '../Modal/profileModal';
 
 interface CommentCardProps {
   userId?: number;
@@ -21,6 +22,10 @@ interface CommentCardProps {
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   const mutation = useDeleteCommentMutation({
     onError: () => {
       showNotification({
@@ -47,31 +52,39 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
   const handleClickDelete = () => {
     mutation.mutate({ id });
   };
+  const handleProfileClick = () => {
+    openModal();
+  };
 
   return (
-    <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background'>
-      <span className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>{<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} />}</span>
-      <div className='flex flex-col gap-[8px] w-full'>
-        <div className='relative w-full bg-green-300 flex gap-[8px] text-black-300 items-center'>
-          <span className='text-xs tablet:text-md desktop:text-lg'>{writer.nickname}</span>
-          <span className='text-xs tablet:text-md desktop:text-lg'>{time}</span>
-          {isPrivate && (
-            <span>
-              <IconLock className='h-[14px] ml-[-10px] desktop:h-[20px] desktop:ml-[-5px]' />
-            </span>
-          )}
-          {userId === writer.id && (
-            <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
-              <a className='text-black-600 hover:underline cursor-pointer'>수정</a>
-              <a className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
-                삭제
-              </a>
-            </div>
-          )}
+    <>
+      <Modal isOpen={isModalOpen} onClose={closeModal} icon={writer.image} profileId={writer.id} />
+      <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background'>
+        <button onClick={handleProfileClick} className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>
+          {<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} />}
+        </button>
+        <div className='flex flex-col gap-[8px] w-full'>
+          <div className='relative w-full bg-green-300 flex gap-[8px] text-black-300 items-center'>
+            <span className='text-xs tablet:text-md desktop:text-lg'>{writer.nickname}</span>
+            <span className='text-xs tablet:text-md desktop:text-lg'>{time}</span>
+            {isPrivate && (
+              <span>
+                <IconLock className='h-[14px] ml-[-10px] desktop:h-[20px] desktop:ml-[-5px]' />
+              </span>
+            )}
+            {userId === writer.id && (
+              <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
+                <a className='text-black-600 hover:underline cursor-pointer'>수정</a>
+                <a className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
+                  삭제
+                </a>
+              </div>
+            )}
+          </div>
+          <p className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600'>{content}</p>
         </div>
-        <p className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600'>{content}</p>
       </div>
-    </div>
+    </>
   );
 }
 
