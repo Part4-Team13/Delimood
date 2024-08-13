@@ -4,8 +4,26 @@ import { postComment, patchComment, deleteComment } from '../apis/comment';
 import { MutationOptions } from '../types/query';
 import quries from '../apis/queries';
 
+type UsePostCommentMutationParams = {
+  epigramId: number;
+  limit: number;
+  options: MutationOptions<PostCommentType, ListItemType>;
+};
+
+type UsePatchCommentMutationParams = {
+  epigramId: number;
+  limit: number;
+  options: MutationOptions<{ id: number; data: PatchCommentType }, ListItemType>;
+};
+
+type UseDeleteCommentMutationParams = {
+  epigramId: number;
+  limit: number;
+  options: MutationOptions<DeleteCommentType, { id: number }>;
+};
+
 // 댓글 등록
-export const usePostCommentMutation = (epigramId: number, limit: number, options: MutationOptions<PostCommentType, ListItemType>) => {
+export const usePostCommentMutation = ({ epigramId, limit, options }: UsePostCommentMutationParams) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postComment,
@@ -56,7 +74,7 @@ export const useGetCommentsQuery = (params: GetCommentsRequestType) => {
 // const { data, error, isLoading } = useGetCommentsQuery({ limit: 10, cursor: 0 });
 
 // 댓글 수정
-export const usePatchCommentMutation = (epigramId: number, limit: number, options: MutationOptions<{ id: number; data: PatchCommentType }, ListItemType>) => {
+export const usePatchCommentMutation = ({ epigramId, limit, options }: UsePatchCommentMutationParams) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: PatchCommentType }) => patchComment(id, data),
@@ -104,7 +122,7 @@ const handlePatchComment = () => {
 */
 
 // 댓글 삭제
-export const useDeleteCommentMutation = (epigramId: number, limit: number, options: MutationOptions<DeleteCommentType, { id: number }>) => {
+export const useDeleteCommentMutation = ({ epigramId, limit, options }: UseDeleteCommentMutationParams) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteComment,
@@ -113,7 +131,7 @@ export const useDeleteCommentMutation = (epigramId: number, limit: number, optio
       const requestParams: GetCommentsRequestType = {
         epigramId,
         limit,
-        cursor: 0, // 기본값으로 설정하거나 필요한 경우 조정
+        cursor: 0,
       };
 
       queryClient.invalidateQueries({
