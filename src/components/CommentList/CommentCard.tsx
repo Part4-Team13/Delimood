@@ -26,6 +26,7 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  // 댓글 삭제
   const mutation = useDeleteCommentMutation({
     onError: () => {
       showNotification({
@@ -49,9 +50,13 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
     },
   });
   const time = TimeFormatter(updatedAt);
+
+  // 삭제 버튼 클릭
   const handleClickDelete = () => {
     mutation.mutate({ id });
   };
+
+  // 프로필 클릭
   const handleProfileClick = () => {
     openModal();
   };

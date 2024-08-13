@@ -4,6 +4,14 @@ import ViewMore from '../ViewMore';
 import { InfiniteData } from '@tanstack/react-query';
 import { ListItemType, ResponseType } from '../../schema/commentSchema';
 
+/**
+ *  const { data, fetchNextPage, isFetching } = useGetAllCommentsInfiniteQuery({ limit: 3 });
+ *  const { data, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(에피그램 ID, { limit: 3 });
+ *  const { data, fetchNextPage, isFetching } = useGetMyCommentInfiniteQuery({ id: 현재 로그인한 사용자의 id, limit: 3 });
+ *
+ *  <CommentList data={data} fetchNextPage={fetchNextPage} isFetching={isFetching} userId={현재 로그인한 사용자의 id} buttonText='최신 댓글 더보기' /> (무한스크롤 필요 시 isInfiniteScroll 추가)
+ */
+
 interface CommentListProps {
   data: InfiniteData<ResponseType> | undefined;
   fetchNextPage: () => void;
@@ -18,6 +26,7 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const loader = useRef(null);
 
+  // NOTE : 데이터 fetch 시 리스트 업데이트
   useEffect(() => {
     if (data) {
       const allComments = data.pages.flatMap((page) => page.list || []);
@@ -28,6 +37,7 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
     }
   }, [data]);
 
+  // 무한스크롤 로직
   useEffect(() => {
     if (data && isInfiniteScroll && loadMore && !isFetching) {
       const observer = new IntersectionObserver(
