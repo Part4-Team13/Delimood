@@ -10,9 +10,10 @@ interface CommentListProps {
   isFetching: boolean;
   userId?: number;
   isInfiniteScroll?: boolean;
+  buttonText?: string;
 }
 
-function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll = false }: CommentListProps) {
+function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll = false, buttonText = '더보기' }: CommentListProps) {
   const [commentList, setCommentList] = useState<ListItemType[]>([]);
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const loader = useRef(null);
@@ -73,7 +74,7 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
       {!isInfiniteScroll ? (
         loadMore && (
           <div className='flex justify-center mt-[40px] desktop:mt-[70px]'>
-            <ViewMore onClick={fetchNextPage} text='더보기' disabled={isFetching} />
+            <ViewMore onClick={fetchNextPage} text={buttonText} disabled={isFetching} />
           </div>
         )
       ) : (
