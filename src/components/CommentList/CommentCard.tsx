@@ -78,7 +78,9 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
     setIsPatching(true);
   };
   const handleInputChange = () => {
-    setCurrentData({ content: inputTextRef.current!.value, isPrivate: inputCheckRef.current!.checked });
+    if (inputCheckRef.current && inputTextRef.current) {
+      setCurrentData({ content: inputTextRef.current.value, isPrivate: inputCheckRef.current.checked });
+    }
   };
 
   // 수정 완료
@@ -103,20 +105,22 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
                 <IconLock className='h-[14px] ml-[-10px] desktop:h-[20px] desktop:ml-[-5px]' />
               </span>
             )}
-            {userId === writer.id && !isPatching ? (
-              <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
-                <button className='text-black-600 hover:underline cursor-pointer' onClick={handleClickPatch}>
-                  수정
-                </button>
-                <button className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
-                  삭제
-                </button>
-              </div>
-            ) : (
-              <span className='flex items-center gap-[3px] ml-auto'>
-                <input type='checkbox' defaultChecked={isPrivate} onClick={handleInputChange} ref={inputCheckRef} /> <span>비밀글</span>
-              </span>
-            )}
+            {userId === writer.id ? (
+              !isPatching ? (
+                <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
+                  <button className='text-black-600 hover:underline cursor-pointer' onClick={handleClickPatch}>
+                    수정
+                  </button>
+                  <button className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
+                    삭제
+                  </button>
+                </div>
+              ) : (
+                <span className='flex items-center gap-[3px] ml-auto'>
+                  <input type='checkbox' defaultChecked={isPrivate} onClick={handleInputChange} ref={inputCheckRef} /> <span>비밀글</span>
+                </span>
+              )
+            ) : null}
           </div>
           {!isPatching ? (
             <p className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600 h-full'>{content}</p>
