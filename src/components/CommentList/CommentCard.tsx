@@ -2,7 +2,7 @@ import TimeFormatter from '../../utils/TimeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
 import { useDeleteCommentMutation } from '../../hooks/useCommentQuery';
 import React from 'react';
-import { CiLock } from 'react-icons/ci';
+import { IconLock } from '@tabler/icons-react';
 
 interface CommentCardProps {
   userId?: number;
@@ -37,7 +37,7 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
           <span className='text-xs tablet:text-md desktop:text-lg'>{time}</span>
           {isPrivate && (
             <span>
-              <CiLock />
+              <IconLock className='h-[14px] ml-[-10px] desktop:h-[20px] desktop:ml-[-5px]' />
             </span>
           )}
           {userId === writer.id && (
