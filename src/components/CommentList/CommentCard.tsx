@@ -2,7 +2,9 @@ import TimeFormatter from '../../utils/TimeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
 import { useDeleteCommentMutation } from '../../hooks/useCommentQuery';
 import React from 'react';
-import { IconLock } from '@tabler/icons-react';
+import { IconLock, IconX } from '@tabler/icons-react';
+import { showNotification } from '@mantine/notifications';
+import { rem } from '@mantine/core';
 
 interface CommentCardProps {
   userId?: number;
@@ -16,11 +18,29 @@ interface CommentCardProps {
     nickname: string;
   };
 }
+const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
   const mutation = useDeleteCommentMutation({
     onError: () => {
-      console.log('실패');
+      showNotification({
+        title: '죄송합니다. 다시 시도해주세요.',
+        message: '댓글 삭제를 실패했습니다.',
+        icon: xIcon,
+        color: 'red',
+        autoClose: 2000,
+        styles: () => ({
+          root: {
+            position: 'fixed',
+            top: '10%',
+            right: '3%',
+            transform: 'translate(-50%, -50%)',
+            minWidth: '300px',
+            width: '40%',
+            maxWidth: '70%',
+          },
+        }),
+      });
     },
   });
   const time = TimeFormatter(updatedAt);
