@@ -61,7 +61,7 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
             </span>
           )}
           {userId === writer.id && (
-            <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px]'>
+            <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
               <a className='text-black-600 hover:underline cursor-pointer'>수정</a>
               <a className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
                 삭제
