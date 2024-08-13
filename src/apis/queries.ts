@@ -1,8 +1,8 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
-import { getMe, getUser } from './user';
+import { getMe, getUser, getUserComment } from './user';
 import { getTodayEmotionLog, getMonthlyEmotionLogs } from './emotionLog';
 import { getComments } from './comment';
-import { GetUserRequestType } from '../schema/userSchema';
+import { GetUserRequestType, GetUserCommentRequestType } from '../schema/userSchema';
 import { GetCommentsRequestType } from '../schema/commentSchema';
 import { PaginationRequest } from '../schema/epigramSchema';
 import { getEpigramList, getTodayEpigram, getEpigramDetail, getCommentList } from '../apis/epigram';
@@ -17,7 +17,12 @@ const quries = createQueryKeyStore({
       queryKey: [request],
       queryFn: () => getUser(request),
     }),
+    getUserComment: (request: GetUserCommentRequestType) => ({
+      queryKey: [request],
+      queryFn: () => getUserComment(request),
+    }),
   },
+
   emotionLogs: {
     today: () => ({
       queryKey: ['emotionLogs', 'today'],
@@ -28,6 +33,7 @@ const quries = createQueryKeyStore({
       queryFn: getMonthlyEmotionLogs,
     }),
   },
+
   comments: {
     getComments: (request: GetCommentsRequestType) => ({
       queryKey: ['getComments', request],

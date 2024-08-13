@@ -4,75 +4,72 @@ import { postComment, patchComment, deleteComment } from '../apis/comment';
 import { MutationOptions } from '../types/query';
 import quries from '../apis/queries';
 
+type UsePostCommentMutationParams = {
+  epigramId: number;
+  options: MutationOptions<PostCommentType, ListItemType>;
+};
+
+type UsePatchCommentMutationParams = {
+  epigramId: number;
+  options: MutationOptions<{ id: number; data: PatchCommentType }, ListItemType>;
+};
+
+type UseDeleteCommentMutationParams = MutationOptions<DeleteCommentType, { id: number }>;
+
 // 댓글 등록
-export const usePostCommentMutation = (options: MutationOptions<PostCommentType, ListItemType>) => {
+export const usePostCommentMutation = ({ epigramId, options }: UsePostCommentMutationParams) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postComment,
     ...options,
     onSuccess: (...args) => {
-      queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({
+        queryKey: quries.comments.getComments({ epigramId, cursor: 0 }).queryKey,
+      });
       if (options?.onSuccess) {
         options.onSuccess(...args);
       }
     },
   });
 };
-// NOTE: 사용 방법
-// const mutation = usePostCommentMutation({
-//   onSuccess: (data) => {
-//     // 댓글 등록 후 실행할 코드
-//   },
-// });
-// mutation.mutate({ epigramId: 1, isPrivate: false, content: '댓글 내용' });
 
 // 댓글 목록 조회
 export const useGetCommentsQuery = (params: GetCommentsRequestType) => {
   return useQuery(quries.comments.getComments(params));
 };
-// NOTE: 사용 방법
-// const { data, error, isLoading } = useGetCommentsQuery({ epigramId: 1, limit: 10, cursor: 0 });
 
 // 댓글 수정
-export const usePatchCommentMutation = (options: MutationOptions<{ id: number; data: PatchCommentType }, ListItemType>) => {
+export const usePatchCommentMutation = ({ epigramId, options }: UsePatchCommentMutationParams) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: PatchCommentType }) => patchComment(id, data),
     ...options,
     onSuccess: (...args) => {
-      queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({
+        queryKey: quries.comments.getComments({ epigramId, cursor: 0 }).queryKey,
+      });
+
       if (options?.onSuccess) {
         options.onSuccess(...args);
       }
     },
   });
 };
-// NOTE: 사용 방법
-// const mutation = usePatchCommentMutation({
-//   onSuccess: (data) => {
-//     // 댓글 수정 후 실행할 코드
-//   },
-// });
-// mutation.mutate({ id: 1, data: { isPrivate: false, content: '수정된 댓글 내용' } });
 
 // 댓글 삭제
-export const useDeleteCommentMutation = (options: MutationOptions<DeleteCommentType, { id: number }>) => {
+export const useDeleteCommentMutation = (options: UseDeleteCommentMutationParams) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteComment,
     ...options,
     onSuccess: (...args) => {
-      queryClient.invalidateQueries({ queryKey: ['comments'] });
+      queryClient.invalidateQueries({
+        queryKey: quries.comments.getComments({}).queryKey,
+      });
+
       if (options?.onSuccess) {
         options.onSuccess(...args);
       }
     },
   });
 };
-// NOTE: 사용 방법
-// const mutation = useDeleteCommentMutation({
-//   onSuccess: (data) => {
-//     // 댓글 삭제 후 실행할 코드
-//   },
-// });
-// mutation.mutate({ id: 1 });

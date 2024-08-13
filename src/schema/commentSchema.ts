@@ -44,9 +44,9 @@ export const DeleteCommentSchema = z.object({
   id: z.number(),
 });
 
-// 댓글 목록 조회 요청
 export const GetCommentsRequestSchema = z.object({
-  limit: z.number(),
+  epigramId: z.number().optional(),
+  limit: z.number().optional(),
   cursor: z.number().optional(),
 });
 

@@ -140,4 +140,6 @@ export type ErrorResponseType = z.infer<typeof ErrorResponse>;
 export type PaginationRequest = {
   limit: number;
   cursor?: number;
+  keyword?: string;
+  writerId?: number;
 };
