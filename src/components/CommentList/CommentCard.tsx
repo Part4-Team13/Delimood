@@ -1,11 +1,12 @@
 import TimeFormatter from '../../utils/TimeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
-import { useDeleteCommentMutation } from '../../hooks/useCommentQuery';
-import React, { useState } from 'react';
+import { useDeleteCommentMutation, usePatchCommentMutation } from '../../hooks/useCommentQuery';
+import React, { useRef, useState } from 'react';
 import { IconLock, IconX } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
 import { rem } from '@mantine/core';
 import Modal from '../Modal/profileModal';
+import { PatchCommentType } from '../../schema/commentSchema';
 
 interface CommentCardProps {
   userId?: number;
@@ -23,15 +24,19 @@ const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isPatching, setIsPatching] = useState<boolean>(false);
+  const [currentData, setCurrentData] = useState<PatchCommentType>({ isPrivate, content });
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const inputTextRef = useRef<HTMLInputElement | null>(null);
+  const inputCheckRef = useRef<HTMLInputElement | null>(null);
 
-  // 댓글 삭제
-  const mutation = useDeleteCommentMutation({
+  // onError 옵션
+  const options = {
     onError: () => {
       showNotification({
-        title: '죄송합니다. 다시 시도해주세요.',
-        message: '댓글 삭제를 실패했습니다.',
+        title: '실패했습니다.',
+        message: '죄송합니다. 다시 시도해주세요.',
         icon: xIcon,
         color: 'red',
         autoClose: 2000,
@@ -48,24 +53,45 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
         }),
       });
     },
-  });
+  };
+
   const time = TimeFormatter(updatedAt);
+
+  // 댓글 삭제
+  const deleteMutation = useDeleteCommentMutation(options);
+
+  // 댓글 수정
+  const patchMutation = usePatchCommentMutation({ epigramId: id, options });
 
   // 삭제 버튼 클릭
   const handleClickDelete = () => {
-    mutation.mutate({ id });
+    deleteMutation.mutate({ id });
   };
 
   // 프로필 클릭
-  const handleProfileClick = () => {
+  const handleClickProfile = () => {
     openModal();
+  };
+
+  // 수정 버튼 클릭
+  const handleClickPatch = () => {
+    setIsPatching(true);
+  };
+  const handleInputChange = () => {
+    setCurrentData({ content: inputTextRef.current!.value, isPrivate: inputCheckRef.current!.checked });
+  };
+
+  // 수정 완료
+  const handleClickComplete = () => {
+    patchMutation.mutate({ id, data: currentData });
+    setIsPatching(false);
   };
 
   return (
     <>
       <Modal isOpen={isModalOpen} onClose={closeModal} icon={writer.image} profileId={writer.id} />
-      <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background'>
-        <button onClick={handleProfileClick} className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>
+      <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background h-fit'>
+        <button onClick={handleClickProfile} className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>
           {<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} />}
         </button>
         <div className='flex flex-col gap-[8px] w-full'>
@@ -77,16 +103,37 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
                 <IconLock className='h-[14px] ml-[-10px] desktop:h-[20px] desktop:ml-[-5px]' />
               </span>
             )}
-            {userId === writer.id && (
+            {userId === writer.id && !isPatching ? (
               <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
-                <a className='text-black-600 hover:underline cursor-pointer'>수정</a>
-                <a className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
+                <button className='text-black-600 hover:underline cursor-pointer' onClick={handleClickPatch}>
+                  수정
+                </button>
+                <button className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
                   삭제
-                </a>
+                </button>
               </div>
+            ) : (
+              <span className='flex items-center gap-[3px] ml-auto'>
+                <input type='checkbox' defaultChecked={isPrivate} onClick={handleInputChange} ref={inputCheckRef} /> <span>비밀글</span>
+              </span>
             )}
           </div>
-          <p className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600'>{content}</p>
+          {!isPatching ? (
+            <p className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600 h-full'>{content}</p>
+          ) : (
+            <div className='flex gap-[10px] items-center'>
+              <input
+                type='text'
+                value={currentData.content}
+                ref={inputTextRef}
+                onChange={handleInputChange}
+                className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600 p-[10px_5px] border-line-darker border-[1px] bg-line-bright rounded-[5px] w-full h-max'
+              />
+              <button onClick={handleClickComplete} className='flex-shrink-0 bg-blue-600 text-white p-[5px] rounded-[5px]'>
+                완료
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
