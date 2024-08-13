@@ -35,9 +35,9 @@ const quries = createQueryKeyStore({
   },
 
   comments: {
-    getComments: (request: GetCommentsRequestType) => ({
-      queryKey: ['getComments', request],
-      queryFn: () => getComments(request),
+    getComments: ({ limit = 10, ...rest }: GetCommentsRequestType) => ({
+      queryKey: ['getComments', { limit, ...rest }],
+      queryFn: () => getComments({ limit, ...rest }),
     }),
   },
 
