@@ -15,7 +15,7 @@ export const useGetAllCommentsInfiniteQuery = (params: PaginationRequest) => {
   });
 };
 
-export const useEpigramCommentsInfiniteQuery = (id: number, params: PaginationRequest) => {
+export const useGetEpigramCommentsInfiniteQuery = (id: number, params: PaginationRequest) => {
   return useInfiniteQuery({
     queryKey: quries.epigrams.comments(id, params).queryKey,
     queryFn: ({ pageParam = 1 }) => getCommentList(id, { ...params, cursor: pageParam }),
@@ -24,7 +24,7 @@ export const useEpigramCommentsInfiniteQuery = (id: number, params: PaginationRe
   });
 };
 
-export const useMyCommentInfiniteQuery = (params: GetUserCommentRequestType) => {
+export const useGetMyCommentInfiniteQuery = (params: GetUserCommentRequestType) => {
   return useInfiniteQuery({
     queryKey: quries.user.getUserComment(params).queryKey,
     queryFn: ({ pageParam = 1 }) => getUserComment({ ...params, cursor: pageParam }),
