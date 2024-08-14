@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import quries from '../apis/queries';
-import { EmotionLogRequestType, EmotionLogResponseType } from '../schema/emotionLogSchema';
+import { EmotionLogRequestType } from '../schema/emotionLogSchema';
 import { postEmotionLog } from '../apis/emotionLog';
 import { MutationOptions } from '../types/query';
 
