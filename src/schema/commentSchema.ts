@@ -10,7 +10,7 @@ export const PostCommentSchema = z.object({
 // 댓글 목록 조회
 // 1. 댓글 작성자
 export const WriterSchema = z.object({
-  image: z.string().url(),
+  image: z.string().nullable(),
   nickname: z.string(),
   id: z.number(),
 });
@@ -22,14 +22,14 @@ export const ListItemSchema = z.object({
   updatedAt: z.coerce.date(),
   createdAt: z.coerce.date(),
   isPrivate: z.boolean(),
-  content: z.string(),
+  content: z.string().min(1),
   id: z.number(),
 });
 
 // 3. 댓글 전체 응답
 export const CommentResponseSchema = z.object({
   totalCount: z.number(),
-  nextCursor: z.number(),
+  nextCursor: z.number().nullable(),
   list: z.array(ListItemSchema),
 });
 
