@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import EpigramCard from './EpigramCard';
 import ViewMore from './ViewMore';
-import { useGetEpigramListInfiniteQuery } from '../hooks/useEpigramQuery';
-import { GetEpigramListType } from '../schema/epigramSchema';
+import { GetEpigramListResponseType, GetEpigramListType } from '../schema/epigramSchema';
+import { InfiniteData } from '@tanstack/react-query';
 
 interface EpigramListProps {
   isWide?: boolean;
+  data: InfiniteData<GetEpigramListResponseType> | undefined;
+  isLoading: boolean;
+  fetchNextPage: () => void;
 }
 
-function EpigramList({ isWide = false }: EpigramListProps) {
-  const LIMIT = !isWide ? 3 : 6;
+function EpigramList({ isWide = false, data, isLoading, fetchNextPage }: EpigramListProps) {
   const [epigramList, setEpigramList] = useState<GetEpigramListType[]>([]);
-  const [limit, setLimit] = useState<number>(LIMIT);
   const [showButton, setShowButton] = useState(false);
-  const { data, isLoading, fetchNextPage } = useGetEpigramListInfiniteQuery({ limit });
 
   useEffect(() => {
     if (data) {
@@ -26,7 +26,6 @@ function EpigramList({ isWide = false }: EpigramListProps) {
   }, [data]);
 
   const handleClickViewMore = () => {
-    if (!isWide) setLimit(5);
     if (data) {
       fetchNextPage();
     }
