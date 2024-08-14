@@ -4,6 +4,14 @@ import thinking from '../../../assets/ico_face_thinking.svg';
 import sad from '../../../assets/ico_face_sad.svg';
 import angry from '../../../assets/ico_face_angry.svg';
 
+export const emotionColors: Record<string, string> = {
+  HAPPY: '#48BB98',
+  ANGRY: '#F05650',
+  SAD: '#5195EE',
+  THINKING: '#8E80E3',
+  MOVED: '#FBC85B',
+};
+
 export const emotionIcons: Record<string, string> = {
   HAPPY: smiling,
   ANGRY: angry,

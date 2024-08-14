@@ -4,14 +4,15 @@ import { useMediaQuery } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { rawData } from './data';
-import { emotionIcons } from './emotionData';
-import EmojiDropdown from './EmojiDropdown';
+import { Button, Group } from '@mantine/core';
+import { emotionIcons, emotionColors, emotionNames } from './emotionData';
+import { ActionIcon } from '@mantine/core';
 
 const EmotionCalendar = () => {
   const isTablet = useMediaQuery('(min-width: 744px) and (max-width: 1279px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
   const [emojis, setEmojis] = useState<{ [key: string]: string }>({});
-  const [selectedEmoji, setSelectedEmoji] = useState<string>('ALL'); // 선택한 이모지를 관리하는 상태
+  const [selectedEmojis, setSelectedEmojis] = useState<string[]>([]);
 
   useEffect(() => {
     const emojiMap = rawData.reduce((acc: { [key: string]: string }, entry: { emotion: string; createdAt: string }) => {
@@ -31,7 +32,7 @@ const EmotionCalendar = () => {
     const dateString = formatDate(date);
     const imageSrc = emojis[dateString] || '';
     const isToday = dayjs().isSame(dayjs(date), 'day');
-    const shouldDisplayEmoji = selectedEmoji === 'ALL' || (imageSrc && emotionIcons[selectedEmoji] === imageSrc);
+    const shouldDisplayEmoji = selectedEmojis.length === 0 || (imageSrc && selectedEmojis.includes(Object.keys(emotionIcons).find((e) => emotionIcons[e] === imageSrc) || ''));
 
     return (
       <div
@@ -68,6 +69,14 @@ const EmotionCalendar = () => {
         )}
       </div>
     );
+  };
+
+  const handleEmojiClick = (emoji: string) => {
+    setSelectedEmojis((prevSelected) => (prevSelected.includes(emoji) ? prevSelected.filter((e) => e !== emoji) : [...prevSelected, emoji]));
+  };
+
+  const handleReset = () => {
+    setSelectedEmojis([]);
   };
 
   return (
@@ -120,7 +129,35 @@ const EmotionCalendar = () => {
           },
         }}
       />
-      <EmojiDropdown onSelect={setSelectedEmoji} selectedEmoji={selectedEmoji} />
+      <div className='w-[308px] tablet:w-[379px] desktop:w-[637px] flex flex-col h-auto my-4 px-1 items-center tablet:mt-10 desktop:mt-16 gap-2 desktop:gap-6'>
+        <span className='text-[14px] mb-2 tablet:text-[16px] font-paraph desktop:text-[20px] text-center'>
+          당신이 언제 행복한 날이 많았는지 궁금하시다면! <br />
+          클릭해보세요!!
+        </span>
+        <Group className='w-[304px] tablet:w-[379px] desktop:w-[620px] h-[80px] tablet:h-[88px] desktop:h-[128px] justify-center border border-gray-100 rounded-xl gap-2 desktop:gap-5'>
+          {Object.entries(emotionIcons).map(([emotion, icon]) => (
+            <Button
+              key={emotion}
+              onClick={() => handleEmojiClick(emotion)}
+              variant='subtle'
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '8px',
+                background: selectedEmojis.includes(emotion) ? `${emotionColors[emotion]}` : '#FFFFFF',
+                border: selectedEmojis.includes(emotion) ? 'none' : `4px solid ${emotionColors[emotion]}`,
+              }}
+              className='bg-background h-[40px] w-[40px] tablet:h-[56px] tablet:w-[56px] desktop:h-[80px] desktop:w-[80px] items-center justify-center'
+            >
+              <img src={icon} alt={emotionNames[emotion]} style={{ width: isTablet ? '32px' : isDesktop ? '40px' : '24px', height: isTablet ? '32px' : isDesktop ? '40px' : '24px' }} />
+            </Button>
+          ))}
+          <ActionIcon onClick={handleReset} variant='subtle' className='w-[30px] h-[30px] desktop:w-[52px] desktop:h-[52px] text-blue-800'>
+            필터 <br />
+            해제
+          </ActionIcon>
+        </Group>
+      </div>
     </div>
   );
 };
