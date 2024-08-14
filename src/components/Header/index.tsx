@@ -82,7 +82,7 @@ const HeaderRight: React.FC<HeaderButtonsProps> = ({ pathNow, navigate }) => {
     return (
       <button className='flex items-center gap-[6px] ml-auto' onClick={() => navigate('/mypage')}>
         <img className='w-[25px] h-[25px] tablet:w-[30px] tablet:h-[30px] object-cover rounded-full' src={src} alt={pathNow} />
-        <span className='hidden tablet:inline'>{data.nickname}</span>
+        <span className='hidden tablet:inline text-gray-300 text-sm desktop:text-md'>{data.nickname}</span>
       </button>
     );
   }
