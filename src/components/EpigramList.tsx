@@ -12,7 +12,7 @@ interface EpigramListProps {
 function EpigramList({ isWide = false }: EpigramListProps) {
   const LIMIT = !isWide ? 3 : 6;
   const [epigramList, setEpigramList] = useState<GetEpigramListType[]>([]);
-  const [nextCursor, setNextCursor] = useState<number | undefined>(null);
+  const [nextCursor, setNextCursor] = useState<number | undefined>();
   const [limit, setLimit] = useState<number>(LIMIT);
   const [showButton, setShowButton] = useState(false);
   const { data, isLoading } = useGetEpigramListQuery({ limit, cursor: nextCursor });
