@@ -129,6 +129,7 @@ const EmotionCalendar = () => {
           },
         }}
       />
+      {/*Refactor : UI부분에서 리펙토링 있을예정*/}
       <div className='w-[308px] tablet:w-[379px] desktop:w-[637px] flex flex-col h-auto my-4 px-1 items-center tablet:mt-10 desktop:mt-16 gap-2 desktop:gap-6'>
         <span className='text-[14px] mb-2 tablet:text-[16px] font-paraph desktop:text-[20px] text-center'>
           당신이 언제 행복한 날이 많았는지 궁금하시다면! <br />
@@ -152,7 +153,7 @@ const EmotionCalendar = () => {
               <img src={icon} alt={emotionNames[emotion]} style={{ width: isTablet ? '32px' : isDesktop ? '40px' : '24px', height: isTablet ? '32px' : isDesktop ? '40px' : '24px' }} />
             </Button>
           ))}
-          <ActionIcon onClick={handleReset} variant='subtle' className='w-[30px] h-[30px] desktop:w-[52px] desktop:h-[52px] text-blue-800'>
+          <ActionIcon onClick={handleReset} variant='subtle' className='w-[30px] h-[30px] desktop:w-[60px] desktop:h-[60px] text-blue-800 text-xs'>
             필터 <br />
             해제
           </ActionIcon>
