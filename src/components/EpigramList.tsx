@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import EpigramCard from './EpigramCard';
 import ViewMore from './ViewMore';
-import { useGetEpigrams } from '../hooks/useGetEpigrams';
-import { EpigramListType } from '../schema/epigram/EpigramGet';
 import { useQueryClient } from '@tanstack/react-query';
+import { useGetEpigramListQuery } from '../hooks/useEpigramQuery';
+import { GetEpigramListType } from '../schema/epigramSchema';
 
 interface EpigramListProps {
   isWide?: boolean;
@@ -11,11 +11,11 @@ interface EpigramListProps {
 
 function EpigramList({ isWide = false }: EpigramListProps) {
   const LIMIT = !isWide ? 3 : 6;
-  const [epigramList, setEpigramList] = useState<EpigramListType[]>([]);
-  const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [epigramList, setEpigramList] = useState<GetEpigramListType[]>([]);
+  const [nextCursor, setNextCursor] = useState<number | undefined>();
   const [limit, setLimit] = useState<number>(LIMIT);
   const [showButton, setShowButton] = useState(false);
-  const { data, isLoading } = useGetEpigrams(limit, nextCursor);
+  const { data, isLoading } = useGetEpigramListQuery({ limit, cursor: nextCursor });
 
   const queryClient = useQueryClient();
 
@@ -39,7 +39,7 @@ function EpigramList({ isWide = false }: EpigramListProps) {
   const handleClickViewMore = () => {
     if (!isWide) setLimit(5);
     if (data) {
-      setNextCursor(data.nextCursor);
+      setNextCursor(data.nextCursor as undefined | number);
     }
   };
 
