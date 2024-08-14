@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import CommentCard from './CommentCard';
 import ViewMore from '../ViewMore';
 import { InfiniteData } from '@tanstack/react-query';
-import { ListItemType, ResponseType } from '../../schema/commentSchema';
+import { CommentResponseType, ListItemType } from '../../schema/commentSchema';
 
 /**
  *  const { data, fetchNextPage, isFetching } = useGetAllCommentsInfiniteQuery({ limit: 3 });
@@ -13,7 +13,7 @@ import { ListItemType, ResponseType } from '../../schema/commentSchema';
  */
 
 interface CommentListProps {
-  data: InfiniteData<ResponseType> | undefined;
+  data: InfiniteData<CommentResponseType> | undefined;
   fetchNextPage: () => void;
   isFetching: boolean;
   userId?: number;

@@ -1,8 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import quries from '../apis/queries';
 import { PaginationRequest } from '../schema/epigramSchema';
-import { getComments } from '../apis/comment';
-import { getCommentList } from '../apis/epigram';
+import { getCommentList, getComments } from '../apis/comment';
 import { GetUserCommentRequestType } from '../schema/userSchema';
 import { getUserComment } from '../apis/user';
 
@@ -11,7 +10,7 @@ export const useGetAllCommentsInfiniteQuery = (params: PaginationRequest) => {
     queryKey: quries.comments.getComments(params).queryKey,
     queryFn: ({ pageParam = 1 }) => getComments({ ...params, cursor: pageParam }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.nextCursor || null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 };
 
@@ -29,6 +28,6 @@ export const useGetMyCommentInfiniteQuery = (params: GetUserCommentRequestType) 
     queryKey: quries.user.getUserComment(params).queryKey,
     queryFn: ({ pageParam = 1 }) => getUserComment({ ...params, cursor: pageParam }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage.nextCursor || null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 };
