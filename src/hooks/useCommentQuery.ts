@@ -1,5 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { PostCommentType, PatchCommentType, DeleteCommentType, ListItemType, GetCommentsRequestType } from '../schema/commentSchema';
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
+import { PostCommentType, PatchCommentType, DeleteCommentType, ListItemType, GetCommentsRequestType, CommentResponseType } from '../schema/commentSchema';
+import { getCommentList } from '../apis/comment';
+import { PaginationRequest } from '../schema/epigramSchema';
 import { postComment, patchComment, deleteComment } from '../apis/comment';
 import { MutationOptions } from '../types/query';
 import quries from '../apis/queries';
@@ -71,5 +73,14 @@ export const useDeleteCommentMutation = (options: UseDeleteCommentMutationParams
         options.onSuccess(...args);
       }
     },
+  });
+};
+
+// 에피그램 댓글 목록 조회
+export const useGetCommentListQuery = (id: number, paginationRequest: PaginationRequest, options?: UseQueryOptions<CommentResponseType>) => {
+  return useQuery<CommentResponseType>({
+    queryKey: quries.epigrams.comments(id, paginationRequest).queryKey,
+    queryFn: () => getCommentList(id, paginationRequest),
+    ...options,
   });
 };
