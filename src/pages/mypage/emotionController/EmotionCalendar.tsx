@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Calendar } from '@mantine/dates';
 import { useMediaQuery } from '@mantine/hooks';
+import { Button, Group, ActionIcon } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { rawData } from './data';
-import { Button, Group } from '@mantine/core';
 import { emotionIcons, emotionColors, emotionNames } from './emotionData';
-import { ActionIcon } from '@mantine/core';
 
 const EmotionCalendar = () => {
   const isTablet = useMediaQuery('(min-width: 744px) and (max-width: 1279px)');
