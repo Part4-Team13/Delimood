@@ -33,8 +33,8 @@ function processEmotionData(data: typeof rawData) {
   const emotionColors: Record<string, string> = {
     HAPPY: '#48BB98',
     ANGRY: '#F05650',
-    SAD: 'indigo',
-    THINKING: 'gray',
+    SAD: '#5195EE',
+    THINKING: '#8E80E3',
     MOVED: '#FBC85B',
   };
 
