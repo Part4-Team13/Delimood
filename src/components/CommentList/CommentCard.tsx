@@ -4,7 +4,7 @@ import { useDeleteCommentMutation, usePatchCommentMutation } from '../../hooks/u
 import React, { useRef, useState } from 'react';
 import { IconLock, IconX } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
-import { rem } from '@mantine/core';
+import { Button, rem } from '@mantine/core';
 import Modal from '../Modal/profileModal';
 import { PatchCommentType } from '../../schema/commentSchema';
 
@@ -59,21 +59,12 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
 
   // 댓글 삭제
   const deleteMutation = useDeleteCommentMutation(options);
-
-  // 댓글 수정
-  const patchMutation = usePatchCommentMutation({ epigramId: id, options });
-
-  // 삭제 버튼 클릭
   const handleClickDelete = () => {
     deleteMutation.mutate({ id });
   };
 
-  // 프로필 클릭
-  const handleClickProfile = () => {
-    openModal();
-  };
-
-  // 수정 버튼 클릭
+  // 댓글 수정
+  const patchMutation = usePatchCommentMutation({ epigramId: id, options });
   const handleClickPatch = () => {
     setIsPatching(true);
   };
@@ -82,11 +73,14 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
       setCurrentData({ content: inputTextRef.current.value, isPrivate: inputCheckRef.current.checked });
     }
   };
-
-  // 수정 완료
   const handleClickComplete = () => {
     patchMutation.mutate({ id, data: currentData });
     setIsPatching(false);
+  };
+
+  // 프로필 클릭
+  const handleClickProfile = () => {
+    openModal();
   };
 
   return (
@@ -133,9 +127,13 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
                 onChange={handleInputChange}
                 className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600 p-[10px_5px] border-line-darker border-[1px] bg-line-bright rounded-[5px] w-full h-max'
               />
-              <button onClick={handleClickComplete} className='flex-shrink-0 bg-blue-600 text-white p-[5px] rounded-[5px]'>
+              <Button
+                disabled={inputTextRef.current?.value.length === 0}
+                onClick={handleClickComplete}
+                className='flex-shrink-0 bg-blue-600 text-white p-[5px] rounded-[5px] disabled:bg-button-diabled'
+              >
                 완료
-              </button>
+              </Button>
             </div>
           )}
         </div>
