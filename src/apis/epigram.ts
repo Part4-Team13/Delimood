@@ -6,7 +6,6 @@ import {
   UpdateEpigramRequestType,
   DeleteResponseType,
   PaginationResponseType,
-  ErrorResponseType,
   PaginationRequest,
 } from '../schema/epigramSchema';
 
@@ -62,12 +61,8 @@ export const deleteEpigram = async (id: number): Promise<DeleteResponseType> => 
 
 // 에피그램 댓글 목록 조회
 export const getCommentList = async (id: number, params: PaginationRequest): Promise<PaginationResponseType> => {
-  const response = await httpClient.get(`/epigrams/${id}/comments`, { params });
-  return response.data;
-};
-
-// 403, 404 에러 응답 처리
-export const ErrorResponse = async (): Promise<ErrorResponseType> => {
-  const response = await httpClient.get('/error');
+  const response = await httpClient.get(`/epigrams/${id}/comments`, {
+    params: { ...params },
+  });
   return response.data;
 };

@@ -7,10 +7,9 @@ import {
   UpdateEpigramRequestType,
   DeleteResponseType,
   PaginationResponseType,
-  ErrorResponseType,
   PaginationRequest,
 } from '../schema/epigramSchema';
-import { postEpigram, getEpigramList, getTodayEpigram, getEpigramDetail, postEpigramLike, postEpigramLikeDelete, updateEpigram, deleteEpigram, getCommentList, ErrorResponse } from '../apis/epigram';
+import { postEpigram, getEpigramList, getTodayEpigram, getEpigramDetail, postEpigramLike, postEpigramLikeDelete, updateEpigram, deleteEpigram, getCommentList } from '../apis/epigram';
 import quries from '../apis/queries';
 
 // 에피그램 작성
@@ -93,15 +92,6 @@ export const useGetCommentListQuery = (id: number, paginationRequest: Pagination
   return useQuery<PaginationResponseType>({
     queryKey: quries.epigrams.comments(id, paginationRequest).queryKey,
     queryFn: () => getCommentList(id, paginationRequest),
-    ...options,
-  });
-};
-
-// 에러 응답 처리
-export const useErrorResponseQuery = (options?: UseQueryOptions<ErrorResponseType>) => {
-  return useQuery<ErrorResponseType>({
-    queryKey: ['error'],
-    queryFn: ErrorResponse,
     ...options,
   });
 };
