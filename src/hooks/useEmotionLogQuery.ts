@@ -5,7 +5,7 @@ import { postEmotionLog } from '../apis/emotionLog';
 import { MutationOptions } from '../types/query';
 
 // 오늘의 감정 등록
-export const usePostEmotionLog = (options: MutationOptions<EmotionLogResponseType>) => {
+export const usePostEmotionLog = (options: MutationOptions<EmotionLogRequestType>) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (request: EmotionLogRequestType) => postEmotionLog(request),
