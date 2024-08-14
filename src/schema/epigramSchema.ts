@@ -97,32 +97,6 @@ export const DeleteResponse = z.object({
   id: Id,
 });
 
-/* Get 에피그램 댓글 목록 조회 */
-
-// 1. 댓글 작성자
-export const CommentWriter = z.object({
-  image: z.string().url(),
-  nickname: z.string(),
-  id: z.number(),
-});
-
-// 2. 댓글 목록
-export const Comment = z.object({
-  epigramId: z.number(),
-  writer: CommentWriter,
-  updatedAt: z.coerce.date(),
-  createdAt: z.coerce.date(),
-  isPrivate: z.boolean(),
-  content: z.string(),
-  id: z.number(),
-});
-
-export const PaginationResponse = z.object({
-  totalCount: z.number(),
-  nextCursor: z.number(),
-  list: z.array(Comment),
-});
-
 export type PostEpigramRequestType = z.infer<typeof PostEpigramRequest>;
 export type PostEpigramResponseType = z.infer<typeof PostEpigramResponse>;
 export type GetEpigramListType = z.infer<typeof GetEpigramList>;
@@ -130,7 +104,6 @@ export type GetEpigramListResponseType = z.infer<typeof GetEpigramListResponse>;
 export type EpigramDetailType = z.infer<typeof EpigramDetail>;
 export type UpdateEpigramRequestType = z.infer<typeof UpdateEpigramRequest>;
 export type DeleteResponseType = z.infer<typeof DeleteResponse>;
-export type PaginationResponseType = z.infer<typeof PaginationResponse>;
 export type PaginationRequest = {
   limit: number;
   cursor?: number;
