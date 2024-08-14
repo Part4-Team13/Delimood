@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import EpigramCard from './EpigramCard';
 import ViewMore from './ViewMore';
-import { useQueryClient } from '@tanstack/react-query';
-import { useGetEpigramListQuery } from '../hooks/useEpigramQuery';
+import { useGetEpigramListInfiniteQuery } from '../hooks/useEpigramQuery';
 import { GetEpigramListType } from '../schema/epigramSchema';
 
 interface EpigramListProps {
@@ -12,34 +11,24 @@ interface EpigramListProps {
 function EpigramList({ isWide = false }: EpigramListProps) {
   const LIMIT = !isWide ? 3 : 6;
   const [epigramList, setEpigramList] = useState<GetEpigramListType[]>([]);
-  const [nextCursor, setNextCursor] = useState<number | undefined>();
   const [limit, setLimit] = useState<number>(LIMIT);
   const [showButton, setShowButton] = useState(false);
-  const { data, isLoading } = useGetEpigramListQuery({ limit, cursor: nextCursor });
-
-  const queryClient = useQueryClient();
+  const { data, isLoading, fetchNextPage } = useGetEpigramListInfiniteQuery({ limit });
 
   useEffect(() => {
     if (data) {
-      const epigrams = data.list;
-      setEpigramList((prev) => {
-        const newList = [...prev, ...epigrams];
-        setShowButton(!(data.totalCount == newList.length));
-        return newList;
+      const allEpigrams = data.pages.flatMap((page) => page.list || []);
+      setEpigramList(() => {
+        data.pages[0].totalCount === allEpigrams.length ? setShowButton(false) : setShowButton(true);
+        return allEpigrams;
       });
     }
   }, [data]);
 
-  useEffect(() => {
-    return () => {
-      queryClient.removeQueries({ queryKey: ['epigrams', { cursor: nextCursor, limit: limit }] });
-    };
-  }, [queryClient, limit, nextCursor]);
-
   const handleClickViewMore = () => {
     if (!isWide) setLimit(5);
     if (data) {
-      setNextCursor(data.nextCursor as undefined | number);
+      fetchNextPage();
     }
   };
 
