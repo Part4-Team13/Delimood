@@ -1,4 +1,5 @@
-import { GetUserReponseType, GetUserRequestType, PatchMeRequestType } from '../schema/userSchema';
+import { GetUserReponseType, GetUserRequestType, PatchMeRequestType, GetUserCommentRequestType } from '../schema/userSchema';
+import { CommentResponseType } from '../schema/commentSchema';
 import httpClient from '.';
 
 export const getMe = async (): Promise<GetUserReponseType> => {
@@ -15,4 +16,29 @@ export const getUser = async (request: GetUserRequestType): Promise<GetUserRepon
 export const updateMe = async (request: PatchMeRequestType): Promise<GetUserReponseType> => {
   const response = await httpClient.patch('/users/me', { ...request });
   return response.data;
+};
+
+export const getUserComment = async (request: GetUserCommentRequestType): Promise<CommentResponseType> => {
+  const { id, limit, cursor } = request;
+  const params: Omit<GetUserCommentRequestType, 'id'> = { limit, cursor };
+  const response = await httpClient.get(`/users/${id}/comments`, { params });
+  return response.data;
+};
+
+export const uploadImage = async (file: File): Promise<string> => {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const response = await httpClient.post('/images/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
+  return response.data.url;
+};
+
+export const updateImage = async (file: File, data: Omit<PatchMeRequestType, 'image'>): Promise<GetUserReponseType> => {
+  const imageUrl = await uploadImage(file);
+  const updatedData = { ...data, image: imageUrl };
+  const response = await updateMe(updatedData);
+  return response;
 };
