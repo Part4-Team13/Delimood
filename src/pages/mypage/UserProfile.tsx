@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ActionIcon, Button, TextInput } from '@mantine/core';
 import { IconCamera, IconPencil, IconCheck, IconX } from '@tabler/icons-react';
-import { useGetMeQuery } from '../../hooks/useUserQuery';
+import { useGetMeQuery, useUpdateMe, useUpdateImage } from '../../hooks/useUserQuery';
 import profileIcon from '../../assets/ico_profile.svg';
 
 const UserProfile = () => {
@@ -10,6 +10,23 @@ const UserProfile = () => {
   const [newNickname, setNewNickname] = useState<string>('');
   const [editing, setEditing] = useState<boolean>(false);
 
+  const updateMeMutation = useUpdateMe({
+    onSuccess: () => {
+      setEditing(false);
+    },
+    onError: (error) => {
+      console.error('Error nickname:', error);
+    },
+  });
+
+  const updateImageMutation = useUpdateImage({
+    onSuccess: (updatedData) => {
+      setProfileImage(updatedData.image);
+    },
+    onError: (error) => {
+      console.error('Error :', error);
+    },
+  });
   useEffect(() => {
     if (data) {
       setProfileImage(data.image);
@@ -25,11 +42,7 @@ const UserProfile = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      updateImageMutation.mutate({ file, data: { nickname: newNickname } });
     }
   };
 
@@ -43,8 +56,9 @@ const UserProfile = () => {
   };
 
   const handleConfirm = () => {
-    // 닉네임 업데이트 로직추가하기!
-    setEditing(false);
+    updateMeMutation.mutate({
+      nickname: newNickname,
+    });
   };
 
   return (
