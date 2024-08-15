@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ActionIcon, Button, TextInput } from '@mantine/core';
 import { IconCamera, IconPencil, IconCheck, IconX } from '@tabler/icons-react';
+import { useGetMeQuery } from '../../hooks/useUserQuery';
 import profileIcon from '../../assets/ico_profile.svg';
 
 const UserProfile = () => {
-  // 초기 데이터
-  const data = {
-    id: 110,
-    nickname: '채식이',
-    teamId: '6-13',
-    createdAt: '2024-07-29T12:47:55.605Z',
-    updatedAt: '2024-07-29T12:52:16.022Z',
-    image:
-      'https://media.istockphoto.com/id/1300107681/ko/%EC%82%AC%EC%A7%84/%EB%8C%80%EC%84%9C%EC%96%91-%EC%9D%98-%ED%91%9C%EB%A9%B4.jpg?s=612x612&w=0&k=20&c=p_vW3L_1A7moSNqHpavoW8EmmiiKOM4bwQM7rSvt5OY=',
-  };
-
-  const [profileImage, setProfileImage] = useState<string>(data.image);
+  const { data, isLoading, error } = useGetMeQuery();
+  const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
+  const [newNickname, setNewNickname] = useState<string>('');
   const [editing, setEditing] = useState<boolean>(false);
-  const [newNickname, setNewNickname] = useState<string>(data.nickname);
+
+  useEffect(() => {
+    if (data) {
+      setProfileImage(data.image);
+      setNewNickname(data.nickname);
+    }
+  }, [data]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  const userNickname = data?.nickname || '사용자 닉네임';
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -36,7 +39,7 @@ const UserProfile = () => {
 
   const handleCancel = () => {
     setEditing(false);
-    setNewNickname(data.nickname);
+    setNewNickname(data?.nickname || '사용자 닉네임');
   };
 
   const handleConfirm = () => {
@@ -72,7 +75,7 @@ const UserProfile = () => {
           </div>
         ) : (
           <div className='flex items-center'>
-            <h2 className='text-base font-medium text-black-950 desktop:text-2xl'>{data.nickname}</h2>
+            <h2 className='text-base font-medium text-black-950 desktop:text-2xl'>{userNickname}</h2>
             <ActionIcon onClick={handleEditClick} variant='subtle' className='ml-2 text-black-500'>
               <IconPencil size={18} />
             </ActionIcon>
