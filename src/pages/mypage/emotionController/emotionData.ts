@@ -8,14 +8,14 @@ export const emotionColors: Record<string, string> = {
   HAPPY: '#48BB98',
   ANGRY: '#F05650',
   SAD: '#5195EE',
-  THINKING: '#8E80E3',
+  WORRIED: '#8E80E3',
   MOVED: '#FBC85B',
 };
 
 export const emotionIcons: Record<string, string> = {
   HAPPY: smiling,
   ANGRY: angry,
-  THINKING: thinking,
+  WORRIED: thinking,
   SAD: sad,
   MOVED: heart,
 };
@@ -23,7 +23,7 @@ export const emotionIcons: Record<string, string> = {
 export const emotionNames: Record<string, string> = {
   HAPPY: '기쁨',
   ANGRY: '분노',
-  THINKING: '고민',
+  WORRIED: '고민',
   SAD: '슬픔',
   MOVED: '감동',
 };
