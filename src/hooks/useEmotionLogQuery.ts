@@ -3,6 +3,7 @@ import quries from '../apis/queries';
 import { EmotionLogRequestType, EmotionLogResponseType } from '../schema/emotionLogSchema';
 import { postEmotionLog } from '../apis/emotionLog';
 import { MutationOptions } from '../types/query';
+import { EmotionLogQueryParamsType } from '../schema/emotionLogSchema';
 
 // 오늘의 감정 등록
 export const usePostEmotionLog = (options: MutationOptions<EmotionLogResponseType>) => {
@@ -34,8 +35,10 @@ export const useGetTodayEmotionLog = () => {
 // const { data, error, isLoading } = useGetTodayEmotionLog();
 
 // 월간 감정 조회
-export const useGetMonthlyEmotionLogs = () => {
-  return useQuery(quries.emotionLogs.monthly());
+export const useGetMonthlyEmotionLogs = (params: EmotionLogQueryParamsType) => {
+  return useQuery(quries.emotionLogs.monthly(params));
 };
+
 // NOTE: 사용 방법
-// const { data, error, isLoading } = useGetMonthlyEmotionLog();
+// const params = { userId: 110, year: 2024, month: 8 } as const;
+// const { data, error, isLoading } = useGetMonthlyEmotionLogs(params);

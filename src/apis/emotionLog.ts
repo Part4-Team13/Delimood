@@ -1,5 +1,6 @@
 import { EmotionLogRequestType, EmotionLogResponseType, EmotionLogsResponseType } from '../schema/emotionLogSchema';
 import httpClient from '.';
+import { EmotionLogQueryParamsType } from '../schema/emotionLogSchema';
 
 export const postEmotionLog = async (request: EmotionLogRequestType): Promise<EmotionLogResponseType> => {
   const response = await httpClient.post('/emotionLogs/today', request);
@@ -11,7 +12,7 @@ export const getTodayEmotionLog = async (): Promise<EmotionLogResponseType> => {
   return response.data;
 };
 
-export const getMonthlyEmotionLogs = async (): Promise<EmotionLogsResponseType> => {
-  const response = await httpClient.get('/emotionLogs/monthly');
+export const getMonthlyEmotionLogs = async (params: EmotionLogQueryParamsType): Promise<EmotionLogsResponseType> => {
+  const response = await httpClient.get('/emotionLogs/monthly', { params });
   return response.data;
 };
