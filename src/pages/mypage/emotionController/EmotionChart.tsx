@@ -1,42 +1,29 @@
+import { useState, useEffect } from 'react';
 import { DonutChart } from '@mantine/charts';
-import { rawData } from './data';
+import { emotionColors, emotionIcons, emotionNames } from './emotionData';
 
-import heart from '../../../assets/ico_face_heart.svg';
-import smiling from '../../../assets/ico_face_smiling.svg';
-import thinking from '../../../assets/ico_face_thinking.svg';
-import sad from '../../../assets/ico_face_sad.svg';
-import angry from '../../../assets/ico_face_angry.svg';
+interface EmotionData {
+  id: number;
+  userId: number;
+  emotion: keyof typeof emotionColors;
+  createdAt: string;
+}
 
-const emotionIcons: Record<string, string> = {
-  HAPPY: smiling,
-  ANGRY: angry,
-  THINKING: thinking,
-  SAD: sad,
-  MOVED: heart,
-};
+interface ProcessedEmotionData {
+  name: string;
+  value: number;
+  color: string;
+}
 
-const emotionNames: Record<string, string> = {
-  HAPPY: '기쁨',
-  ANGRY: '분노',
-  THINKING: '고민',
-  SAD: '슬픔',
-  MOVED: '감동',
-};
+function processEmotionData(data: EmotionData[]): ProcessedEmotionData[] {
+  if (!data || data.length === 0) return [];
 
-function processEmotionData(data: typeof rawData) {
   const total = data.length;
+
   const emotionCounts = data.reduce<Record<string, number>>((acc, entry) => {
     acc[entry.emotion] = (acc[entry.emotion] || 0) + 1;
     return acc;
   }, {});
-
-  const emotionColors: Record<string, string> = {
-    HAPPY: '#48BB98',
-    ANGRY: '#F05650',
-    SAD: '#5195EE',
-    THINKING: '#8E80E3',
-    MOVED: '#FBC85B',
-  };
 
   return Object.entries(emotionCounts)
     .map(([emotion, count]) => ({
@@ -47,7 +34,7 @@ function processEmotionData(data: typeof rawData) {
     .sort((a, b) => b.value - a.value);
 }
 
-function EmotionList({ data }: { data: ReturnType<typeof processEmotionData> }) {
+function EmotionList({ data }: { data: ProcessedEmotionData[] }) {
   const topEmotionName = data[0].name;
 
   return (
@@ -63,29 +50,53 @@ function EmotionList({ data }: { data: ReturnType<typeof processEmotionData> }) 
   );
 }
 
-export default function EmotionChart() {
-  const data = processEmotionData(rawData);
-  const topEmotion = data[0];
+export default function EmotionChart({ data }: { data: EmotionData[] }) {
+  const processedData = processEmotionData(data);
+  const hasData = processedData.length > 0;
+  const topEmotion = hasData ? processedData[0] : null;
+
+  const [chartSize, setChartSize] = useState(120);
+  const [chartThick, setChartThink] = useState(7);
+
+  useEffect(() => {
+    const updateChart = () => {
+      if (window.innerWidth >= 1280) {
+        setChartSize(180);
+        setChartThink(9);
+      } else {
+        setChartSize(120);
+        setChartThink(7);
+      }
+    };
+
+    updateChart();
+    window.addEventListener('resize', updateChart);
+
+    return () => {
+      window.removeEventListener('resize', updateChart);
+    };
+  }, []);
+
+  const placeholderData = [{ name: 'No Data', value: 100, color: '#e0e0e0' }];
 
   return (
-    <div className='w-[312px] tablet:w-[384px] flex flex-col gap-[16px] desktop:w-[640px] desktop:gap-[48px] '>
+    <div className='w-[312px] tablet:w-[384px] flex flex-col gap-[16px] desktop:w-[640px] desktop:gap-[48px] mb-[40px] tablet:mb-[63px] desktop:mb-[104px]'>
       <h2 className='text-base font-semibold text-black-600 desktop:text-2xl'>감정 차트</h2>
       <div className='flex gap-[48px] rounded-lg border border-line-bright tablet:gap-[76px] h-[176px] desktop:h-[264px] justify-center items-center desktop:gap-[120px]'>
         <div className='relative'>
-          <div className='block desktop:hidden'>
-            <DonutChart paddingAngle={2} size={120} thickness={7} data={data} withTooltip={false} />
-          </div>
-          <div className='hidden desktop:block'>
-            <DonutChart paddingAngle={2} size={180} thickness={10} data={data} withTooltip={false} />
-          </div>
-          {topEmotion && (
+          <DonutChart paddingAngle={2} size={chartSize} thickness={chartThick} data={hasData ? processedData : placeholderData} withTooltip={false} />
+          {topEmotion ? (
             <div className='absolute inset-0 flex flex-col items-center justify-center text-center'>
               <img src={emotionIcons[topEmotion.name]} alt={emotionNames[topEmotion.name]} className='w-6 h-6 desktop:w-10 desktop:h-10' />
               <span className='text-base font-bold'>{emotionNames[topEmotion.name]}</span>
             </div>
+          ) : (
+            <div className='absolute inset-0 flex items-center justify-center text-center'>
+              <span className='text-sm text-gray-400'>No Data</span>
+            </div>
           )}
         </div>
-        <EmotionList data={data} />
+        {hasData ? <EmotionList data={processedData} /> : <div className='-ml-5'>이모지 데이터가 없음</div>}
       </div>
     </div>
   );

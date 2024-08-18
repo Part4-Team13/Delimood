@@ -4,24 +4,25 @@ import { useMediaQuery } from '@mantine/hooks';
 import { Button, Group, ActionIcon } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
-import { rawData } from './data';
 import { emotionIcons, emotionColors, emotionNames } from './emotionData';
 
-const EmotionCalendar = () => {
+const EmotionCalendar = ({ data, onDateChange }: { data: { emotion: string; createdAt: string }[]; onDateChange: (year: number, month: number) => void }) => {
   const isTablet = useMediaQuery('(min-width: 744px) and (max-width: 1279px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
   const [emojis, setEmojis] = useState<{ [key: string]: string }>({});
   const [selectedEmojis, setSelectedEmojis] = useState<string[]>([]);
 
   useEffect(() => {
-    const emojiMap = rawData.reduce((acc: { [key: string]: string }, entry: { emotion: string; createdAt: string }) => {
-      const date = entry.createdAt.split('T')[0];
-      acc[date] = emotionIcons[entry.emotion] || '';
-      return acc;
-    }, {});
+    if (data) {
+      const emojiMap = data.reduce((acc: { [key: string]: string }, entry: { emotion: string; createdAt: string }) => {
+        const date = entry.createdAt.split('T')[0];
+        acc[date] = emotionIcons[entry.emotion] || '';
+        return acc;
+      }, {});
 
-    setEmojis(emojiMap);
-  }, []);
+      setEmojis(emojiMap);
+    }
+  }, [data]);
 
   const formatDate = (date: Date): string => {
     return dayjs(date).format('YYYY-MM-DD');
@@ -78,6 +79,14 @@ const EmotionCalendar = () => {
     setSelectedEmojis([]);
   };
 
+  const handleDateChange = (newDate: Date | null) => {
+    if (newDate) {
+      const newYear = dayjs(newDate).year();
+      const newMonth = dayjs(newDate).month() + 1;
+      onDateChange(newYear, newMonth);
+    }
+  };
+
   return (
     <div>
       <Calendar
@@ -127,8 +136,8 @@ const EmotionCalendar = () => {
             fontWeight: '600',
           },
         }}
+        onDateChange={handleDateChange}
       />
-      {/*Refactor : UI부분에서 리펙토링 있을예정*/}
       <div className='w-[308px] tablet:w-[379px] desktop:w-[637px] flex flex-col h-auto my-4 px-1 items-center tablet:mt-10 desktop:mt-16 gap-2 desktop:gap-6'>
         <span className='text-[14px] mb-2 tablet:text-[16px] font-paraph desktop:text-[20px] text-center'>
           당신이 언제 행복한 날이 많았는지 궁금하시다면! <br />

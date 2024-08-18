@@ -40,7 +40,7 @@ export default function Mypage() {
 
   return (
     <div>
-      <div className='flex flex-col items-center justify-center bg-white mt-[64px] desktop:mt-[128px] shadow-mypage rounded-[24px]'>
+      <div className='flex flex-col items-center justify-center bg-white mt-[64px] desktop:mt-[128px] shadow-mypage rounded-[24px] mb-[40px]'>
         <UserProfile />
         <button
           onClick={handleLogout}
