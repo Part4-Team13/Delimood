@@ -9,13 +9,19 @@ const UserProfile = () => {
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [newNickname, setNewNickname] = useState<string>('');
   const [editing, setEditing] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const updateMeMutation = useUpdateMe({
     onSuccess: () => {
       setEditing(false);
+      setErrorMessage(null);
     },
     onError: (error) => {
-      console.error('Error nickname:', error);
+      if (error.response && error.response.status === 400) {
+        setErrorMessage('중복된 닉네임입니다. 다른 닉네임을 사용해주세요.');
+      } else {
+        setErrorMessage('닉네임 변경 중 오류가 발생했습니다.');
+      }
     },
   });
 
@@ -25,8 +31,10 @@ const UserProfile = () => {
     },
     onError: (error) => {
       console.error('Error :', error);
+      setErrorMessage('이미지 업로드 중 오류가 발생했습니다.');
     },
   });
+
   useEffect(() => {
     if (data) {
       setProfileImage(data.image);
@@ -53,6 +61,7 @@ const UserProfile = () => {
   const handleCancel = () => {
     setEditing(false);
     setNewNickname(data?.nickname || '사용자 닉네임');
+    setErrorMessage(null);
   };
 
   const handleConfirm = () => {
@@ -78,14 +87,17 @@ const UserProfile = () => {
       </div>
       <div className='relative'>
         {editing ? (
-          <div className='flex items-center gap-2'>
-            <TextInput value={newNickname} onChange={(e) => setNewNickname(e.target.value)} placeholder='새 닉네임' className='w-[200px] desktop:w-[250px]' />
-            <Button onClick={handleConfirm} color='blue' className='p-3'>
-              <IconCheck size={18} />
-            </Button>
-            <Button onClick={handleCancel} color='red' className='p-3'>
-              <IconX size={18} />
-            </Button>
+          <div className='flex flex-col items-center gap-2'>
+            <div className='flex items-center gap-2'>
+              <TextInput value={newNickname} onChange={(e) => setNewNickname(e.target.value)} placeholder='새 닉네임' className='w-[200px] desktop:w-[250px]' />
+              <Button onClick={handleConfirm} color='blue' className='p-3'>
+                <IconCheck size={18} />
+              </Button>
+              <Button onClick={handleCancel} color='red' className='p-3'>
+                <IconX size={18} />
+              </Button>
+            </div>
+            {errorMessage && <div className='text-sm font-semibold text-state-alert'>{errorMessage}</div>}
           </div>
         ) : (
           <div className='flex items-center'>
