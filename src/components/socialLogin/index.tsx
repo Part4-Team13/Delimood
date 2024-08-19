@@ -1,12 +1,13 @@
 import Kakao from '../../assets/ico_logo_kakao.svg';
 import Google from '../../assets/ico_logo_google.svg';
 import Naver from '../../assets/ico_logo_naver.svg';
+import { PUBLIC_KAKAO_CLIENT_ID, TEST_REDIRECT_URI } from '../../constants/env';
 
-const SocialButton: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
+const SocialButton: React.FC<{ src: string; alt: string; href: string }> = ({ src, alt, href }) => {
   return (
-    <button className='w-[40px] h-[40px] flex items-center justify-center desktop:w-[60px] desktop:h-[60px]'>
+    <a href={href} className='w-[40px] h-[40px] flex items-center justify-center desktop:w-[60px] desktop:h-[60px]' rel='noopener noreferrer'>
       <img src={src} alt={alt} />
-    </button>
+    </a>
   );
 };
 
@@ -20,9 +21,9 @@ const SocialLogin: React.FC = () => {
       </h2>
 
       <div className='flex items-center justify-center gap-4 mt-[24px] desktop:mt-[40px]'>
-        <SocialButton src={Kakao} alt='Kakao' />
-        <SocialButton src={Google} alt='Google' />
-        <SocialButton src={Naver} alt='Naver' />
+        <SocialButton src={Kakao} alt='Kakao' href={`https://kauth.kakao.com/oauth/authorize?client_id=${PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${TEST_REDIRECT_URI}&response_type=code`} />
+        <SocialButton src={Google} alt='Google' href={''} />
+        <SocialButton src={Naver} alt='Naver' href={''} />
       </div>
     </div>
   );
