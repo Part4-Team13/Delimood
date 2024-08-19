@@ -1,11 +1,11 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
-import { getMe, getUser } from './user';
+import { getMe, getUser, getUserComment } from './user';
 import { getTodayEmotionLog, getMonthlyEmotionLogs } from './emotionLog';
-import { getComments } from './comment';
-import { GetUserRequestType } from '../schema/userSchema';
+import { getComments, getCommentList } from './comment';
+import { GetUserRequestType, GetUserCommentRequestType } from '../schema/userSchema';
 import { GetCommentsRequestType } from '../schema/commentSchema';
 import { PaginationRequest } from '../schema/epigramSchema';
-import { getEpigramList } from '../apis/epigram';
+import { getEpigramList, getTodayEpigram, getEpigramDetail } from '../apis/epigram';
 
 const quries = createQueryKeyStore({
   user: {
@@ -16,6 +16,10 @@ const quries = createQueryKeyStore({
     getUser: (request: GetUserRequestType) => ({
       queryKey: [request],
       queryFn: () => getUser(request),
+    }),
+    getUserComment: (request: GetUserCommentRequestType) => ({
+      queryKey: [request],
+      queryFn: () => getUserComment(request),
     }),
   },
 
@@ -31,9 +35,9 @@ const quries = createQueryKeyStore({
   },
 
   comments: {
-    getComments: (request: GetCommentsRequestType) => ({
-      queryKey: ['getComments', request],
-      queryFn: () => getComments(request),
+    getComments: ({ limit = 10, ...rest }: GetCommentsRequestType) => ({
+      queryKey: ['getComments', { limit, ...rest }],
+      queryFn: () => getComments({ limit, ...rest }),
     }),
   },
 
@@ -41,6 +45,18 @@ const quries = createQueryKeyStore({
     list: (params: PaginationRequest) => ({
       queryKey: ['epigrams', 'list', params],
       queryFn: () => getEpigramList(params),
+    }),
+    todayEpigram: () => ({
+      queryKey: ['epigrams', 'today'],
+      queryFn: getTodayEpigram,
+    }),
+    detailEpigram: (id: number) => ({
+      queryKey: ['epigrams', 'detail', id],
+      queryFn: () => getEpigramDetail(id),
+    }),
+    comments: (id: number, { limit, cursor }: PaginationRequest) => ({
+      queryKey: ['epigrams', 'comments', id, { limit, cursor }],
+      queryFn: () => getCommentList(id, { limit, cursor }),
     }),
   },
 });
