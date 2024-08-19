@@ -36,11 +36,11 @@ function EpigramCard({ id, author, content, tags, isSeperated = false }: Epigram
           <div className={`text-black-600 flex-shrink-0 ${isSeperated ? 'line-clamp-2 tablet:line-clamp-4 desktop:line-clamp-5' : 'min-h-[48px]'}`}>
             <p>{content}</p>
           </div>
-          <span className='text-blue-400 ml-auto'>- {author} -</span>
+          <span className='ml-auto text-blue-400'>- {author} -</span>
         </div>
         <ul className={`flex text-blue-400 ml-auto w-fit ${isSeperated ? 'flex-col gap-0' : 'flex-row gap-[8px]'}`}>
           {tags.map((tag) => (
-            <li key={tag.id}>#{tag.name}</li>
+            <li key={tag.id}>{tag.name}</li>
           ))}
         </ul>
         <LikeButton />
