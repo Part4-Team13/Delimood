@@ -1,4 +1,4 @@
-import plus from '../assets/ico_plus.svg';
+import plus from '../assets/ico_plus_blue.svg';
 
 interface ViewMoreProps {
   onClick?: () => void;
