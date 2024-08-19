@@ -1,4 +1,4 @@
-import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import {
   PostEpigramRequestType,
   PostEpigramResponseType,
@@ -83,5 +83,15 @@ export const useDeleteEpigramMutation = (id: number, options?: UseMutationOption
   return useMutation<DeleteResponseType, unknown, void>({
     mutationFn: () => deleteEpigram(id),
     ...options,
+  });
+};
+
+// useInfiniteQuery 사용
+export const useGetEpigramListInfiniteQuery = (params: PaginationRequest) => {
+  return useInfiniteQuery<GetEpigramListResponseType>({
+    queryKey: quries.epigrams.list(params).queryKey,
+    queryFn: ({ pageParam = 0 }) => getEpigramList({ ...params, cursor: pageParam as number }),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    initialPageParam: 0,
   });
 };
