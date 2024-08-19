@@ -85,6 +85,7 @@ export const useDeleteEpigramMutation = (id: number, options?: UseMutationOption
     ...options,
   });
 };
+<<<<<<< HEAD
 
 // useInfiniteQuery 사용
 export const useGetEpigramListInfiniteQuery = (params: PaginationRequest) => {
@@ -95,3 +96,5 @@ export const useGetEpigramListInfiniteQuery = (params: PaginationRequest) => {
     initialPageParam: 0,
   });
 };
+=======
+>>>>>>> b0e0a510e475f01cd26b82bad12139a066a02288

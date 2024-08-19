@@ -22,6 +22,7 @@ const quries = createQueryKeyStore({
       queryFn: () => getUserComment(request),
     }),
   },
+
   emotionLogs: {
     today: () => ({
       queryKey: ['emotionLogs', 'today'],
@@ -32,6 +33,7 @@ const quries = createQueryKeyStore({
       queryFn: getMonthlyEmotionLogs,
     }),
   },
+
   comments: {
     getComments: ({ limit = 10, ...rest }: GetCommentsRequestType) => ({
       queryKey: ['getComments', { limit, ...rest }],
