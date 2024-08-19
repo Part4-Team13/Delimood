@@ -5,12 +5,17 @@ import ico_more_vertical from '../../assets/ico_more_vertical.svg';
 import CommentList from '../../components/CommentList';
 import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import { useGetEpigramDetailQuery } from '../../hooks/useEpigramQuery';
+import { useGetMeQuery } from '../../hooks/useUserQuery';
+import { Menu } from '@mantine/core';
 
 function EpigramDetail() {
   const { id } = useParams();
+  const { data: userData } = useGetMeQuery();
   const epigramId: number = Number(id);
   const { data: commentData, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
   const { data, isLoading, isFetched } = useGetEpigramDetailQuery(epigramId);
+
+  if (userData) console.log(userData.id);
 
   if (isLoading) {
     return <div>로딩중입니다...</div>;
@@ -25,7 +30,19 @@ function EpigramDetail() {
                 <li key={tag.id}>{tag.name}</li>
               ))}
             </ul>
-            <img src={ico_more_vertical} alt='에피그램 수정' className='w-[24px] cursor-pointer' />
+            {userData?.id === data?.writerId && (
+              <Menu>
+                <Menu.Target>
+                  <button>
+                    <img src={ico_more_vertical} alt='에피그램 수정' className='w-[24px] cursor-pointer' />
+                  </button>
+                </Menu.Target>
+                <Menu.Dropdown className='bg-background rounded-[16px] border-[1px] border-blue-300'>
+                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]'>수정하기</Menu.Item>
+                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]'>삭제하기</Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            )}
           </div>
           <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px]'> {data!.content} </p>
           <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl'>- {data!.author} -</span>
@@ -50,7 +67,7 @@ function EpigramDetail() {
           </ul>
         </main>
         <div>
-          <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll />
+          <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
         </div>
       </>
     );
