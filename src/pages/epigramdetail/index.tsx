@@ -2,11 +2,13 @@ import { useParams } from 'react-router-dom';
 import ico_like from '../../assets/ico_like.svg';
 import ico_external_link from '../../assets/ico_external_link.svg';
 import ico_more_vertical from '../../assets/ico_more_vertical.svg';
+import ico_profile from '../../assets/ico_profile.svg';
 import CommentList from '../../components/CommentList';
 import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import { useGetEpigramDetailQuery } from '../../hooks/useEpigramQuery';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
-import { Menu } from '@mantine/core';
+import { Button, Menu } from '@mantine/core';
+import { useRef, useState } from 'react';
 
 function EpigramDetail() {
   const { id } = useParams();
@@ -14,8 +16,11 @@ function EpigramDetail() {
   const epigramId: number = Number(id);
   const { data: commentData, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
   const { data, isLoading, isFetched } = useGetEpigramDetailQuery(epigramId);
+  const [comment, setComment] = useState();
 
-  if (userData) console.log(userData.id);
+  const addComment = useRef<HTMLTextAreaElement | undefined>();
+
+  if (userData) userData.image = userData.image ? userData.image : ico_profile;
 
   if (isLoading) {
     return <div>로딩중입니다...</div>;
@@ -67,6 +72,33 @@ function EpigramDetail() {
           </ul>
         </main>
         <div>
+          <div className='w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto flex flex-col gap-[16px] tablet:gap-[24px] mb-[12px] tablet:mb-[32px] desktop:mb-[40px]'>
+            <span className='text-lg desktop:text-xl'>댓글({commentData?.pages[0].totalCount})</span>
+            <div className='flex flex-col items-center w-full gap-[10px]'>
+              <div className='flex gap-[13px] desktop:gap-[21px] items-start w-full '>
+                <span className='flex-shrink-0'>
+                  <img src={userData?.image} alt='내 프로필' className='w-[48px] h-[48px] rounded-full' />
+                </span>
+                <div className='flex flex-col gap-[5px] w-full'>
+                  <div className='flex items-center gap-[10px]'>
+                    <span>{userData?.nickname}</span>
+                    <span className='h-fit flex gap-[2px]'>
+                      <input type='checkbox' />
+                      <span>비밀글</span>
+                    </span>
+                  </div>
+                  <div className='flex items-center gap-[5px] h-full'>
+                    <textarea
+                      ref={addComment}
+                      placeholder='100자 이내로 입력해주세요'
+                      className='w-full h-[100px] rounded-[8px] border-[1px] bg-background border-line-darker p-[12px_16px] focus:outline-none'
+                    />
+                    <Button className='text-md desktop:text-lg bg-button-default hover:bg-button-hover w-max mt-[5px] flex-shrink-0'>확인</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
         </div>
       </>
