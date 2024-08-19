@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
 // 댓글 등록
-export const PostComment = z.object({
+export const PostCommentSchema = z.object({
   epigramId: z.number(),
   isPrivate: z.boolean(),
   content: z.string(),
@@ -10,7 +10,7 @@ export const PostComment = z.object({
 // 댓글 목록 조회
 // 1. 댓글 작성자
 export const WriterSchema = z.object({
-  image: z.string().url(),
+  image: z.string().nullable(),
   nickname: z.string(),
   id: z.number(),
 });
@@ -22,38 +22,37 @@ export const ListItemSchema = z.object({
   updatedAt: z.coerce.date(),
   createdAt: z.coerce.date(),
   isPrivate: z.boolean(),
-  content: z.string(),
+  content: z.string().min(1),
   id: z.number(),
 });
 
-// 3. 전체 응답
-export const ResponseSchema = z.object({
+// 3. 댓글 전체 응답
+export const CommentResponseSchema = z.object({
   totalCount: z.number(),
-  nextCursor: z.number(),
+  nextCursor: z.number().nullable(),
   list: z.array(ListItemSchema),
 });
 
 // 댓글 수정
-export const PatchComment = z.object({
+export const PatchCommentSchema = z.object({
   isPrivate: z.boolean(),
   content: z.string(),
 });
 
 // 댓글 삭제
-export const DeleteComment = z.object({
+export const DeleteCommentSchema = z.object({
   id: z.number(),
 });
 
-// 댓글 목록 조회 요청
-export const GetCommentsRequest = z.object({
-  epigramId: z.number(),
-  limit: z.number(),
+export const GetCommentsRequestSchema = z.object({
+  epigramId: z.number().optional(),
+  limit: z.number().optional(),
   cursor: z.number().optional(),
 });
 
-export type PostCommentType = z.infer<typeof PostComment>;
-export type ResponseType = z.infer<typeof ResponseSchema>;
+export type PostCommentType = z.infer<typeof PostCommentSchema>;
+export type CommentResponseType = z.infer<typeof CommentResponseSchema>;
 export type ListItemType = z.infer<typeof ListItemSchema>;
-export type PatchCommentType = z.infer<typeof PatchComment>;
-export type DeleteCommentType = z.infer<typeof DeleteComment>;
-export type GetCommentsRequestType = z.infer<typeof GetCommentsRequest>;
+export type PatchCommentType = z.infer<typeof PatchCommentSchema>;
+export type DeleteCommentType = z.infer<typeof DeleteCommentSchema>;
+export type GetCommentsRequestType = z.infer<typeof GetCommentsRequestSchema>;
