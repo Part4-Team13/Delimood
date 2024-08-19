@@ -5,30 +5,44 @@ import ico_more_vertical from '../../assets/ico_more_vertical.svg';
 import ico_profile from '../../assets/ico_profile.svg';
 import CommentList from '../../components/CommentList';
 import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery';
-import { useGetEpigramDetailQuery } from '../../hooks/useEpigramQuery';
+import { useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { Button, Menu, rem } from '@mantine/core';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePostCommentMutation } from '../../hooks/useCommentQuery';
 import { showNotification } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function EpigramDetail() {
-  const { id } = useParams();
-  const { data: userData } = useGetMeQuery();
-  const epigramId: number = Number(id);
-  const { data: commentData, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
-  const { data, isLoading, isFetched } = useGetEpigramDetailQuery(epigramId);
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
   const [comment, setComment] = useState<string>('');
   const [isCommentPrivate, setIsCommentPrivate] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState<number>(0);
+  const [like, setLike] = useState<boolean>(false);
   const addComment = useRef<HTMLTextAreaElement | null>(null);
+
+  const queryClient = useQueryClient();
+
+  const { id } = useParams();
+  const epigramId: number = Number(id);
+  const { data: userData } = useGetMeQuery();
+  const { data: commentData, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
+  const { data, isLoading, isFetched } = useGetEpigramDetailQuery(epigramId);
+
+  useEffect(() => {
+    if (data) {
+      setLike(data.isLiked);
+      setLikeCount(data.likeCount);
+    }
+    console.log('리렌더링');
+  }, [data, likeCount, like, queryClient]);
 
   const options = {
     onError: () => {
       showNotification({
-        title: '댓글 등록에 실패했습니다.',
+        title: '실패했습니다.',
         message: '죄송합니다. 다시 시도해주세요.',
         icon: xIcon,
         color: 'red',
@@ -46,8 +60,17 @@ function EpigramDetail() {
         }),
       });
     },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+      if (data) {
+        setLike(data.isLiked);
+        setLikeCount(data.likeCount);
+      }
+    },
   };
-  const commentMutate = usePostCommentMutation({ epigramId, options });
+  const commentMutation = usePostCommentMutation({ epigramId, options });
+  const likeMutation = usePostEpigramLikeMutation(epigramId, options);
+  const deleteLikeMutation = usePostEpigramLikeDeleteMutation(epigramId, options);
 
   const onAddCommentChange = () => {
     // NOTE: 100자 제한
@@ -63,8 +86,19 @@ function EpigramDetail() {
   };
 
   const onClickAddCommentButton = () => {
-    if (comment) commentMutate.mutate({ epigramId, content: comment, isPrivate: isCommentPrivate });
-    setComment('');
+    if (comment) commentMutation.mutate({ epigramId, content: comment, isPrivate: isCommentPrivate });
+    addComment.current!.value = '';
+    setComment(addComment.current!.value);
+  };
+
+  const onClickLikeButton = () => {
+    if (data) {
+      if (!data.isLiked) {
+        likeMutation.mutate();
+      } else {
+        deleteLikeMutation.mutate();
+      }
+    }
   };
 
   if (userData) userData.image = userData.image ? userData.image : ico_profile;
@@ -94,18 +128,24 @@ function EpigramDetail() {
           <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px]'> {data!.content} </p>
           <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl'>- {data!.author} -</span>
           <ul className='flex gap-[8px] justify-center items-center mt-[32px] desktop:mt-[36px]'>
-            <li className='flex gap-[4px] bg-button-default hover:bg-button-hover text-white rounded-[100px] items-center h-fit p-[6px_14px] cursor-pointer'>
-              <img src={ico_like} alt='좋아요' className='w-[20px] desktop:w-[36px]' />
-              <span>{data!.likeCount} </span>
+            <li>
+              <button
+                onClick={onClickLikeButton}
+                className={`flex gap-[4px] text-white rounded-[100px] items-center h-fit p-[6px_14px] cursor-pointer ${like ? 'bg-state-alert hover:bg-red' : 'bg-button-default hover:bg-button-hover'}`}
+              >
+                <img src={ico_like} alt='좋아요' className='w-[20px] desktop:w-[36px]' />
+                <span>{likeCount}</span>
+              </button>
             </li>
             <li
               onClick={() => {
                 window.open(data!.referenceUrl!, '_blank');
               }}
-              className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'
             >
-              <span> {data!.referenceTitle}</span>
-              {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
+              <button className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'>
+                <span> {data!.referenceTitle}</span>
+                {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
+              </button>
             </li>
           </ul>
         </main>
