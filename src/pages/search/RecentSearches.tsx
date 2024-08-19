@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@mantine/core';
+import HashTag from '../../components/HashTag';
 
 const RecentSearches = ({ onSearch, searches }: { onSearch: (term: string) => void; searches: string[] }) => {
   const [recentSearches, setRecentSearches] = useState<string[]>(searches);
@@ -13,6 +14,13 @@ const RecentSearches = ({ onSearch, searches }: { onSearch: (term: string) => vo
     onSearch(term);
   };
 
+  //개별 검색어 삭제 핸들러
+  const removeSearch = (indexToRemove: number) => {
+    const updatedSearches = recentSearches.filter((_, index) => index !== indexToRemove);
+    setRecentSearches(updatedSearches);
+    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+  };
+
   //'모두 지우기' 버튼을 클릭할 때 로컬 스토리지에서 recentSearches 항목(최신 검색어 목록)을 삭제됨.
   const clearSearches = () => {
     localStorage.removeItem('recentSearches');
@@ -20,22 +28,14 @@ const RecentSearches = ({ onSearch, searches }: { onSearch: (term: string) => vo
   };
 
   return (
-    <div className='flex flex-col tablet:w-[384px] w-[312px] desktop:w-[640px] gap-4'>
+    <div className='flex flex-col tablet:w-[384px] w-[312px] desktop:w-[640px] gap-1'>
       <div className='flex items-center justify-between text-black-700'>
         <p className='text-base font-medium tablet:text-xl desktop:text-2xl'>최근 검색어</p>
         <Button onClick={clearSearches} className='text-xs font-semibold bg-white tablet:text-sm text-state-alert hover:bg-white hover:text-state-alert hover:underline desktop:text-base'>
           모두 지우기
         </Button>
       </div>
-      <div className='flex flex-wrap justify-start gap-2'>
-        {recentSearches.map((search, index) => (
-          <div key={index} className='w-auto h-auto px-3 py-2 bg-background rounded-[18px] text-black-300'>
-            <button onClick={() => handleSearchClick(search)} className='text-left'>
-              {search}
-            </button>
-          </div>
-        ))}
-      </div>
+      <HashTag tags={recentSearches} removeTag={removeSearch} onTagClick={handleSearchClick} />
     </div>
   );
 };
