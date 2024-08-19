@@ -1,14 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import quries from '../apis/queries';
-import { PostEmotionLog, GetTodayEmotionLog } from '../schema/emotionLogSchema';
+import { EmotionLogRequestType, EmotionLogResponseType } from '../schema/emotionLogSchema';
 import { postEmotionLog } from '../apis/emotionLog';
 import { MutationOptions } from '../types/query';
 
 // 오늘의 감정 등록
-export const usePostEmotionLog = (options: MutationOptions<GetTodayEmotionLog>) => {
+export const usePostEmotionLog = (options: MutationOptions<EmotionLogResponseType>) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (request: PostEmotionLog) => postEmotionLog(request),
+    mutationFn: (request: EmotionLogRequestType) => postEmotionLog(request),
     ...options,
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries(quries.emotionLogs.today());
@@ -38,4 +38,4 @@ export const useGetMonthlyEmotionLogs = () => {
   return useQuery(quries.emotionLogs.monthly());
 };
 // NOTE: 사용 방법
-// const { data, error, isLoading } = useGetTodayEmotionLog();
+// const { data, error, isLoading } = useGetMonthlyEmotionLog();
