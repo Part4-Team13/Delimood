@@ -1,11 +1,11 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ico_like from '../../assets/ico_like.svg';
 import ico_external_link from '../../assets/ico_external_link.svg';
 import ico_more_vertical from '../../assets/ico_more_vertical.svg';
 import ico_profile from '../../assets/ico_profile.svg';
 import CommentList from '../../components/CommentList';
 import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery';
-import { useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
+import { useDeleteEpigramMutation, useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { Button, Menu, rem } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
@@ -71,6 +71,7 @@ function EpigramDetail() {
   const commentMutation = usePostCommentMutation({ epigramId, options });
   const likeMutation = usePostEpigramLikeMutation(epigramId, options);
   const deleteLikeMutation = usePostEpigramLikeDeleteMutation(epigramId, options);
+  const deleteEpigramMutation = useDeleteEpigramMutation(epigramId);
 
   const onAddCommentChange = () => {
     // NOTE: 100자 제한
@@ -101,6 +102,31 @@ function EpigramDetail() {
     }
   };
 
+  const navigate = useNavigate();
+
+  const onClickDeleteEpigram = () => {
+    deleteEpigramMutation.mutate();
+    navigate('/epigrams');
+    showNotification({
+      title: '삭제하였습니다.',
+      message: '아쉽네요!',
+      icon: xIcon,
+      color: 'green',
+      autoClose: 2000,
+      styles: () => ({
+        root: {
+          position: 'fixed',
+          top: '10%',
+          right: '3%',
+          transform: 'translate(-50%, -50%)',
+          minWidth: '300px',
+          width: '40%',
+          maxWidth: '70%',
+        },
+      }),
+    });
+  };
+
   if (userData) userData.image = userData.image ? userData.image : ico_profile;
   if (isLoading) {
     return <div>로딩중입니다...</div>;
@@ -120,7 +146,9 @@ function EpigramDetail() {
                 </Menu.Target>
                 <Menu.Dropdown className='bg-background rounded-[16px] border-[1px] border-blue-300'>
                   <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]'>수정하기</Menu.Item>
-                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]'>삭제하기</Menu.Item>
+                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={onClickDeleteEpigram}>
+                    삭제하기
+                  </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
             )}
