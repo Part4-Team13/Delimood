@@ -1,9 +1,9 @@
 import React from 'react';
-import { EpigramListType } from '../schema/epigram/EpigramGet';
 import { useNavigate } from 'react-router-dom';
 import like from '../assets/ico_like.svg';
+import { GetEpigramListType } from '../schema/epigramSchema';
 
-type EpigramCardProps = Pick<EpigramListType, 'id' | 'author' | 'content' | 'tags'> & { isSeperated: boolean };
+type EpigramCardProps = Pick<GetEpigramListType, 'id' | 'author' | 'content' | 'tags'> & { isSeperated: boolean };
 // type LikeButtonProps = Pick<EpigramCardProps, 'id'>;
 
 // 클릭 시 해당 epigram의 like +1

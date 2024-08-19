@@ -1,4 +1,5 @@
-import { GetUserCommentReponseType, GetUserCommentRequestType, GetUserReponseType, GetUserRequestType, PatchMeRequestType } from '../schema/userSchema';
+import { GetUserReponseType, GetUserRequestType, PatchMeRequestType, GetUserCommentRequestType } from '../schema/userSchema';
+import { CommentResponseType } from '../schema/commentSchema';
 import httpClient from '.';
 
 export const getMe = async (): Promise<GetUserReponseType> => {
@@ -17,7 +18,7 @@ export const updateMe = async (request: PatchMeRequestType): Promise<GetUserRepo
   return response.data;
 };
 
-export const getUserComment = async (request: GetUserCommentRequestType): Promise<GetUserCommentReponseType> => {
+export const getUserComment = async (request: GetUserCommentRequestType): Promise<CommentResponseType> => {
   const { id, limit, cursor } = request;
   const params: Omit<GetUserCommentRequestType, 'id'> = { limit, cursor };
   const response = await httpClient.get(`/users/${id}/comments`, { params });

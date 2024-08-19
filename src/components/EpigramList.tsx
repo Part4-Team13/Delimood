@@ -1,45 +1,33 @@
 import { useEffect, useState } from 'react';
 import EpigramCard from './EpigramCard';
 import ViewMore from './ViewMore';
-import { useGetEpigrams } from '../hooks/useGetEpigrams';
-import { EpigramListType } from '../schema/epigram/EpigramGet';
-import { useQueryClient } from '@tanstack/react-query';
+import { GetEpigramListResponseType, GetEpigramListType } from '../schema/epigramSchema';
+import { InfiniteData } from '@tanstack/react-query';
 
 interface EpigramListProps {
   isWide?: boolean;
+  data: InfiniteData<GetEpigramListResponseType> | undefined;
+  isLoading: boolean;
+  fetchNextPage: () => void;
 }
 
-function EpigramList({ isWide = false }: EpigramListProps) {
-  const LIMIT = !isWide ? 3 : 6;
-  const [epigramList, setEpigramList] = useState<EpigramListType[]>([]);
-  const [nextCursor, setNextCursor] = useState<number | null>(null);
-  const [limit, setLimit] = useState<number>(LIMIT);
+function EpigramList({ isWide = false, data, isLoading, fetchNextPage }: EpigramListProps) {
+  const [epigramList, setEpigramList] = useState<GetEpigramListType[]>([]);
   const [showButton, setShowButton] = useState(false);
-  const { data, isLoading } = useGetEpigrams(limit, nextCursor);
-
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (data) {
-      const epigrams = data.list;
-      setEpigramList((prev) => {
-        const newList = [...prev, ...epigrams];
-        setShowButton(!(data.totalCount == newList.length));
-        return newList;
+      const allEpigrams = data.pages.flatMap((page) => page.list || []);
+      setEpigramList(() => {
+        data.pages[0].totalCount === allEpigrams.length ? setShowButton(false) : setShowButton(true);
+        return allEpigrams;
       });
     }
   }, [data]);
 
-  useEffect(() => {
-    return () => {
-      queryClient.removeQueries({ queryKey: ['epigrams', { cursor: nextCursor, limit: limit }] });
-    };
-  }, [queryClient, limit, nextCursor]);
-
   const handleClickViewMore = () => {
-    if (!isWide) setLimit(5);
     if (data) {
-      setNextCursor(data.nextCursor);
+      fetchNextPage();
     }
   };
 

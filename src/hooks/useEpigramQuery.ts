@@ -1,4 +1,4 @@
-import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import {
   PostEpigramRequestType,
   PostEpigramResponseType,
@@ -6,11 +6,9 @@ import {
   EpigramDetailType,
   UpdateEpigramRequestType,
   DeleteResponseType,
-  PaginationResponseType,
-  ErrorResponseType,
   PaginationRequest,
 } from '../schema/epigramSchema';
-import { postEpigram, getEpigramList, getTodayEpigram, getEpigramDetail, postEpigramLike, postEpigramLikeDelete, updateEpigram, deleteEpigram, getCommentList, ErrorResponse } from '../apis/epigram';
+import { postEpigram, getEpigramList, getTodayEpigram, getEpigramDetail, postEpigramLike, postEpigramLikeDelete, updateEpigram, deleteEpigram } from '../apis/epigram';
 import quries from '../apis/queries';
 
 // 에피그램 작성
@@ -88,20 +86,12 @@ export const useDeleteEpigramMutation = (id: number, options?: UseMutationOption
   });
 };
 
-// 에피그램 댓글 목록 조회
-export const useGetCommentListQuery = (id: number, paginationRequest: PaginationRequest, options?: UseQueryOptions<PaginationResponseType>) => {
-  return useQuery<PaginationResponseType>({
-    queryKey: quries.epigrams.comments(id, paginationRequest).queryKey,
-    queryFn: () => getCommentList(id, paginationRequest),
-    ...options,
-  });
-};
-
-// 에러 응답 처리
-export const useErrorResponseQuery = (options?: UseQueryOptions<ErrorResponseType>) => {
-  return useQuery<ErrorResponseType>({
-    queryKey: ['error'],
-    queryFn: ErrorResponse,
-    ...options,
+// useInfiniteQuery 사용
+export const useGetEpigramListInfiniteQuery = (params: PaginationRequest) => {
+  return useInfiniteQuery<GetEpigramListResponseType>({
+    queryKey: quries.epigrams.list(params).queryKey,
+    queryFn: ({ pageParam = 0 }) => getEpigramList({ ...params, cursor: pageParam as number }),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    initialPageParam: 0,
   });
 };

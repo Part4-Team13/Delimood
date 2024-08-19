@@ -97,37 +97,6 @@ export const DeleteResponse = z.object({
   id: Id,
 });
 
-/* Get 에피그램 댓글 목록 조회 */
-// 댓글 작성자 정의
-export const CommentWriter = z.object({
-  image: z.string().nullable(),
-  nickname: z.string(),
-  id: Id,
-});
-
-// 댓글 정의
-export const Comment = z.object({
-  epigramId: Id,
-  writer: CommentWriter,
-  updatedAt: z.string(),
-  createdAt: z.string(),
-  isPrivate: z.boolean(),
-  content: z.string().min(1),
-  id: Id,
-});
-
-// 페이지네이션 응답 정의
-export const PaginationResponse = z.object({
-  totalCount: z.number(),
-  nextCursor: z.number().nullable(),
-  list: z.array(Comment),
-});
-
-/* 403, 404 에러 */
-export const ErrorResponse = z.object({
-  message: z.string(),
-});
-
 export type PostEpigramRequestType = z.infer<typeof PostEpigramRequest>;
 export type PostEpigramResponseType = z.infer<typeof PostEpigramResponse>;
 export type GetEpigramListType = z.infer<typeof GetEpigramList>;
