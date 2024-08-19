@@ -13,6 +13,7 @@ import { usePostCommentMutation } from '../../hooks/useCommentQuery';
 import { showNotification } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
+import img_bg_top from '../../assets/img_bg_top.png';
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function EpigramDetail() {
@@ -21,6 +22,7 @@ function EpigramDetail() {
   const [isCommentPrivate, setIsCommentPrivate] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(0);
   const [like, setLike] = useState<boolean>(false);
+  const [backgroundSize, setBackgroundSize] = useState<string>('auto');
   const addComment = useRef<HTMLTextAreaElement | null>(null);
 
   const queryClient = useQueryClient();
@@ -30,13 +32,32 @@ function EpigramDetail() {
   const { data: userData } = useGetMeQuery();
   const { data: commentData, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
   const { data, isLoading, isFetched } = useGetEpigramDetailQuery(epigramId);
+  const navigate = useNavigate();
 
+  //NOTE : 배경 반응형 관련
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 744) {
+        setBackgroundSize('cover');
+      } else {
+        setBackgroundSize('contain');
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  });
+
+  //NOTE : 좋아요 관련
   useEffect(() => {
     if (data) {
       setLike(data.isLiked);
       setLikeCount(data.likeCount);
     }
-    console.log('리렌더링');
   }, [data, likeCount, like, queryClient]);
 
   const options = {
@@ -102,8 +123,6 @@ function EpigramDetail() {
     }
   };
 
-  const navigate = useNavigate();
-
   const onClickDeleteEpigram = () => {
     deleteEpigramMutation.mutate();
     navigate('/epigrams');
@@ -133,9 +152,13 @@ function EpigramDetail() {
   }
   if (isFetched) {
     return (
-      <>
-        <main className='w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto mb-[63px] tablet:mb-[87px] desktop:mb-[103px]'>
-          <div className='flex justify-between mt-[40px] text-lg desktop:text-xl'>
+      <div className='overflow-hidden'>
+        <div
+          className='-z-10 absolute top-[-30px] desktop:top-[30px] left-0 right-0 min-h-[407px]'
+          style={{ backgroundImage: `url(${img_bg_top})`, backgroundSize: backgroundSize, backgroundPosition: 'top', backgroundRepeat: 'repeat-x' }}
+        />
+        <main className='w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto mb-[63px] tablet:mb-[87px] desktop:mb-[103px] mt-[40px]'>
+          <div className='flex justify-between text-lg desktop:text-xl'>
             <ul className='flex gap-[16px] text-blue-400'>{data && data.tags.map((tag) => <li key={tag.id}>{tag.name}</li>)}</ul>
             {userData?.id === data?.writerId && (
               <Menu>
@@ -212,7 +235,7 @@ function EpigramDetail() {
 
           <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
         </div>
-      </>
+      </div>
     );
   }
 }
