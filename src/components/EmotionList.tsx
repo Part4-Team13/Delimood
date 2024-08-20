@@ -8,6 +8,7 @@ import { usePostEmotionLog } from '../hooks/useEmotionLogQuery';
 import { showNotification } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
 import { rem } from '@mantine/core';
+import { useGetMeQuery } from '../hooks/useUserQuery';
 
 const emotions = [
   { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },
@@ -60,6 +61,7 @@ interface EmotionListProps {
 
 function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+  const { data: userData } = useGetMeQuery();
   const [selectedEmotion, setSelectedEmotion] = useState('');
   const [isHidden, setIsHidden] = useState(false);
   const mutation = usePostEmotionLog({
@@ -86,8 +88,10 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
   });
 
   useEffect(() => {
-    if (hideAfterPost) {
-      const lastPostDate = localStorage.getItem('lastPostDate');
+    if (hideAfterPost && userData) {
+      //
+      const lastPostDateKey = `lastPostDate_${userData.id}`;
+      const lastPostDate = localStorage.getItem(lastPostDateKey);
       const today = new Date().toISOString().split('T')[0];
 
       //NOTE:현재 날짜(today)와 lastPostDate를 비교해서 만약 이 값이 다르면(즉, 하루가 지났다면) 사용자는 다시 감정을 선택할 수 있음.
@@ -96,15 +100,16 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
         if (onHide) onHide();
       }
     }
-  }, [hideAfterPost, onHide]);
+  }, [hideAfterPost, onHide, userData]);
 
   const emotionCardClick = (emotion: string) => {
     setSelectedEmotion(emotion);
     mutation.mutate({ emotion });
 
-    if (hideAfterPost) {
+    if (hideAfterPost && userData) {
       const today = new Date().toISOString().split('T')[0];
-      localStorage.setItem('lastPostDate', today);
+      const lastPostDateKey = `lastPostDate_${userData.id}`;
+      localStorage.setItem(lastPostDateKey, today);
       setIsHidden(true);
       if (onHide) onHide();
     }
