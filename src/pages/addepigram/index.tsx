@@ -169,7 +169,7 @@ export default function Demo() {
             <HashTag tags={tags} removeTag={removeTag} />
           </div>
 
-          <Group justify='flex-center' mt='md'>
+          <Group justify='flex-center' mt='md' className='mb-[59px]'>
             <Button
               type='submit'
               className='desktop:w-[640px] desktop:h-[64px] desktop:text-xl tablet:w-[384px] tablet:h-[48px] w-[312px] h-[48px]  text-lg  rounded-xl bg-button-default hover:bg-button-hover mt-4 py-0 px-4'
