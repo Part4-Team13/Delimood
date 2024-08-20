@@ -3,11 +3,12 @@ import smiling from '../assets/ico_face_smiling.svg';
 import thinking from '../assets/ico_face_thinking.svg';
 import sad from '../assets/ico_face_sad.svg';
 import angry from '../assets/ico_face_angry.svg';
-import { useState } from 'react';
-import { usePostEmotionLog } from '../hooks/useEmotionLogQuery';
+import { useEffect, useState } from 'react';
+import { usePostEmotionLog, useGetTodayEmotionLog } from '../hooks/useEmotionLogQuery';
 import { showNotification } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
 import { rem } from '@mantine/core';
+import { useGetMeQuery } from '../hooks/useUserQuery';
 
 const emotions = [
   { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },
@@ -32,7 +33,7 @@ interface EmotionCardProps {
   describe: string;
   color: string;
   isSelected: boolean;
-  onClick: (color: string) => void;
+  onClick: (emotion: string) => void;
   emotion: string;
 }
 
@@ -52,37 +53,63 @@ const EmotionCard: React.FC<EmotionCardProps> = ({ icon, describe, color, isSele
 
 function EmotionList() {
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
-  const [selectedEmotion, setSelectedEmotion] = useState('');
-  const mutation = usePostEmotionLog({
-    onError: () => {
-      showNotification({
-        title: '죄송합니다. 다시 시도해주세요.',
-        message: '감정 등록에 실패했습니다.',
-        icon: xIcon,
-        color: 'red',
-        autoClose: 2000,
-        styles: () => ({
-          root: {
-            position: 'fixed',
-            top: '10%',
-            right: '3%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '300px',
-            width: '40%',
-            maxWidth: '70%',
-          },
-        }),
-      });
+  const [selectedEmotion, setSelectedEmotion] = useState<string>('');
+  const { data: userData, isLoading: userLoading } = useGetMeQuery();
+
+  const mutation = usePostEmotionLog(
+    { userId: userData?.id || 0, year: new Date().getFullYear(), month: new Date().getMonth() + 1 },
+    {
+      onError: () => {
+        showNotification({
+          title: '죄송합니다. 다시 시도해주세요.',
+          message: '감정 등록에 실패했습니다.',
+          icon: xIcon,
+          color: 'red',
+          autoClose: 2000,
+          styles: () => ({
+            root: {
+              position: 'fixed',
+              top: '10%',
+              right: '3%',
+              transform: 'translate(-50%, -50%)',
+              minWidth: '300px',
+              width: '40%',
+              maxWidth: '70%',
+            },
+          }),
+        });
+      },
+      onSuccess: () => {
+        if (userData?.id) {
+          refetch();
+        }
+      },
     },
+  );
+
+  const { data: todayEmotion, refetch } = useGetTodayEmotionLog({
+    userId: userData?.id || 0,
   });
+
+  useEffect(() => {
+    if (todayEmotion) {
+      setSelectedEmotion(todayEmotion.emotion);
+    }
+  }, [todayEmotion]);
+
+  if (userLoading) {
+    return <div>Loading...</div>;
+  }
 
   const emotionCardClick = (emotion: string) => {
     setSelectedEmotion(emotion);
-    mutation.mutate({ emotion });
+    if (userData?.id) {
+      mutation.mutate({ emotion });
+    }
   };
 
   return (
-    <ul className='flex gap-[16px]'>
+    <ul className='flex gap-[16px] items-center justify-center'>
       {emotions.map((emotion, index) => (
         <li key={index}>
           <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.emotion === selectedEmotion} onClick={emotionCardClick} emotion={emotion.emotion} />

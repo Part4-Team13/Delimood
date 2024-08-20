@@ -4,6 +4,7 @@ import { rem } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import EmotionController from './emotionController';
+import EmotionList from '../../components/EmotionList';
 import dayjs from 'dayjs';
 import UserProfile from './UserProfile';
 
@@ -48,10 +49,14 @@ export default function Mypage() {
         >
           로그아웃
         </button>
-        <div className='w-[312px] tablet:w-[384px] desktop:w-[640px] flex justify-between'>
-          <h2 className='text-base font-semibold text-black-600 desktop:text-2xl'>오늘의 감정</h2>
-          <span className='mr-2 text-base font-normal text-blue-400 tablet:mr-4 desktop:text-xl'>{today}</span>
+        <div className='mb-[56px] tablet:mb-[60px] desktop:mb-[164px] flex flex-col gap-6 desktop:gap-12'>
+          <div className='w-[344px] tablet:w-[384px] desktop:w-[640px] flex justify-between'>
+            <h2 className='text-base font-semibold text-black-600 desktop:text-2xl'>오늘의 감정</h2>
+            <span className='text-base font-normal text-blue-400 tablet:mr-2 desktop:text-xl'>{today}</span>
+          </div>
+          <EmotionList />
         </div>
+
         <EmotionController />
       </div>
     </div>
