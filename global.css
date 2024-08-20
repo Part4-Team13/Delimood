@@ -28,4 +28,18 @@
 	.text-paraph.text-xl{
 		line-height: 28px;
 	}
+	.striped {
+		background: repeating-linear-gradient(
+			#ffffff,
+			#ffffff 22px,
+			#f2f2f2 24px
+			)
+		}
+	.striped-desktop {
+		background: repeating-linear-gradient(
+			#ffffff,
+			#ffffff 28px,
+			#f2f2f2 30px
+		)
+	}
 }
