@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { rem } from '@mantine/core';
@@ -7,11 +8,19 @@ import EmotionController from './emotionController';
 import EmotionList from '../../components/EmotionList';
 import dayjs from 'dayjs';
 import UserProfile from './UserProfile';
+import MyCommentsList from './MyCommentsList';
+import MyEpigramList from './MyEpigramList';
+import { useGetMeQuery } from '../../hooks/useUserQuery';
 
 export default function Mypage() {
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
   const navigate = useNavigate();
   const today = dayjs().format('YYYY.MM.DD');
+
+  const { data: userData, isLoading: isUserLoading } = useGetMeQuery();
+  const [activeTab, setActiveTab] = useState<'epigrams' | 'comments'>('epigrams');
+  const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0);
+  const [totalEpigramsCount, setTotalEpigramsCount] = useState<number>(0);
 
   const handleLogout = () => {
     Cookies.remove('accessToken');
@@ -39,9 +48,15 @@ export default function Mypage() {
     navigate('/login');
   };
 
+  if (isUserLoading) {
+    return <div>로딩중입니다...</div>;
+  }
+
+  const userId = userData?.id;
+
   return (
-    <div>
-      <div className='flex flex-col items-center justify-center bg-white mt-[64px] desktop:mt-[128px] shadow-mypage rounded-[24px] mb-[40px]'>
+    <div className='flex flex-col mb-[114px] tablet:mb-[241px] desktop:mb-[395px] gap-14 desktop:gap-24'>
+      <div className='flex flex-col items-center justify-center bg-white mt-[64px] desktop:mt-[128px] shadow-mypage rounded-[24px]'>
         <UserProfile />
         <button
           onClick={handleLogout}
@@ -56,8 +71,19 @@ export default function Mypage() {
           </div>
           <EmotionList />
         </div>
-
         <EmotionController />
+      </div>
+      <div className='flex flex-col items-center justify-center gap-6 tablet:gap-8 desktop:gap-12'>
+        <div className='w-[312px] tablet:w-[384px] desktop:w-[640px] flex flex-end gap-4 desktop:gap-6 font-semibold text-base desktop:text-2xl'>
+          <button onClick={() => setActiveTab('epigrams')} className={`cursor-pointer ${activeTab === 'epigrams' ? 'text-black-600' : 'text-gray-300'}`}>
+            내 에피그램<span> ({totalEpigramsCount})</span>
+          </button>
+          <button onClick={() => setActiveTab('comments')} className={`cursor-pointer ${activeTab === 'comments' ? 'text-black-600' : 'text-gray-300'}`}>
+            내 댓글<span> ({totalCommentsCount})</span>
+          </button>
+        </div>
+        {userId && activeTab === 'epigrams' && <MyEpigramList userId={userId} onTotalCountFetched={setTotalEpigramsCount} />}
+        {userId && activeTab === 'comments' && <MyCommentsList userId={userId} onTotalCountFetched={setTotalCommentsCount} />}
       </div>
     </div>
   );
