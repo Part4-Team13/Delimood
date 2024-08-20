@@ -1,12 +1,13 @@
 import TimeFormatter from '../../utils/TimeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
 import { useDeleteCommentMutation, usePatchCommentMutation } from '../../hooks/useCommentQuery';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, MouseEvent } from 'react';
 import { IconLock, IconX } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
 import { Button, rem } from '@mantine/core';
 import Modal from '../Modal/profileModal';
 import { PatchCommentType } from '../../schema/commentSchema';
+import { useNavigate } from 'react-router-dom';
 
 interface CommentCardProps {
   userId?: number;
@@ -19,10 +20,11 @@ interface CommentCardProps {
     image: string | null;
     nickname: string;
   };
+  epigramId: number;
 }
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
-function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
+function CommentCard({ updatedAt, id, content, writer, userId, isPrivate, epigramId }: CommentCardProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isPatching, setIsPatching] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<PatchCommentType>({ isPrivate, content });
@@ -30,6 +32,14 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
   const closeModal = () => setIsModalOpen(false);
   const inputTextRef = useRef<HTMLInputElement | null>(null);
   const inputCheckRef = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate();
+
+  // 카드 클릭하면 해당 에피그램 페이지로 이동하게 설정
+  const handleCardClick = () => {
+    if (!isPatching) {
+      navigate(`/epigrams/${epigramId}`);
+    }
+  };
 
   // onError 옵션
   const options = {
@@ -59,13 +69,15 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
 
   // 댓글 삭제
   const deleteMutation = useDeleteCommentMutation(options);
-  const handleClickDelete = () => {
+  const handleClickDelete = (event: MouseEvent) => {
+    event.stopPropagation();
     deleteMutation.mutate({ id });
   };
 
   // 댓글 수정
   const patchMutation = usePatchCommentMutation({ epigramId: id, options });
-  const handleClickPatch = () => {
+  const handleClickPatch = (event: MouseEvent) => {
+    event.stopPropagation();
     setIsPatching(true);
   };
   const handleInputChange = () => {
@@ -79,14 +91,18 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
   };
 
   // 프로필 클릭
-  const handleClickProfile = () => {
+  const handleClickProfile = (event: MouseEvent) => {
+    event.stopPropagation();
     openModal();
   };
 
   return (
     <>
       <Modal isOpen={isModalOpen} onClose={closeModal} icon={writer.image} profileId={writer.id} />
-      <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background h-fit'>
+      <div
+        onClick={handleCardClick}
+        className='cursor-pointer flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background h-fit'
+      >
         <button onClick={handleClickProfile} className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>
           {<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} />}
         </button>
@@ -102,10 +118,10 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
             {userId === writer.id ? (
               !isPatching ? (
                 <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
-                  <button className='text-black-600 hover:underline cursor-pointer' onClick={handleClickPatch}>
+                  <button className='cursor-pointer text-black-600 hover:underline' onClick={handleClickPatch}>
                     수정
                   </button>
-                  <button className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
+                  <button className='cursor-pointer text-state-alert hover:underline' onClick={handleClickDelete}>
                     삭제
                   </button>
                 </div>

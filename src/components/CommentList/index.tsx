@@ -77,7 +77,15 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
         {commentList &&
           commentList.map((comment) => (
             <li key={comment.id}>
-              <CommentCard userId={userId} id={comment.id} updatedAt={comment.updatedAt} content={comment.content} writer={comment.writer} isPrivate={comment.isPrivate} />
+              <CommentCard
+                userId={userId}
+                id={comment.id}
+                updatedAt={comment.updatedAt}
+                content={comment.content}
+                writer={comment.writer}
+                isPrivate={comment.isPrivate}
+                epigramId={comment.epigramId}
+              />
             </li>
           ))}
       </ul>
