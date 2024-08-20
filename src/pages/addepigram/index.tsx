@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm, isNotEmpty, hasLength } from '@mantine/form';
-import { Button, Group, TextInput, Input, Text, Textarea, Radio, Divider } from '@mantine/core';
+import { Button, Group, TextInput, Input, Text, Textarea, Radio } from '@mantine/core';
 import HashTag from '../../components/HashTag';
 
 export default function Demo() {
@@ -62,7 +62,7 @@ export default function Demo() {
 
   return (
     <div className='w-[100vw] h-[100vh] bg-white'>
-      <div className='flex items-center justify-center'>
+      <div className='flex items-center bg-white justify-center'>
         <form onSubmit={form.onSubmit(() => {})} className='tablet:w-[384px] desktop:w-[640px] w-[312px] vertical-align '>
           <div className='desktop:text-2xl tablet:text-xl  text-lg font-semibold mb-4 mt-[56px]'>에피그램 만들기</div>
 
