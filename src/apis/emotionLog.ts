@@ -7,8 +7,8 @@ export const postEmotionLog = async (request: EmotionLogRequestType): Promise<Em
   return response.data;
 };
 
-export const getTodayEmotionLog = async (): Promise<EmotionLogResponseType> => {
-  const response = await httpClient.get('/emotionLogs/today');
+export const getTodayEmotionLog = async (params: EmotionLogQueryParamsType): Promise<EmotionLogResponseType> => {
+  const response = await httpClient.get('/emotionLogs/today', { params });
   return response.data;
 };
 

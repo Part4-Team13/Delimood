@@ -2,8 +2,8 @@ import * as z from 'zod';
 
 export const EmotionLogQueryParamsSchema = z.object({
   userId: z.number().positive().int(),
-  year: z.number().int().min(1900).max(2100),
-  month: z.number().int().min(1).max(12),
+  year: z.number().int().min(1900).max(2100).optional(),
+  month: z.number().int().min(1).max(12).optional(),
 });
 
 export const DateRangeSchema = z.union([z.literal('today'), z.literal('monthly')]);

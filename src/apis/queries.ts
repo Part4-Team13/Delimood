@@ -25,9 +25,9 @@ const quries = createQueryKeyStore({
   },
 
   emotionLogs: {
-    today: () => ({
-      queryKey: ['emotionLogs', 'today'],
-      queryFn: getTodayEmotionLog,
+    today: (params: EmotionLogQueryParamsType) => ({
+      queryKey: [params],
+      queryFn: () => getTodayEmotionLog(params),
     }),
     monthly: (params: EmotionLogQueryParamsType) => ({
       queryKey: [params],
