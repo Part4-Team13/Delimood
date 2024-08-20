@@ -8,6 +8,7 @@ import Addepigram from './pages/addepigram';
 import Mypage from './pages/mypage';
 import Layout from './layout/Layout';
 import EpigramDetail from './pages/epigramDetail';
+import EpigramBoard from './pages/epigramboard';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='search' element={<Search />} />
         <Route path='addepigram' element={<Addepigram />} />
         <Route path='mypage' element={<Mypage />} />
+        <Route path='board' element={<EpigramBoard />} />
       </Route>
     </Routes>
   );
