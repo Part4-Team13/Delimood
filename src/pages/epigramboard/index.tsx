@@ -34,7 +34,6 @@ export default function EpigramBoard() {
 
   return (
     <>
-      <FixedButton />
       <div className='mt-[32px] desktop:mt-[120px] w-[312px] tablet:w-[600px] desktop:w-[1200px] mx-auto flex justify-between'>
         <span className='text-lg desktop:text-2xl font-bold'>피드</span>
         {showButton && (
@@ -43,10 +42,10 @@ export default function EpigramBoard() {
           </button>
         )}
       </div>
-
       <div className='mt-[40px] mb-[114px]'>
         <EpigramList data={data} fetchNextPage={fetchNextPage} isLoading={isLoading} isWide={isWide} />
       </div>
+      <FixedButton />
     </>
   );
 }
