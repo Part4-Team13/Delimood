@@ -7,7 +7,7 @@ import Search from './pages/search';
 import Addepigram from './pages/addepigram';
 import Mypage from './pages/mypage';
 import Layout from './layout/Layout';
-import EpigramDetail from './pages/epigramDetail';
+import EpigramDetail from './pages/epigramdetail';
 import EditEpigram from './pages/editepigram';
 
 function App() {
