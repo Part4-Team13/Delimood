@@ -37,7 +37,7 @@ export default function EpigramBoard() {
         <span className='text-lg desktop:text-2xl font-bold'>피드</span>
         {showButton && (
           <button onClick={onClickIsWideButton}>
-            <img src={isWide ? ico_view_line : ico_view_frames} alt='두 줄로 보기' />
+            <img src={isWide ? ico_view_line : ico_view_frames} alt='보기 변경' />
           </button>
         )}
       </div>
