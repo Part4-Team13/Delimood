@@ -9,9 +9,10 @@ interface EpigramListProps {
   data: InfiniteData<GetEpigramListResponseType> | undefined;
   isLoading: boolean;
   fetchNextPage: () => void;
+  buttonText?: string;
 }
 
-function EpigramList({ isWide = false, data, isLoading, fetchNextPage }: EpigramListProps) {
+function EpigramList({ isWide = false, data, isLoading, fetchNextPage, buttonText }: EpigramListProps) {
   const [epigramList, setEpigramList] = useState<GetEpigramListType[]>([]);
   const [showButton, setShowButton] = useState(false);
 
@@ -49,7 +50,7 @@ function EpigramList({ isWide = false, data, isLoading, fetchNextPage }: Epigram
       )}
       {!isLoading && showButton && (
         <div className='mx-auto'>
-          <ViewMore text={isWide ? '에피그램 더보기' : '더보기'} onClick={handleClickViewMore} disabled={isLoading} />
+          <ViewMore text={buttonText || (isWide ? '에피그램 더보기' : '더보기')} onClick={handleClickViewMore} disabled={isLoading} />
         </div>
       )}
     </div>

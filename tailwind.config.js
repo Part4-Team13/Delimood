@@ -72,6 +72,9 @@ export default {
         // 기본 폰트 : Pretendard
         paraph: 'Iropke Batang',
       },
+      boxShadow: {
+        epigramCard: '0 3px 12px rgba(0, 0, 0, 0.04)',
+      },
     },
   },
 };
