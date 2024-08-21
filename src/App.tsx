@@ -7,8 +7,9 @@ import Search from './pages/search';
 import Addepigram from './pages/addepigram';
 import Mypage from './pages/mypage';
 import Layout from './layout/Layout';
-import EpigramDetail from './pages/epigramDetail';
 import EpigramBoard from './pages/epigramboard';
+import EpigramDetail from './pages/epigramdetail';
+import EditEpigram from './pages/editepigram';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path='addepigram' element={<Addepigram />} />
         <Route path='mypage' element={<Mypage />} />
         <Route path='board' element={<EpigramBoard />} />
+        <Route path='editepigram/:id' element={<EditEpigram />} />
       </Route>
     </Routes>
   );
