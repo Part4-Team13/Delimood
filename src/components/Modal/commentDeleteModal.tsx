@@ -1,4 +1,5 @@
 import React from 'react';
+import img_alert from '@/assets/ico_alert.svg';
 
 interface ButtonProps {
   text: string;
@@ -53,12 +54,13 @@ function Modal({ isOpen, onClose, icon, message, secondaryMessage, buttons }: Mo
 
   return (
     <div className='fixed inset-0 bg-black-600 bg-opacity-50 flex items-center justify-center z-50' onClick={onClose}>
-      <div className='bg-white p-10 rounded-3xl w-[320px] h-[238px] text-center shadow-md tablet:w-[372px] tablet:h-[282px] desktop:w-[452px] desktop:h-[332px]' onClick={(e) => e.stopPropagation()}>
+      <div className='bg-white p-10 rounded-3xl text-center shadow-md tablet:w-[372px] tablet:h-[282px] desktop:w-[452px] desktop:h-[332px]' onClick={(e) => e.stopPropagation()}>
         <div className='flex flex-col items-center justify-center h-full'>
+          <img src={img_alert} alt='경고' className='w-[44px] desktop:w-[56px] mb-[16px] tablet:mb-[24px]' />
           {icon && <div className='mb-6 w-[44px] h-[44px] desktop:w-[56px] desktop:h-[56px]'>{icon}</div>}
           <p className='text-lg font-semibold mb-2 text-gray-800 tablet:text-xl tablet:font-semibold tablet:mb-2 desktop:text-2xl desktop:font-medium desktop:mb-4'>{message}</p>
           {secondaryMessage && <p className='text-md text-gray-400 mb-6 tablet:text-lg tablet:text-gray-400 tablet:mb-9 desktop:text-2lg desktop:text-gray-400 desktop:mb-10'>{secondaryMessage}</p>}
-          <div className='flex justify-center gap-4'>
+          <div className='flex justify-center gap-[8px] desktop:gap-[16px]'>
             {buttons.map((button, index) => (
               <button
                 key={index}
