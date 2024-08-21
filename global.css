@@ -42,4 +42,7 @@
 			#f2f2f2 30px
 		)
 	}
+	textarea {
+		resize: none
+	}
 }
