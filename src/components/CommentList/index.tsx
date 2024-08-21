@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CommentCard from './CommentCard';
 import ViewMore from '../ViewMore';
 import { InfiniteData } from '@tanstack/react-query';
 import { CommentResponseType, ListItemType } from '../../schema/commentSchema';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 /**
  *  const { data, fetchNextPage, isFetching } = useGetAllCommentsInfiniteQuery({ limit: 3 });
@@ -25,6 +26,16 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
   const [commentList, setCommentList] = useState<ListItemType[]>([]);
   const [loadMore, setLoadMore] = useState<boolean>(false);
   const loader = useRef(null);
+
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const onClickCard = (e: React.SyntheticEvent, epigramId: number) => {
+    e.stopPropagation();
+    if (pathname !== `/epigrams/${epigramId}`) {
+      navigate(`/epigrams/${epigramId}`);
+    }
+  };
 
   // NOTE : 데이터 fetch 시 리스트 업데이트
   useEffect(() => {
@@ -76,8 +87,8 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
       <ul className='mx-auto bg-yellow-300 w-fit'>
         {commentList &&
           commentList.map((comment) => (
-            <li key={comment.id}>
-              <CommentCard userId={userId} id={comment.id} updatedAt={comment.updatedAt} content={comment.content} writer={comment.writer} isPrivate={comment.isPrivate} />
+            <li key={comment.id} onClick={(e) => onClickCard(e, comment.epigramId)} className={pathname === `/epigrams/${comment.epigramId}` ? 'cursor-default' : 'cursor-pointer hover:bg-blue-200'}>
+              <CommentCard userId={userId} id={comment.id} createdAt={comment.createdAt} content={comment.content} writer={comment.writer} isPrivate={comment.isPrivate} />
             </li>
           ))}
       </ul>
