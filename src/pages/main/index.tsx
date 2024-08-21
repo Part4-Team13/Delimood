@@ -1,6 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
+import img_bg_top from '@/assets/img_bg_top.png';
+import ico_more_arrow_down from '@/assets/ico_more_arrow_down.svg';
+import img_pr_epigram_medium from '@/assets/img_pr_epigram_medium.png';
+import img_pr_emotions_medium from '@/assets/img_pr_emotions_medium.png';
+import img_pr_graph_medium from '@/assets/img_pr_graph_medium.png';
+import img_pr_examples from '@/assets/img_pr_examples.png';
+import img_bg_bottom from '@/assets/img_bg_bottom.png';
+import img_paraph from '@/assets/img_paraph.png';
+
 const basicStyle = 'flex flex-col items-center';
 
 const buttonStyle = 'px-[28px] py-[10px] rounded-xl bg-button-default text-lg text-white desktop:px-[108px] desktop:py-[16px] desktop:text-xl hover:bg-button-hover';
@@ -27,7 +36,7 @@ export default function Main() {
       <header
         className={`${basicStyle} pt-[252px] pb-[48px] overflow-hidden desktop:pt-[400px] desktop:pb-[74px]`}
         style={{
-          backgroundImage: `url(src/assets/img_bg_top.png)`,
+          backgroundImage: `url(${img_bg_top})`,
           backgroundSize: 'cover',
           backgroundPosition: 'bottom',
         }}
@@ -43,12 +52,12 @@ export default function Main() {
         </div>
         <div className={`${basicStyle} gap-[4px]`}>
           <span className='text-xs text-blue-400 tablet:text-lg'>더 알아보기</span>
-          <img src='src/assets/ico_more_arrow_down.svg' alt='더보기 아이콘' />
+          <img src={ico_more_arrow_down} alt='더보기 아이콘' />
         </div>
       </header>
       <main className={`${basicStyle} px-[24px] mt-[124px] tablet:px-[180px]`}>
         <section className={sectionStyle}>
-          <img src='src/assets/img_pr_epigram_medium.png' alt='에피그램 이미지' className={sectionImgStyle} />
+          <img src={img_pr_epigram_medium} alt='에피그램 이미지' className={sectionImgStyle} />
           <div>
             <h1 className={sectionHeadingStyle}>
               명언이나 글귀, <br /> 토막 상식들을 공유해 보세요.
@@ -61,7 +70,7 @@ export default function Main() {
           </div>
         </section>
         <section className={`${sectionStyle} text-right`}>
-          <img src='src/assets/img_pr_emotions_medium.png' alt='에피그램 이미지' className={`${sectionImgStyle} order-2 desktop:order-1`} />
+          <img src={img_pr_emotions_medium} alt='에피그램 이미지' className={`${sectionImgStyle} order-2 desktop:order-1`} />
           <div>
             <h1 className={sectionHeadingStyle}>
               감정 상태에 따라, <br /> 알맞은 위로를 받을 수 있어요.
@@ -70,7 +79,7 @@ export default function Main() {
           </div>
         </section>
         <section className={`${sectionStyle} mb-[280px]`}>
-          <img src='src/assets/img_pr_graph_medium.png' alt='감정 이미지' className={sectionImgStyle} />
+          <img src={img_pr_graph_medium} alt='감정 이미지' className={sectionImgStyle} />
           <div>
             <h1 className={sectionHeadingStyle}>
               내가 요즘 어떤 감정 상태인지 <br /> 통계로 한 눈에 볼 수 있어요.
@@ -86,17 +95,17 @@ export default function Main() {
           <h1 className='mb-[40px] font-bold text-2xl text-center desktop:text-3xl'>
             사용자들이 직접 <br /> 인용한 에피그램들
           </h1>
-          <img src='src/assets/img_pr_examples.png' alt='에피그램 이미지' className='w-full max-w-[640px]' />
+          <img src={img_pr_examples} alt='에피그램 이미지' className='w-full max-w-[640px]' />
         </section>
       </main>
       <footer
         className={`${basicStyle} justify-center h-[600px] overflow-hidden desktop:h-[1040px]`}
         style={{
-          backgroundImage: `url(src/assets/img_bg_bottom.png)`,
+          backgroundImage: `url(${img_bg_bottom})`,
           backgroundSize: 'cover',
         }}
       >
-        <img src='src/assets/img_paraph.png' alt='에피그램 텍스트 로고' className='mb-[32px] w-[122px] desktop:w-[184px] desktop:mb-[48px]' />
+        <img src={img_paraph} alt='에피그램 텍스트 로고' className='mb-[32px] w-[122px] desktop:w-[184px] desktop:mb-[48px]' />
         <button className={buttonStyle} onClick={handleButtonClick}>
           시작하기
         </button>
