@@ -1,4 +1,4 @@
-import timeFormatter from '../../utils/TimeFormatter';
+import timeFormatter from '../../utils/timeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
 import { useDeleteCommentMutation, usePatchCommentMutation } from '../../hooks/useCommentQuery';
 import React, { useRef, useState } from 'react';
