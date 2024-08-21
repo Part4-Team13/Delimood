@@ -1,4 +1,4 @@
-import TimeFormatter from '../../utils/TimeFormatter';
+import timeFormatter from '../../utils/TimeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
 import { useDeleteCommentMutation, usePatchCommentMutation } from '../../hooks/useCommentQuery';
 import React, { useRef, useState } from 'react';
@@ -61,7 +61,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
     },
   };
 
-  const time = TimeFormatter(createdAt);
+  const time = timeFormatter(createdAt);
 
   // 댓글 삭제
   const deleteMutation = useDeleteCommentMutation(options);
