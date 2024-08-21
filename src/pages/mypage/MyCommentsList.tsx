@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useGetMyCommentInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import CommentList from '../../components/CommentList';
 import Search from '../../assets/ico_mypage_search.svg';
+
 interface MyCommentsListProps {
   userId: number;
   onTotalCountFetched: (totalCount: number) => void;
 }
 
+//내 댓글 리스트를 보여주는 컴포넌트
 const MyCommentsList: React.FC<MyCommentsListProps> = ({ userId, onTotalCountFetched }) => {
   const { data, fetchNextPage, isFetching } = useGetMyCommentInfiniteQuery({ limit: 4, id: userId });
 
@@ -21,8 +23,7 @@ const MyCommentsList: React.FC<MyCommentsListProps> = ({ userId, onTotalCountFet
 
   const navigate = useNavigate();
   const onClickMyEpigramList = () => {
-    //Fix:board 경로로 수정예정
-    navigate(`/epigrams`);
+    navigate(`/board`);
   };
 
   return (
