@@ -106,7 +106,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
 
       <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background h-fit'>
         <button onClick={handleClickProfile} className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>
-          {<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} />}
+          {<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} className='object-cover w-full h-full' />}
         </button>
         <div className='flex flex-col gap-[8px] w-full'>
           <div className='relative w-full bg-green-300 flex gap-[8px] text-black-300 items-center'>
