@@ -7,6 +7,7 @@ import Search from './pages/search';
 import Addepigram from './pages/addepigram';
 import Mypage from './pages/mypage';
 import EpigramDetail from './pages/epigramDetail';
+import LoginSocial from './pages/loginSocial/index';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path='/' element={<Main />} />
       <Route path='signup' element={<Signup />} />
       <Route path='login' element={<Login />} />
+      <Route path='login/callback' element={<LoginSocial />} />
       <Route path='epigrams' element={<Epigrams />} />
       <Route path='epigrams/:id' element={<EpigramDetail />} />
       <Route path='search' element={<Search />} />
