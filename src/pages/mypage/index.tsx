@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { rem } from '@mantine/core';
+import { rem, Loader } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import EmotionController from './emotionController';
@@ -11,6 +11,7 @@ import UserProfile from './UserProfile';
 import MyCommentsList from './MyCommentsList';
 import MyEpigramList from './MyEpigramList';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
+import { useGetMyCommentInfiniteQuery } from '../../hooks/useInfiniteQuery';
 
 export default function Mypage() {
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
@@ -21,6 +22,19 @@ export default function Mypage() {
   const [activeTab, setActiveTab] = useState<'epigrams' | 'comments'>('epigrams');
   const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0);
   const [totalEpigramsCount, setTotalEpigramsCount] = useState<number>(0);
+
+  const { data: commentData } = useGetMyCommentInfiniteQuery({
+    limit: 1,
+    id: userData?.id ?? -1,
+  });
+
+  useEffect(() => {
+    if (userData?.id && commentData?.pages?.[0]?.totalCount !== undefined) {
+      setTotalCommentsCount(commentData.pages[0].totalCount);
+    } else {
+      setTotalCommentsCount(0);
+    }
+  }, [commentData, userData]);
 
   const handleLogout = () => {
     Cookies.remove('accessToken');
@@ -49,7 +63,11 @@ export default function Mypage() {
   };
 
   if (isUserLoading) {
-    return <div>로딩중입니다...</div>;
+    return (
+      <div className='items-center justify-center flex h-screen'>
+        <Loader color='cyan' size='lg' />
+      </div>
+    );
   }
 
   const userId = userData?.id;
