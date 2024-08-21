@@ -8,11 +8,12 @@ import { Button, rem } from '@mantine/core';
 import ProfileModal from '../Modal/profileModal';
 import DeleteModal from '../Modal/commentDeleteModal';
 import { PatchCommentType } from '../../schema/commentSchema';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface CommentCardProps {
   userId?: number;
   id: number;
-  updatedAt: string | Date;
+  createdAt: string | Date;
   isPrivate: boolean;
   content: string;
   writer: {
@@ -23,13 +24,15 @@ interface CommentCardProps {
 }
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
-function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
+function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isPatching, setIsPatching] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<PatchCommentType>({ isPrivate, content });
   const inputTextRef = useRef<HTMLInputElement | null>(null);
   const inputCheckRef = useRef<HTMLInputElement | null>(null);
+
+  const queryClient = useQueryClient();
 
   // onError 옵션
   const options = {
@@ -53,9 +56,12 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
         }),
       });
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
   };
 
-  const time = TimeFormatter(updatedAt);
+  const time = TimeFormatter(createdAt);
 
   // 댓글 삭제
   const deleteMutation = useDeleteCommentMutation(options);
