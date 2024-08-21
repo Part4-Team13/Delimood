@@ -10,6 +10,7 @@ import Layout from './layout/Layout';
 import EpigramDetail from './pages/epigramDetail';
 import LoginSocial from './pages/loginSocial/index';
 import GooglePage from './pages/loginSocial/googlepage';
+import NaverPage from './pages/loginSocial/naverPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path='login' element={<Login />} />
         <Route path='login/callback' element={<LoginSocial />} />
         <Route path='login/callback/google' element={<GooglePage />} />
+        <Route path='login/callback/naver' element={<NaverPage />} />
         <Route path='epigrams' element={<Epigrams />} />
         <Route path='epigrams/:id' element={<EpigramDetail />} />
         <Route path='search' element={<Search />} />
