@@ -72,21 +72,25 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
 
   // 댓글 수정
   const patchMutation = usePatchCommentMutation({ epigramId: id, options });
-  const handleClickPatch = () => {
+  const handleClickPatch = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
     setIsPatching(true);
   };
-  const handleInputChange = () => {
+  const handleInputChange = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
     if (inputCheckRef.current && inputTextRef.current) {
       setCurrentData({ content: inputTextRef.current.value, isPrivate: inputCheckRef.current.checked });
     }
   };
-  const handleClickComplete = () => {
+  const handleClickComplete = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
     patchMutation.mutate({ id, data: currentData });
     setIsPatching(false);
   };
 
   // 프로필 클릭
-  const handleClickProfile = () => {
+  const handleClickProfile = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
     setIsProfileModalOpen(true);
   };
 
@@ -104,7 +108,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
         ]}
       />
 
-      <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background h-fit'>
+      <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker h-fit'>
         <button onClick={handleClickProfile} className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>
           {<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} className='object-cover w-full h-full' />}
         </button>
@@ -120,7 +124,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
             {userId === writer.id ? (
               !isPatching ? (
                 <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
-                  <button className='text-black-600 hover:underline cursor-pointer' onClick={handleClickPatch}>
+                  <button className='text-black-600 hover:underline cursor-pointer' onClick={(e) => handleClickPatch(e)}>
                     수정
                   </button>
                   <button className='text-state-alert hover:underline cursor-pointer' onClick={() => setIsDeleteModalOpen(true)}>
@@ -129,7 +133,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
                 </div>
               ) : (
                 <span className='flex items-center gap-[3px] ml-auto'>
-                  <input type='checkbox' defaultChecked={isPrivate} onClick={handleInputChange} ref={inputCheckRef} /> <span>비밀글</span>
+                  <input type='checkbox' defaultChecked={isPrivate} onClick={(e) => handleInputChange(e)} ref={inputCheckRef} /> <span>비밀글</span>
                 </span>
               )
             ) : null}
@@ -142,7 +146,8 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
                 type='text'
                 value={currentData.content}
                 ref={inputTextRef}
-                onChange={handleInputChange}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => handleInputChange(e)}
                 className='text-[14px] leading-[19px] tablet:text-lg desktop:text-xl text-black-600 p-[10px_5px] border-line-darker border-[1px] bg-line-bright rounded-[5px] w-full h-max'
               />
               <Button
