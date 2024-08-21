@@ -12,7 +12,7 @@ export default function HeaderLeft({ pathNow, navigate }: HeaderButtonsProps) {
   }, [drawerClose, pathNow]);
 
   const MenuItems: { name: string; path: string }[] = [
-    { name: '피드', path: '/epigrams' },
+    { name: '피드', path: 'board' },
     { name: '검색', path: 'search' },
   ];
 
@@ -31,7 +31,7 @@ export default function HeaderLeft({ pathNow, navigate }: HeaderButtonsProps) {
       </Drawer>
 
       <ul className='flex items-center gap-[12px] tablet:gap-[24px] desktop:gap-[36px] mr-auto cursor-pointer'>
-        <li onClick={() => navigate('/')} className='w-[101px] desktop:w-[131px] h-[24px] tablet:h-[26px] desktop:h-[36px]'>
+        <li onClick={() => navigate('/epigrams')} className='w-[101px] desktop:w-[131px] h-[24px] tablet:h-[26px] desktop:h-[36px]'>
           <button className='mr-[12px] w-full h-full'>
             <img src={logo} alt='메인 페이지로' />
           </button>
