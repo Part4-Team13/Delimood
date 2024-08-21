@@ -11,7 +11,7 @@ const onClickLikeButton = () => {};
 
 const LikeButton: React.FC = () => {
   return (
-    <button onClick={onClickLikeButton} className={`bg-button-diabled hover:bg-button-hover w-[20px] tablet:w-[24px] rounded-full p-[2px] absolute  right-[6px] top-[6px] z-10`}>
+    <button onClick={onClickLikeButton} className={`bg-button-diabled hover:bg-button-hover w-[20px] tablet:w-[24px] rounded-full p-[2px] absolute  right-[6px] top-[6px]`}>
       {/* {${*isMine ? 'bg-button-default cursor-pointer hover:bg-button-hover' : 'bg-button-diabled cursor-default' }} */}
       <img src={like} alt='좋아요' />
     </button>

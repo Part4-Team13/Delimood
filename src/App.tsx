@@ -7,6 +7,7 @@ import Search from './pages/search';
 import Addepigram from './pages/addepigram';
 import Mypage from './pages/mypage';
 import Layout from './layout/Layout';
+import EpigramBoard from './pages/epigramboard';
 import EpigramDetail from './pages/epigramdetail';
 import EditEpigram from './pages/editepigram';
 
@@ -22,6 +23,7 @@ function App() {
         <Route path='search' element={<Search />} />
         <Route path='addepigram' element={<Addepigram />} />
         <Route path='mypage' element={<Mypage />} />
+        <Route path='board' element={<EpigramBoard />} />
         <Route path='editepigram/:id' element={<EditEpigram />} />
       </Route>
     </Routes>
