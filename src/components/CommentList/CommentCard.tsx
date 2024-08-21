@@ -5,7 +5,8 @@ import React, { useRef, useState } from 'react';
 import { IconLock, IconX } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
 import { Button, rem } from '@mantine/core';
-import Modal from '../Modal/profileModal';
+import ProfileModal from '../Modal/profileModal';
+import DeleteModal from '../Modal/commentDeleteModal';
 import { PatchCommentType } from '../../schema/commentSchema';
 
 interface CommentCardProps {
@@ -23,11 +24,10 @@ interface CommentCardProps {
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isPatching, setIsPatching] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<PatchCommentType>({ isPrivate, content });
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
   const inputTextRef = useRef<HTMLInputElement | null>(null);
   const inputCheckRef = useRef<HTMLInputElement | null>(null);
 
@@ -59,8 +59,9 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
 
   // 댓글 삭제
   const deleteMutation = useDeleteCommentMutation(options);
-  const handleClickDelete = () => {
+  const deleteComment = () => {
     deleteMutation.mutate({ id });
+    setIsDeleteModalOpen(false);
   };
 
   // 댓글 수정
@@ -80,12 +81,23 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
 
   // 프로필 클릭
   const handleClickProfile = () => {
-    openModal();
+    setIsProfileModalOpen(true);
   };
 
   return (
     <>
-      <Modal isOpen={isModalOpen} onClose={closeModal} icon={writer.image} profileId={writer.id} />
+      <ProfileModal isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} icon={writer.image} profileId={writer.id} />
+      <DeleteModal
+        message='댓글을 삭제하시겠어요?'
+        secondaryMessage='댓글은 삭제 후 복구할 수 없어요.'
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        buttons={[
+          { text: '취소', onClick: () => setIsDeleteModalOpen(false), variant: 'secondary' },
+          { text: '삭제하기', onClick: () => deleteComment(), variant: 'primary' },
+        ]}
+      />
+
       <div className='flex gap-[16px] items-start w-[360px] tablet:w-[384px] desktop:w-[640px] py-[16px] px-[24px] border-t-[1px] border-t-line-darker bg-background h-fit'>
         <button onClick={handleClickProfile} className='w-[48px] h-[48px] rounded-full bg-red-400 flex-shrink-0 overflow-hidden'>
           {<img src={writer.image ? writer.image : profileIcon} alt={writer.nickname} />}
@@ -105,7 +117,7 @@ function CommentCard({ updatedAt, id, content, writer, userId, isPrivate }: Comm
                   <button className='text-black-600 hover:underline cursor-pointer' onClick={handleClickPatch}>
                     수정
                   </button>
-                  <button className='text-state-alert hover:underline cursor-pointer' onClick={handleClickDelete}>
+                  <button className='text-state-alert hover:underline cursor-pointer' onClick={() => setIsDeleteModalOpen(true)}>
                     삭제
                   </button>
                 </div>
