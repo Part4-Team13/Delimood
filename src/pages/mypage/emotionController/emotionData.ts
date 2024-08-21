@@ -4,6 +4,7 @@ import thinking from '../../../assets/ico_face_thinking.svg';
 import sad from '../../../assets/ico_face_sad.svg';
 import angry from '../../../assets/ico_face_angry.svg';
 
+//NOTE : 감정 데이터 관련 설정
 export const emotionColors: Record<string, string> = {
   HAPPY: '#48BB98',
   ANGRY: '#F05650',

@@ -28,6 +28,7 @@ const EmotionCalendar = ({ data, year, month, onDateChange }: { data: { emotion:
     return dayjs(date).format('YYYY-MM-DD');
   };
 
+  //NOTE : 달력의 각 날짜를 렌더링하며, 감정 아이콘을 날짜에 표시.
   const CustomDay = ({ date }: { date: Date }) => {
     const dateString = formatDate(date);
     const imageSrc = emojis[dateString] || '';
@@ -71,6 +72,7 @@ const EmotionCalendar = ({ data, year, month, onDateChange }: { data: { emotion:
     );
   };
 
+  //감정 필터
   const handleEmojiClick = (emoji: string) => {
     setSelectedEmojis((prevSelected) => (prevSelected.includes(emoji) ? prevSelected.filter((e) => e !== emoji) : [...prevSelected, emoji]));
   };
@@ -90,7 +92,7 @@ const EmotionCalendar = ({ data, year, month, onDateChange }: { data: { emotion:
   return (
     <div>
       <Calendar
-        defaultDate={new Date(year, month - 1)} // year와 month를 사용하여 기본 날짜 설정
+        defaultDate={new Date(year, month - 1)}
         firstDayOfWeek={0}
         renderDay={(date) => <CustomDay date={date} />}
         locale='ko'

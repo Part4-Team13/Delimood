@@ -31,6 +31,7 @@ export default function Mypage() {
     id: userData?.id ?? -1,
   });
 
+  //NOTE : 댓글 데이터가 로드되면 총 댓글 수를 업데이트
   useEffect(() => {
     if (userData?.id && commentData?.pages?.[0]?.totalCount !== undefined) {
       setTotalCommentsCount(commentData.pages[0].totalCount);

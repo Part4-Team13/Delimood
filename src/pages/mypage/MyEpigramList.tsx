@@ -9,6 +9,7 @@ interface MyEpigramListProps {
   onTotalCountFetched: (totalCount: number) => void;
 }
 
+//내 에피그램 리스트를 보여주는 컴포넌트
 const MyEpigramList: React.FC<MyEpigramListProps> = ({ userId, onTotalCountFetched }) => {
   const { data, fetchNextPage, isFetching } = useGetEpigramListInfiniteQuery({ limit: 3, writerId: userId });
 

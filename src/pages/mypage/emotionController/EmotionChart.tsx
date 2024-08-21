@@ -15,6 +15,7 @@ interface ProcessedEmotionData {
   color: string;
 }
 
+//NOTE : 감정 데이터를 처리하여 도넛 차트에 필요한 형식으로 변환하는 함수
 function processEmotionData(data: EmotionData[]): ProcessedEmotionData[] {
   if (!data || data.length === 0) return [];
 
@@ -34,6 +35,7 @@ function processEmotionData(data: EmotionData[]): ProcessedEmotionData[] {
     .sort((a, b) => b.value - a.value);
 }
 
+//NOTE : 감정의 비율을 리스트로 표시하는 컴포넌트
 function EmotionList({ data }: { data: ProcessedEmotionData[] }) {
   const topEmotionName = data[0].name;
 

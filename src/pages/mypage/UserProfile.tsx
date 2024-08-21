@@ -11,6 +11,7 @@ const UserProfile = () => {
   const [editing, setEditing] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  //닉네임 업데이트
   const updateMeMutation = useUpdateMe({
     onSuccess: () => {
       setEditing(false);
@@ -25,6 +26,7 @@ const UserProfile = () => {
     },
   });
 
+  //프로필 이미지 업데이트
   const updateImageMutation = useUpdateImage({
     onSuccess: (updatedData) => {
       setProfileImage(updatedData.image);
@@ -35,6 +37,7 @@ const UserProfile = () => {
     },
   });
 
+  //사용자 정보 데이터 로딩 후 상태 업데이트
   useEffect(() => {
     if (data) {
       setProfileImage(data.image);
@@ -47,6 +50,7 @@ const UserProfile = () => {
 
   const userNickname = data?.nickname || '사용자 닉네임';
 
+  //프로필 이미지 업로드 핸들러
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -64,6 +68,7 @@ const UserProfile = () => {
     setErrorMessage(null);
   };
 
+  //닉네임 변경 확인 핸들러
   const handleConfirm = () => {
     updateMeMutation.mutate({
       nickname: newNickname,
@@ -89,11 +94,19 @@ const UserProfile = () => {
         {editing ? (
           <div className='flex flex-col items-center gap-2'>
             <div className='flex items-center gap-2'>
-              <TextInput value={newNickname} onChange={(e) => setNewNickname(e.target.value)} placeholder='새 닉네임' className='w-[200px] desktop:w-[250px]' />
-              <Button onClick={handleConfirm} color='blue' className='p-3'>
+              <TextInput
+                value={newNickname}
+                onChange={(e) => setNewNickname(e.target.value)}
+                placeholder='새 닉네임'
+                className='w-[200px] desktop:w-[250px] border-none'
+                classNames={{
+                  input: 'focus:border-black-600 focus:border-1 text-base bg-blue-200 rounded-xl px-3 text-base text-black-950',
+                }}
+              />
+              <Button onClick={handleConfirm} color='blue' className='p-3 rounded-full'>
                 <IconCheck size={18} />
               </Button>
-              <Button onClick={handleCancel} color='red' className='p-3'>
+              <Button onClick={handleCancel} color='red' className='p-3 rounded-full bg-state-alert'>
                 <IconX size={18} />
               </Button>
             </div>
