@@ -29,7 +29,6 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  console.log(data?.pages[0].list[0].epigramId);
 
   const onClickCard = (e: React.SyntheticEvent, epigramId: number) => {
     e.stopPropagation();
