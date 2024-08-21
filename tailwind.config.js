@@ -73,7 +73,7 @@ export default {
         paraph: 'Iropke Batang',
       },
       boxShadow: {
-        epigramCard: '0 3px 12px rgba(0, 0, 0, 0.04)',
+        epigramdetail: '0 3px 20px rgba(0, 0, 0, 0.04)',
       },
     },
   },
