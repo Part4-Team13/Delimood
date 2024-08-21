@@ -14,6 +14,7 @@ import { showNotification } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import img_zigzag from '../../assets/img_zigzag.png';
+import Modal from '../../components/Modal/commentDeleteModal';
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function EpigramDetail() {
@@ -31,6 +32,7 @@ function EpigramDetail() {
   const { data: userData } = useGetMeQuery();
   const { data: commentData, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
   const { data, isLoading, isFetched } = useGetEpigramDetailQuery(epigramId);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   //NOTE : 좋아요 관련
@@ -105,6 +107,10 @@ function EpigramDetail() {
   };
 
   const onClickDeleteEpigram = () => {
+    setIsModalOpen(true);
+  };
+
+  const deleteEpigram = () => {
     deleteEpigramMutation.mutate();
     navigate('/epigrams');
     showNotification({
@@ -133,91 +139,103 @@ function EpigramDetail() {
   }
   if (isFetched) {
     return (
-      <div className='overflow-hidden'>
-        <main className='relative w-screen mb-[63px] tablet:mb-[87px] desktop:mb-[103px] pt-[40px] pb-[16px] tablet:pb-[32px] desktop:pb-[40px] striped desktop:striped-desktop shadow-epigramdetail'>
-          <div className='mx-auto w-fit'>
-            <div className='flex justify-between text-lg desktop:text-xl'>
-              <ul className='flex gap-[16px] text-blue-400'>{data && data.tags.map((tag) => <li key={tag.id}>{tag.name}</li>)}</ul>
-              {userData?.id === data?.writerId && (
-                <Menu>
-                  <Menu.Target>
-                    <button>
-                      <img src={ico_more_vertical} alt='에피그램 수정' className='w-[24px] cursor-pointer' />
-                    </button>
-                  </Menu.Target>
-                  <Menu.Dropdown className='bg-background rounded-[16px] border-[1px] border-blue-300'>
-                    <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={() => navigate(`/editepigram/${epigramId}`)}>
-                      수정하기
-                    </Menu.Item>
-                    <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={onClickDeleteEpigram}>
-                      삭제하기
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              )}
-            </div>
-            <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px] w-[312px] tablet:w-[384px] desktop:w-[640px]'>{data!.content}</p>
-            <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl'>- {data!.author} -</span>
-            <ul className='flex gap-[8px] justify-center items-center mt-[32px] desktop:mt-[36px]'>
-              <li>
-                <button
-                  onClick={onClickLikeButton}
-                  className={`flex gap-[4px] text-white rounded-[100px] items-center h-fit p-[6px_14px] cursor-pointer ${like ? 'bg-state-alert hover:bg-red' : 'bg-button-default hover:bg-button-hover'}`}
+      <>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          message='게시물을 삭제하시겠어요?'
+          secondaryMessage='게시물은 삭제 후 복구할 수 없어요.'
+          buttons={[
+            { text: '취소', onClick: () => setIsModalOpen(false), variant: 'secondary' },
+            { text: '확인', onClick: deleteEpigram, variant: 'primary' },
+          ]}
+        />
+        <div className='overflow-hidden'>
+          <main className='relative w-screen mb-[63px] tablet:mb-[87px] desktop:mb-[103px] pt-[40px] pb-[16px] tablet:pb-[32px] desktop:pb-[40px] striped desktop:striped-desktop shadow-epigramdetail'>
+            <div className='mx-auto w-fit'>
+              <div className='flex justify-between text-lg desktop:text-xl'>
+                <ul className='flex gap-[16px] text-blue-400'>{data && data.tags.map((tag) => <li key={tag.id}>{tag.name}</li>)}</ul>
+                {userData?.id === data?.writerId && (
+                  <Menu>
+                    <Menu.Target>
+                      <button>
+                        <img src={ico_more_vertical} alt='에피그램 수정' className='w-[24px] cursor-pointer' />
+                      </button>
+                    </Menu.Target>
+                    <Menu.Dropdown className='bg-background rounded-[16px] border-[1px] border-blue-300'>
+                      <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={() => navigate(`/editepigram/${epigramId}`)}>
+                        수정하기
+                      </Menu.Item>
+                      <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={onClickDeleteEpigram}>
+                        삭제하기
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                )}
+              </div>
+              <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px] w-[312px] tablet:w-[384px] desktop:w-[640px]'>{data!.content}</p>
+              <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl'>- {data!.author} -</span>
+              <ul className='flex gap-[8px] justify-center items-center mt-[32px] desktop:mt-[36px]'>
+                <li>
+                  <button
+                    onClick={onClickLikeButton}
+                    className={`flex gap-[4px] text-white rounded-[100px] items-center h-fit p-[6px_14px] cursor-pointer ${like ? 'bg-state-alert hover:bg-red' : 'bg-button-default hover:bg-button-hover'}`}
+                  >
+                    <img src={ico_like} alt='좋아요' className='w-[20px] desktop:w-[36px]' />
+                    <span>{likeCount}</span>
+                  </button>
+                </li>
+                <li
+                  onClick={() => {
+                    window.open(data!.referenceUrl!, '_blank');
+                  }}
                 >
-                  <img src={ico_like} alt='좋아요' className='w-[20px] desktop:w-[36px]' />
-                  <span>{likeCount}</span>
-                </button>
-              </li>
-              <li
-                onClick={() => {
-                  window.open(data!.referenceUrl!, '_blank');
-                }}
-              >
-                <button className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'>
-                  <span> {data!.referenceTitle}</span>
-                  {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
-                </button>
-              </li>
-            </ul>
-          </div>
-          <span className='absolute bottom-[-15px] w-screen h-[15px]' style={{ backgroundImage: `url(${img_zigzag})`, backgroundRepeat: 'repeat-x' }} />
-        </main>
-        <div>
-          {userData && (
-            <div className='w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto flex flex-col gap-[16px] tablet:gap-[24px] mb-[12px] tablet:mb-[32px] desktop:mb-[40px]'>
-              <span className='text-lg desktop:text-xl font-bold'>댓글({commentData?.pages[0].totalCount})</span>
-              <div className='flex flex-col items-center w-full gap-[10px]'>
-                <div className='flex gap-[13px] desktop:gap-[21px] items-start w-full '>
-                  <img src={userData?.image} alt='내 프로필' className='w-[48px] h-[48px] rounded-full' />
-                  <div className='flex flex-col gap-[3px] w-full'>
-                    <textarea
-                      ref={addComment}
-                      placeholder='100자 이내로 입력해주세요'
-                      onChange={onAddCommentChange}
-                      className='w-full min-h-[100px] focus:outline-none border-[1px] bg-background border-line-darker p-[12px_16px] rounded-[8px]'
-                    />
-                    <div className='flex justify-between items-center left-[12px] right-[12px] bottom-[5px]'>
-                      <span className='h-fit flex gap-[2px]'>
-                        <input type='checkbox' onChange={() => setIsCommentPrivate((prev) => !prev)} checked={isCommentPrivate} />
-                        <span>비밀글</span>
-                      </span>
-                      <Button
-                        onClick={onClickAddCommentButton}
-                        disabled={buttonDisabled}
-                        className='text-md desktop:text-lg bg-button-default hover:bg-button-hover w-max mt-[5px] flex-shrink-0 disabled:bg-button-diabled'
-                      >
-                        확인
-                      </Button>
+                  <button className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'>
+                    <span> {data!.referenceTitle}</span>
+                    {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <span className='absolute bottom-[-15px] w-screen h-[15px]' style={{ backgroundImage: `url(${img_zigzag})`, backgroundRepeat: 'repeat-x' }} />
+          </main>
+          <div>
+            {userData && (
+              <div className='w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto flex flex-col gap-[16px] tablet:gap-[24px] mb-[12px] tablet:mb-[32px] desktop:mb-[40px]'>
+                <span className='text-lg desktop:text-xl font-bold'>댓글({commentData?.pages[0].totalCount})</span>
+                <div className='flex flex-col items-center w-full gap-[10px]'>
+                  <div className='flex gap-[13px] desktop:gap-[21px] items-start w-full '>
+                    <img src={userData?.image} alt='내 프로필' className='w-[48px] h-[48px] rounded-full' />
+                    <div className='flex flex-col gap-[3px] w-full'>
+                      <textarea
+                        ref={addComment}
+                        placeholder='100자 이내로 입력해주세요'
+                        onChange={onAddCommentChange}
+                        className='w-full min-h-[100px] focus:outline-none border-[1px] bg-background border-line-darker p-[12px_16px] rounded-[8px]'
+                      />
+                      <div className='flex justify-between items-center left-[12px] right-[12px] bottom-[5px]'>
+                        <span className='h-fit flex gap-[2px]'>
+                          <input type='checkbox' onChange={() => setIsCommentPrivate((prev) => !prev)} checked={isCommentPrivate} />
+                          <span>비밀글</span>
+                        </span>
+                        <Button
+                          onClick={onClickAddCommentButton}
+                          disabled={buttonDisabled}
+                          className='text-md desktop:text-lg bg-button-default hover:bg-button-hover w-max mt-[5px] flex-shrink-0 disabled:bg-button-diabled'
+                        >
+                          확인
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
+            <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }
