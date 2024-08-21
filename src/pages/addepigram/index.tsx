@@ -2,16 +2,21 @@ import { useState } from 'react';
 import { useForm, isNotEmpty, hasLength } from '@mantine/form';
 import { Button, Group, TextInput, Input, Text, Textarea, Radio } from '@mantine/core';
 import HashTag from '../../components/HashTag';
+import { useGetMeQuery } from '../../hooks/useUserQuery';
+import { usePostEpigramMutation } from '../../hooks/useEpigramQuery';
+import { useNavigate } from 'react-router-dom';
 
 export default function Demo() {
+  const { data: userProfile } = useGetMeQuery();
+  const navigate = useNavigate();
+
   const form = useForm({
     initialValues: {
       content: '',
       author: '',
       source: '',
-      tag: '',
+      sourceUrl: '',
     },
-
     validate: {
       content: hasLength({ min: 1, max: 500 }, '500자 이내로 입력해주세요'),
       author: isNotEmpty('저자를 입력해주세요.'),
@@ -22,7 +27,7 @@ export default function Demo() {
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
 
-  // REFACTOR: 라디오 버튼의 값이 변경될 때 달라지는 placeholder 값. '본인' 부분을 사용자의 닉네임으로 채우는 것으로 리팩토리 고려 예정
+  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣기
   const handleRadioChange = (value: string) => {
     if (value === '직접 입력') {
       setPlaceholder('저자 이름 입력');
@@ -33,19 +38,17 @@ export default function Demo() {
       setDisabled(true);
       form.setFieldValue('author', '알 수 없음');
     } else if (value === '본인') {
-      setPlaceholder('본인');
+      setPlaceholder(userProfile?.nickname || '본인');
       setDisabled(true);
-      form.setFieldValue('author', '본인');
+      form.setFieldValue('author', userProfile?.nickname || '');
     }
   };
 
-  // NOTE: 태그 상태 관리
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState<string>('');
 
   const addTag = () => {
     const trimmedTag = newTag.trim();
-
     if (trimmedTag && !tags.includes(trimmedTag) && trimmedTag.length <= 10) {
       if (tags.length < 3) {
         setTags([...tags, trimmedTag]);
@@ -60,10 +63,27 @@ export default function Demo() {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
+  const postEpigramMutation = usePostEpigramMutation({
+    onSuccess: (data) => {
+      navigate(`/epigrams/${data.id}`);
+    },
+  });
+
   return (
     <div className='w-[100vw] h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
-        <form onSubmit={form.onSubmit(() => {})} className='tablet:w-[384px] desktop:w-[640px] w-[312px] vertical-align '>
+        <form
+          onSubmit={form.onSubmit((values) => {
+            const { source, sourceUrl, ...rest } = values;
+            postEpigramMutation.mutate({
+              ...rest,
+              referenceUrl: sourceUrl,
+              referenceTitle: source,
+              tags,
+            });
+          })}
+          className='tablet:w-[384px] desktop:w-[640px] w-[312px] vertical-align '
+        >
           <div className='desktop:text-2xl tablet:text-xl  text-lg font-semibold mb-4 mt-[56px]'>에피그램 만들기</div>
 
           <Textarea
@@ -142,7 +162,7 @@ export default function Demo() {
           <Input
             placeholder='URL (ex. https://www.website.com)'
             mt='md'
-            {...form.getInputProps('source')}
+            {...form.getInputProps('sourceUrl')}
             classNames={{
               input:
                 'desktop:text-xl  desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
