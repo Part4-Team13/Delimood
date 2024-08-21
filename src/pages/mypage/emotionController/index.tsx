@@ -15,7 +15,7 @@ export default function EmotionController() {
 
   const { data, error, isLoading } = useGetMonthlyEmotionLogs({ userId, year, month });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className='min-h-[800px] flex items-center justify-center'>Loading...</div>;
   if (error) return <div>Error</div>;
 
   const handleDateChange = (newYear: number, newMonth: number) => {
@@ -26,7 +26,7 @@ export default function EmotionController() {
 
   return (
     <div className='flex flex-col justify-center items-center gap-14 tablet:gap-[60px] desktop:gap-[156px]'>
-      <EmotionCalendar data={data || []} onDateChange={handleDateChange} />
+      <EmotionCalendar data={data || []} year={year} month={month} onDateChange={handleDateChange} />
       <EmotionChart data={data || []} />
     </div>
   );

@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { emotionIcons, emotionColors, emotionNames } from './emotionData';
 
-const EmotionCalendar = ({ data, onDateChange }: { data: { emotion: string; createdAt: string }[]; onDateChange: (year: number, month: number) => void }) => {
+const EmotionCalendar = ({ data, year, month, onDateChange }: { data: { emotion: string; createdAt: string }[]; year: number; month: number; onDateChange: (year: number, month: number) => void }) => {
   const isTablet = useMediaQuery('(min-width: 744px) and (max-width: 1279px)');
   const isDesktop = useMediaQuery('(min-width: 1280px)');
   const [emojis, setEmojis] = useState<{ [key: string]: string }>({});
@@ -90,6 +90,7 @@ const EmotionCalendar = ({ data, onDateChange }: { data: { emotion: string; crea
   return (
     <div>
       <Calendar
+        defaultDate={new Date(year, month - 1)} // year와 month를 사용하여 기본 날짜 설정
         firstDayOfWeek={0}
         renderDay={(date) => <CustomDay date={date} />}
         locale='ko'
