@@ -4,10 +4,16 @@ import Naver from '../../assets/ico_logo_naver.svg';
 import { v4 as uuidv4 } from 'uuid';
 import { PUBLIC_KAKAO_CLIENT_ID, PUBLIC_GOOGLE_CLIENT_ID, TEST_REDIRECT_URI, TEST_GOOGLE_REDIRECT_URI, PUBLIC_NAVER_CLIENT_ID, TEST_NAVER_REDIRECT_URI } from '../../constants/env';
 
-const SocialButton: React.FC<{ src: string; alt: string; href: string }> = ({ src, alt, href }) => {
+const SocialButton: React.FC<{ src: string; alt: string; href: string; hoverColor: string }> = ({ src, alt, href, hoverColor }) => {
   return (
-    <a href={href} className='w-[40px] h-[40px] flex items-center justify-center desktop:w-[60px] desktop:h-[60px]' rel='noopener noreferrer'>
-      <img src={src} alt={alt} />
+    <a
+      href={href}
+      className='w-[40px] h-[40px] flex items-center justify-center desktop:w-[60px] desktop:h-[60px] border desktop:border-2 border-gray-100 rounded-[5px]'
+      style={{ '--hover-color': hoverColor } as React.CSSProperties}
+      rel='noopener noreferrer'
+    >
+      <img src={src} alt={alt} className='w-[20px] desktop:w-[27px]' />
+      <style>{`a:hover { background-color: var(--hover-color); }`}</style>
     </a>
   );
 };
@@ -23,17 +29,24 @@ const SocialLogin: React.FC = () => {
         <span className='flex-grow mx-2 border-t border-blue-400' />
       </h2>
 
-      <div className='flex items-center justify-center gap-4 mt-[24px] desktop:mt-[40px]'>
-        <SocialButton src={Kakao} alt='Kakao' href={`https://kauth.kakao.com/oauth/authorize?client_id=${PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${TEST_REDIRECT_URI}&response_type=code`} />
+      <div className='flex items-center justify-center gap-4 mt-[24px] desktop:mt-[40px] desktop:gap-6'>
+        <SocialButton
+          src={Kakao}
+          alt='Kakao'
+          href={`https://kauth.kakao.com/oauth/authorize?client_id=${PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${TEST_REDIRECT_URI}&response_type=code`}
+          hoverColor='#FEE500'
+        />
         <SocialButton
           src={Google}
           alt='Google'
           href={`https://accounts.google.com/o/oauth2/auth?client_id=${PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${TEST_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`}
+          hoverColor='#DB4437'
         />
         <SocialButton
           src={Naver}
           alt='Naver'
           href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${PUBLIC_NAVER_CLIENT_ID}&redirect_uri=${TEST_NAVER_REDIRECT_URI}&state=${state}`}
+          hoverColor='#3CBB3C'
         />
       </div>
     </div>
