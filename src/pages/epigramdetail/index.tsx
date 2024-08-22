@@ -157,7 +157,15 @@ function EpigramDetail() {
           <main className='relative w-screen mb-[63px] tablet:mb-[87px] desktop:mb-[103px] pt-[40px] pb-[16px] tablet:pb-[32px] desktop:pb-[40px] striped desktop:striped-desktop shadow-epigramdetail'>
             <div className='mx-auto w-fit'>
               <div className='flex justify-between text-lg desktop:text-xl'>
-                <ul className='flex gap-[16px] text-blue-400 cursor-default'>{data && data.tags.map((tag) => <li key={tag.id}>{tag.name}</li>)}</ul>
+                <ul className='flex gap-[16px] text-blue-400 cursor-default'>
+                  {data &&
+                    data.tags.map((tag) => (
+                      <li key={tag.id}>
+                        {tag.name.startsWith('#') ? '' : '#'}
+                        {tag.name}
+                      </li>
+                    ))}
+                </ul>
                 {userData?.id === data?.writerId && (
                   <Menu>
                     <Menu.Target>
