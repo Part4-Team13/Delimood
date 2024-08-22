@@ -7,7 +7,7 @@ import CommentList from '../../components/CommentList';
 import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import { useDeleteEpigramMutation, useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
-import { Button, Menu, rem } from '@mantine/core';
+import { Button, Menu, rem, Switch } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import { usePostCommentMutation } from '../../hooks/useCommentQuery';
 import { showNotification } from '@mantine/notifications';
@@ -15,6 +15,9 @@ import { IconX } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import img_zigzag from '../../assets/img_zigzag.png';
 import Modal from '../../components/Modal/commentDeleteModal';
+
+import img_magnifier from '../../assets/img_magnifier.png';
+
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function EpigramDetail() {
@@ -205,25 +208,27 @@ function EpigramDetail() {
                 <span className='text-lg desktop:text-xl font-bold'>댓글({commentData?.pages[0].totalCount})</span>
                 <div className='flex flex-col items-center w-full gap-[10px]'>
                   <div className='flex gap-[13px] desktop:gap-[21px] items-start w-full '>
-                    <img src={userData?.image} alt='내 프로필' className='w-[48px] h-[48px] rounded-full' />
+                    <img src={userData?.image} alt='내 프로필' className='w-[48px] h-[48px] rounded-full' style={{ objectFit: 'cover' }} />
                     <div className='flex flex-col gap-[3px] w-full'>
                       <textarea
                         ref={addComment}
                         placeholder='100자 이내로 입력해주세요'
                         onChange={onAddCommentChange}
-                        className='w-full min-h-[100px] focus:outline-none border-[1px] bg-background border-line-darker p-[12px_16px] rounded-[8px]'
+                        className='w-full min-h-[100px] focus:outline-button-default border-[1px] bg-background border-line-darker p-[12px_16px] rounded-[8px]'
                       />
                       <div className='flex justify-between items-center left-[12px] right-[12px] bottom-[5px]'>
-                        <span className='h-fit flex gap-[2px]'>
-                          <input type='checkbox' onChange={() => setIsCommentPrivate((prev) => !prev)} checked={isCommentPrivate} />
-                          <span>비밀글</span>
+                        <span className='h-fit flex gap-[8px] items-center'>
+                          <label htmlFor='setPrivate' className='text-gray-400 text-xs tablet:text-lg'>
+                            공개
+                          </label>
+                          <Switch onChange={() => setIsCommentPrivate((prev) => !prev)} checked={!isCommentPrivate} color='#454545' id='setPrivate' />
                         </span>
                         <Button
                           onClick={onClickAddCommentButton}
                           disabled={buttonDisabled}
                           className='text-md desktop:text-lg bg-button-default hover:bg-button-hover w-max mt-[5px] flex-shrink-0 disabled:bg-button-diabled'
                         >
-                          확인
+                          저장
                         </Button>
                       </div>
                     </div>
@@ -232,7 +237,16 @@ function EpigramDetail() {
               </div>
             )}
 
-            <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
+            {commentData?.pages[0].totalCount == 0 ? (
+              <div className='cursor-default flex flex-col w-fit mx-auto items-center gap-[8px] desktop:gap-[24px] mb-[294px] mt-[80px] tablet:mb-[210px] desktop:mb-[232px] desktop:mt-[124px]'>
+                <img src={img_magnifier} alt='돋보기 아이콘' className='w-[96px] desktop:w-[144px]' />
+                <p className='text-center text-md desktop:text-xl'>
+                  아직 댓글이 없어요! <br />첫 번째 댓글 작성자가 되어보세요.
+                </p>
+              </div>
+            ) : (
+              <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
+            )}
           </div>
         </div>
       </>
