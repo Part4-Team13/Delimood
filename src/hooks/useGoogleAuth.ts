@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import useGoogleLogin from './useGoogleLogin';
+import useGoogleLogin from '../components/socialLogin/useGoogleLogin';
 
 const useGoogleAuth = () => {
   const location = useLocation();

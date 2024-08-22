@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import useNaverLogin from './useNaverLogin';
+import useNaverLogin from '../components/socialLogin/useNaverLogin';
 
 const useNaverAuth = () => {
   const location = useLocation();

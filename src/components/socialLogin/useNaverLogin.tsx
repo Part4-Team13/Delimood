@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import postNaver from '../apis/postNaver';
+import postNaver from '../../apis/postNaver';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';

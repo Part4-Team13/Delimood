@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import useKakaoLogin from './useKakaoLogin';
+import useKakaoLogin from '../components/socialLogin/useKakaoLogin';
 
 const useKakaoAuth = () => {
   const location = useLocation();

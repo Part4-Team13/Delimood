@@ -1,4 +1,4 @@
-import { PUBLIC_GOOGLE_CLIENT_ID, PUBLIC_GOOGLE_CLIENT_SECRET, TEST_GOOGLE_REDIRECT_URI } from '../constants/env';
+import { PUBLIC_GOOGLE_CLIENT_ID, PUBLIC_GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI } from '../constants/env';
 import axios from 'axios';
 import httpClient from '.';
 
@@ -9,7 +9,7 @@ const getGoogleIdToken = async (code: string) => {
       code,
       client_id: PUBLIC_GOOGLE_CLIENT_ID,
       client_secret: PUBLIC_GOOGLE_CLIENT_SECRET,
-      redirect_uri: TEST_GOOGLE_REDIRECT_URI,
+      redirect_uri: GOOGLE_REDIRECT_URI,
       grant_type: 'authorization_code',
     }),
     {
@@ -26,7 +26,7 @@ const postGoogle = async (code: string) => {
 
   // 서버에 idToken을 보내는 요청
   const response = await httpClient.post('/auth/signIn/GOOGLE', {
-    redirectUri: TEST_GOOGLE_REDIRECT_URI,
+    redirectUri: GOOGLE_REDIRECT_URI,
     token: idToken,
   });
 

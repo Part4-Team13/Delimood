@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import postGoogle from '../apis/postGoogle';
+import postKakao from '../../apis/postKakao';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { showNotification } from '@mantine/notifications';
 import { IconX, IconCheck } from '@tabler/icons-react';
 import { rem } from '@mantine/core';
 
-const useGoogleLogin = () => {
+const useKakaoLogin = () => {
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
 
@@ -15,7 +15,7 @@ const useGoogleLogin = () => {
 
   return useMutation({
     mutationFn: async (code: string) => {
-      const data = await postGoogle(code);
+      const data = await postKakao(code);
 
       Cookies.set('accessToken', data.accessToken, { expires: new Date(Date.now() + 1800 * 1000) });
       Cookies.set('refreshToken', data.refreshToken);
@@ -116,4 +116,4 @@ const useGoogleLogin = () => {
   });
 };
 
-export default useGoogleLogin;
+export default useKakaoLogin;
