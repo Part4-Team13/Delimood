@@ -6,7 +6,7 @@ import angry from '../assets/ico_face_angry.svg';
 import { useEffect, useState } from 'react';
 import { usePostEmotionLog, useGetTodayEmotionLog } from '../hooks/useEmotionLogQuery';
 import { useGetMeQuery } from '../hooks/useUserQuery';
-import alertMessage from '../utils/alertMessage';
+import alertMessage from './AlertMessage';
 
 const emotions = [
   { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },

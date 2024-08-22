@@ -13,7 +13,7 @@ import { usePostCommentMutation } from '../../hooks/useCommentQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import img_zigzag from '../../assets/img_zigzag.png';
 import Modal from '../../components/Modal/commentDeleteModal';
-import alertMessage from '../../utils/alertMessage';
+import alertMessage from '../../components/AlertMessage';
 
 function EpigramDetail() {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);

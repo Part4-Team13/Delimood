@@ -2,7 +2,7 @@ import { useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpig
 import like from '../../assets/ico_like.svg';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import alertMessage from '../../utils/alertMessage';
+import alertMessage from '../AlertMessage';
 
 interface LikeButtonProps {
   id: number;

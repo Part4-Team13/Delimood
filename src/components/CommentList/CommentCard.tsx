@@ -8,7 +8,7 @@ import ProfileModal from '../Modal/profileModal';
 import DeleteModal from '../Modal/commentDeleteModal';
 import { PatchCommentType } from '../../schema/commentSchema';
 import { useQueryClient } from '@tanstack/react-query';
-import alertMessage from '../../utils/alertMessage';
+import alertMessage from '../AlertMessage';
 
 interface CommentCardProps {
   userId?: number;

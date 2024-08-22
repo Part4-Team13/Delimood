@@ -11,7 +11,7 @@ import MyEpigramList from './MyEpigramList';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { useGetMyCommentInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import DeleteModal from '../../components/Modal/commentDeleteModal';
-import alertMessage from '../../utils/alertMessage';
+import alertMessage from '../../components/AlertMessage';
 
 export default function Mypage() {
   const navigate = useNavigate();

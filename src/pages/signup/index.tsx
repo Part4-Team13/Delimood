@@ -8,7 +8,7 @@ import SocialLogin from '../../components/socialLogin';
 import { useSignUp } from '../../hooks/authQuery';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as useReactHookForm } from 'react-hook-form';
-import alertMessage from '../../utils/alertMessage';
+import alertMessage from '../../components/AlertMessage';
 
 const SignUp: React.FC = () => {
   const initialValues: SignUpRequestType = {

@@ -11,7 +11,7 @@ interface AlertMessageProps {
   color: 'dark' | 'gray' | 'red' | 'pink' | 'grape' | 'violet' | 'indigo' | 'blue' | 'cyan' | 'green' | 'lime' | 'yellow' | 'orange' | 'teal';
 }
 
-function alertMessage({ title = '알림 메시지입니다.', message = '부가 설명입니다.', color = 'dark' }: AlertMessageProps) {
+const alertMessage = ({ title = '알림 메시지입니다.', message = '부가 설명입니다.', color = 'dark' }: AlertMessageProps) => {
   const alert = showNotification({
     title,
     message,
@@ -32,6 +32,6 @@ function alertMessage({ title = '알림 메시지입니다.', message = '부가 
   });
 
   return alert;
-}
+};
 
 export default alertMessage;

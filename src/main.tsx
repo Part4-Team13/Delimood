@@ -11,7 +11,7 @@ import '@mantine/dates/styles.css';
 import '@mantine/charts/styles.css';
 import './index.css';
 import '../global.css';
-import alertMessage from './utils/alertMessage.tsx';
+import alertMessage from './components/AlertMessage.tsx';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({

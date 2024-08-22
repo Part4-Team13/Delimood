@@ -9,7 +9,7 @@ import { useLogin } from '../../hooks/authQuery';
 import { AxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as useReactHookForm } from 'react-hook-form';
-import alertMessage from '../../utils/alertMessage';
+import alertMessage from '../../components/AlertMessage';
 
 type ErrorResponse = {
   message: string;
