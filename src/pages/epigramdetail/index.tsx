@@ -7,7 +7,7 @@ import CommentList from '../../components/CommentList';
 import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import { useDeleteEpigramMutation, useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
-import { Button, Menu, rem } from '@mantine/core';
+import { Button, Menu, rem, Switch } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import { usePostCommentMutation } from '../../hooks/useCommentQuery';
 import { showNotification } from '@mantine/notifications';
@@ -15,6 +15,9 @@ import { IconX } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import img_zigzag from '../../assets/img_zigzag.png';
 import Modal from '../../components/Modal/commentDeleteModal';
+
+import img_magnifier from '../../assets/img_magnifier.png';
+
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function EpigramDetail() {
@@ -154,7 +157,15 @@ function EpigramDetail() {
           <main className='relative w-screen mb-[63px] tablet:mb-[87px] desktop:mb-[103px] pt-[40px] pb-[16px] tablet:pb-[32px] desktop:pb-[40px] striped desktop:striped-desktop shadow-epigramdetail'>
             <div className='mx-auto w-fit'>
               <div className='flex justify-between text-lg desktop:text-xl'>
-                <ul className='flex gap-[16px] text-blue-400'>{data && data.tags.map((tag) => <li key={tag.id}>{tag.name}</li>)}</ul>
+                <ul className='flex gap-[16px] text-blue-400 cursor-default'>
+                  {data &&
+                    data.tags.map((tag) => (
+                      <li key={tag.id}>
+                        {tag.name.startsWith('#') ? '' : '#'}
+                        {tag.name}
+                      </li>
+                    ))}
+                </ul>
                 {userData?.id === data?.writerId && (
                   <Menu>
                     <Menu.Target>
@@ -173,8 +184,8 @@ function EpigramDetail() {
                   </Menu>
                 )}
               </div>
-              <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px] w-[312px] tablet:w-[384px] desktop:w-[640px]'>{data!.content}</p>
-              <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl'>- {data!.author} -</span>
+              <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px] w-[312px] tablet:w-[384px] desktop:w-[640px] cursor-default'>{data!.content}</p>
+              <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl cursor-default'>- {data!.author} -</span>
               <ul className='flex gap-[8px] justify-center items-center mt-[32px] desktop:mt-[36px]'>
                 <li>
                   <button
@@ -185,16 +196,18 @@ function EpigramDetail() {
                     <span>{likeCount}</span>
                   </button>
                 </li>
-                <li
-                  onClick={() => {
-                    window.open(data!.referenceUrl!, '_blank');
-                  }}
-                >
-                  <button className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'>
-                    <span> {data!.referenceTitle}</span>
-                    {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
-                  </button>
-                </li>
+                {data?.referenceTitle && (
+                  <li
+                    onClick={() => {
+                      window.open(data!.referenceUrl!, '_blank');
+                    }}
+                  >
+                    <button className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'>
+                      <span> {data!.referenceTitle}</span>
+                      {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
+                    </button>
+                  </li>
+                )}
               </ul>
             </div>
             <span className='absolute bottom-[-15px] w-screen h-[15px]' style={{ backgroundImage: `url(${img_zigzag})`, backgroundRepeat: 'repeat-x' }} />
@@ -205,25 +218,27 @@ function EpigramDetail() {
                 <span className='text-lg desktop:text-xl font-bold'>댓글({commentData?.pages[0].totalCount})</span>
                 <div className='flex flex-col items-center w-full gap-[10px]'>
                   <div className='flex gap-[13px] desktop:gap-[21px] items-start w-full '>
-                    <img src={userData?.image} alt='내 프로필' className='w-[48px] h-[48px] rounded-full' />
+                    <img src={userData?.image} alt='내 프로필' className='w-[48px] h-[48px] rounded-full' style={{ objectFit: 'cover' }} />
                     <div className='flex flex-col gap-[3px] w-full'>
                       <textarea
                         ref={addComment}
                         placeholder='100자 이내로 입력해주세요'
                         onChange={onAddCommentChange}
-                        className='w-full min-h-[100px] focus:outline-none border-[1px] bg-background border-line-darker p-[12px_16px] rounded-[8px]'
+                        className='w-full min-h-[100px] focus:outline-button-default border-[1px] bg-background border-line-darker p-[12px_16px] rounded-[8px]'
                       />
                       <div className='flex justify-between items-center left-[12px] right-[12px] bottom-[5px]'>
-                        <span className='h-fit flex gap-[2px]'>
-                          <input type='checkbox' onChange={() => setIsCommentPrivate((prev) => !prev)} checked={isCommentPrivate} />
-                          <span>비밀글</span>
+                        <span className='h-fit flex gap-[8px] items-center'>
+                          <label htmlFor='setPrivate' className='text-gray-400 text-xs tablet:text-lg'>
+                            공개
+                          </label>
+                          <Switch onChange={() => setIsCommentPrivate((prev) => !prev)} checked={!isCommentPrivate} color='#454545' id='setPrivate' />
                         </span>
                         <Button
                           onClick={onClickAddCommentButton}
                           disabled={buttonDisabled}
                           className='text-md desktop:text-lg bg-button-default hover:bg-button-hover w-max mt-[5px] flex-shrink-0 disabled:bg-button-diabled'
                         >
-                          확인
+                          저장
                         </Button>
                       </div>
                     </div>
@@ -232,7 +247,16 @@ function EpigramDetail() {
               </div>
             )}
 
-            <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
+            {commentData?.pages[0].totalCount == 0 ? (
+              <div className='cursor-default flex flex-col w-fit mx-auto items-center gap-[8px] desktop:gap-[24px] mb-[294px] mt-[80px] tablet:mb-[210px] desktop:mb-[232px] desktop:mt-[124px]'>
+                <img src={img_magnifier} alt='돋보기 아이콘' className='w-[96px] desktop:w-[144px]' />
+                <p className='text-center text-md desktop:text-xl'>
+                  아직 댓글이 없어요! <br />첫 번째 댓글 작성자가 되어보세요.
+                </p>
+              </div>
+            ) : (
+              <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
+            )}
           </div>
         </div>
       </>
