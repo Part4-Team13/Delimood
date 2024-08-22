@@ -7,6 +7,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/charts/styles.css';
 import './index.css';
 import '../global.css';
 import alertMessage from './utils/alertMessage.tsx';
