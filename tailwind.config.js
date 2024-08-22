@@ -40,6 +40,7 @@ export default {
         400: '#525252',
         500: '#454545',
         600: '#373737',
+        950: '#050505',
       },
       blue: {
         200: '#ECEFF4',
@@ -73,6 +74,7 @@ export default {
         paraph: 'Iropke Batang',
       },
       boxShadow: {
+        mypage: '0 0 36px rgba(0, 0, 0, 0.05)',
         epigramCard: '0 3px 12px rgba(0, 0, 0, 0.04)',
         epigramdetail: '0 3px 20px rgba(0, 0, 0, 0.04)',
       },

@@ -3,8 +3,8 @@ import smiling from '../assets/ico_face_smiling.svg';
 import thinking from '../assets/ico_face_thinking.svg';
 import sad from '../assets/ico_face_sad.svg';
 import angry from '../assets/ico_face_angry.svg';
-import { useState, useEffect } from 'react';
-import { usePostEmotionLog } from '../hooks/useEmotionLogQuery';
+import { useEffect, useState } from 'react';
+import { usePostEmotionLog, useGetTodayEmotionLog } from '../hooks/useEmotionLogQuery';
 import { showNotification } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
 import { rem } from '@mantine/core';
@@ -33,7 +33,7 @@ interface EmotionCardProps {
   describe: string;
   color: string;
   isSelected: boolean;
-  onClick: (color: string) => void;
+  onClick: (emotion: string) => void;
   emotion: string;
 }
 
@@ -61,50 +61,70 @@ interface EmotionListProps {
 
 function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
-  const { data: userData } = useGetMeQuery();
-  const [selectedEmotion, setSelectedEmotion] = useState('');
+  const [selectedEmotion, setSelectedEmotion] = useState<string>('');
+  const { data: userData, isLoading: userLoading } = useGetMeQuery();
+
   const [isHidden, setIsHidden] = useState(false);
-  const mutation = usePostEmotionLog({
-    onError: () => {
-      showNotification({
-        title: '죄송합니다. 다시 시도해주세요.',
-        message: '감정 등록에 실패했습니다.',
-        icon: xIcon,
-        color: 'red',
-        autoClose: 2000,
-        styles: () => ({
-          root: {
-            position: 'fixed',
-            top: '10%',
-            right: '3%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '300px',
-            width: '40%',
-            maxWidth: '70%',
-          },
-        }),
-      });
+  const mutation = usePostEmotionLog(
+    { userId: userData?.id || 0, year: new Date().getFullYear(), month: new Date().getMonth() + 1 },
+    {
+      onError: () => {
+        showNotification({
+          title: '죄송합니다. 다시 시도해주세요.',
+          message: '감정 등록에 실패했습니다.',
+          icon: xIcon,
+          color: 'red',
+          autoClose: 2000,
+          styles: () => ({
+            root: {
+              position: 'fixed',
+              top: '10%',
+              right: '3%',
+              transform: 'translate(-50%, -50%)',
+              minWidth: '300px',
+              width: '40%',
+              maxWidth: '70%',
+            },
+          }),
+        });
+      },
+      onSuccess: () => {
+        if (userData?.id) {
+          refetch();
+        }
+      },
     },
+  );
+
+  const { data: todayEmotion, refetch } = useGetTodayEmotionLog({
+    userId: userData?.id || 0,
   });
 
   useEffect(() => {
-    if (hideAfterPost && userData) {
-      //
-      const lastPostDateKey = `lastPostDate_${userData.id}`;
-      const lastPostDate = localStorage.getItem(lastPostDateKey);
-      const today = new Date().toISOString().split('T')[0];
+    if (todayEmotion) {
+      setSelectedEmotion(todayEmotion.emotion);
+    }
+  }, [todayEmotion]);
 
-      //NOTE:현재 날짜(today)와 lastPostDate를 비교해서 만약 이 값이 다르면(즉, 하루가 지났다면) 사용자는 다시 감정을 선택할 수 있음.
-      if (lastPostDate === today) {
-        setIsHidden(true);
-        if (onHide) onHide();
-      }
+  useEffect(() => {
+    if (!hideAfterPost || !userData) return;
+
+    const lastPostDateKey = `lastPostDate_${userData.id}`;
+    const lastPostDate = localStorage.getItem(lastPostDateKey);
+    const today = new Date().toISOString().split('T')[0];
+
+    //NOTE:현재 날짜(today)와 lastPostDate를 비교해서 만약 이 값이 다르면(즉, 하루가 지났다면) 사용자는 다시 감정을 선택할 수 있음.
+    if (lastPostDate === today) {
+      setIsHidden(true);
+      if (onHide) onHide();
     }
   }, [hideAfterPost, onHide, userData]);
 
   const emotionCardClick = (emotion: string) => {
     setSelectedEmotion(emotion);
-    mutation.mutate({ emotion });
+    if (userData?.id) {
+      mutation.mutate({ emotion });
+    }
 
     if (hideAfterPost && userData) {
       const today = new Date().toISOString().split('T')[0];
@@ -119,8 +139,12 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
     return null;
   }
 
+  if (userLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <ul className='flex gap-[16px]'>
+    <ul className='flex gap-[16px] items-center justify-center'>
       {emotions.map((emotion, index) => (
         <li key={index}>
           <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.emotion === selectedEmotion} onClick={emotionCardClick} emotion={emotion.emotion} />
