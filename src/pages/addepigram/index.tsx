@@ -23,7 +23,6 @@ export default function Demo() {
     },
   });
 
-  // NOTE: 라디오 버튼 클릭에 따른 placeholder 값 변경 관리
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
 
@@ -44,6 +43,7 @@ export default function Demo() {
     }
   };
 
+  // NOTE: 태그 상태 관리
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState<string>('');
 
@@ -75,16 +75,51 @@ export default function Demo() {
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
-            postEpigramMutation.mutate({
+
+            // 기본 payload 객체 생성
+            const payload: {
+              tags: string[];
+              content: string;
+              author: string;
+              referenceUrl?: string;
+              referenceTitle?: string;
+            } = {
               ...rest,
-              referenceUrl: sourceUrl,
-              referenceTitle: source,
               tags,
-            });
+              content: rest.content,
+              author: rest.author,
+            };
+
+            // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
+            if (sourceUrl && /^https?:\/\/.+/.test(sourceUrl)) {
+              payload.referenceUrl = sourceUrl;
+            }
+
+            if (source) {
+              payload.referenceTitle = source;
+            }
+
+            // NOTE: 유효하지 않은 값을 가진 필드는 제거
+            if (payload.referenceUrl === '') {
+              delete payload.referenceUrl;
+            }
+            if (payload.referenceTitle === '') {
+              delete payload.referenceTitle;
+            }
+
+            postEpigramMutation.mutate(
+              payload as {
+                tags: string[];
+                content: string;
+                author: string;
+                referenceUrl: string;
+                referenceTitle: string;
+              },
+            );
           })}
           className='tablet:w-[384px] desktop:w-[640px] w-[312px] vertical-align '
         >
-          <div className='desktop:text-2xl tablet:text-xl  text-lg font-semibold mb-4 mt-[56px]'>에피그램 만들기</div>
+          <div className='desktop:text-2xl tablet:text-xl text-lg font-semibold mb-4 mt-[56px]'>에피그램 만들기</div>
 
           <Textarea
             label='내용'
@@ -92,7 +127,7 @@ export default function Demo() {
             withAsterisk
             {...form.getInputProps('content')}
             classNames={{
-              input: `desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px]  desktop:placeholder:text-xl placeholder:text-lg `,
+              input: `desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px] desktop:placeholder:text-xl placeholder:text-lg `,
               label: 'desktop:text-xl tablet:text-lg text-md mt-[40px]',
               error: 'text-state-alert text-state-alert desktop:text-lg text-sm mt-1 float-right',
             }}
@@ -154,7 +189,7 @@ export default function Demo() {
             {...form.getInputProps('source')}
             classNames={{
               input:
-                'desktop:text-xl  desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
+                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
               label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
             }}
           />
@@ -165,7 +200,7 @@ export default function Demo() {
             {...form.getInputProps('sourceUrl')}
             classNames={{
               input:
-                'desktop:text-xl  desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
             }}
           />
 
@@ -183,7 +218,7 @@ export default function Demo() {
               }}
               classNames={{
                 input:
-                  'desktop:text-xl  desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
               }}
             />
             <HashTag tags={tags} removeTag={removeTag} />
@@ -192,7 +227,7 @@ export default function Demo() {
           <Group justify='flex-center' mt='md' className='mb-[59px]'>
             <Button
               type='submit'
-              className='desktop:w-[640px] desktop:h-[64px] desktop:text-xl tablet:w-[384px] tablet:h-[48px] w-[312px] h-[48px]  text-lg  rounded-xl bg-button-default hover:bg-button-hover mt-4 py-0 px-4'
+              className='desktop:w-[640px] desktop:h-[64px] desktop:text-xl tablet:w-[384px] tablet:h-[48px] w-[312px] h-[48px] text-lg rounded-xl bg-button-default hover:bg-button-hover mt-4 py-0 px-4'
             >
               작성 완료
             </Button>
