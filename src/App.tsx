@@ -11,7 +11,6 @@ import EpigramBoard from './pages/epigramboard';
 import EpigramDetail from './pages/epigramdetail';
 import EditEpigram from './pages/editepigram';
 import KakaoPage from './pages/loginSocial/kakaoPage';
-import GooglePage from './pages/loginSocial/googlePage';
 import NaverPage from './pages/loginSocial/naverPage';
 
 function App() {
@@ -30,7 +29,6 @@ function App() {
         <Route path='editepigram/:id' element={<EditEpigram />} />
       </Route>
       <Route path='login/callback/kakao' element={<KakaoPage />} />
-      <Route path='login/callback/google' element={<GooglePage />} />
       <Route path='login/callback/naver' element={<NaverPage />} />
     </Routes>
   );
