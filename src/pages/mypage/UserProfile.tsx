@@ -70,6 +70,11 @@ const UserProfile = () => {
 
   //닉네임 변경 확인 핸들러
   const handleConfirm = () => {
+    if (newNickname.length > 20) {
+      setErrorMessage('닉네임은 20자 이하로 설정해야 합니다.');
+      return;
+    }
+
     updateMeMutation.mutate({
       nickname: newNickname,
     });
