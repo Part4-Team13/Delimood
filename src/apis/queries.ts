@@ -5,6 +5,7 @@ import { getComments, getCommentList } from './comment';
 import { GetUserRequestType, GetUserCommentRequestType } from '../schema/userSchema';
 import { GetCommentsRequestType } from '../schema/commentSchema';
 import { PaginationRequest } from '../schema/epigramSchema';
+import { EmotionLogQueryParamsType } from '../schema/emotionLogSchema';
 import { getEpigramList, getTodayEpigram, getEpigramDetail } from '../apis/epigram';
 
 const quries = createQueryKeyStore({
@@ -24,13 +25,13 @@ const quries = createQueryKeyStore({
   },
 
   emotionLogs: {
-    today: () => ({
-      queryKey: ['emotionLogs', 'today'],
-      queryFn: getTodayEmotionLog,
+    today: (params: EmotionLogQueryParamsType) => ({
+      queryKey: [params],
+      queryFn: () => getTodayEmotionLog(params),
     }),
-    monthly: () => ({
-      queryKey: ['emotionLogs', 'monthly'],
-      queryFn: getMonthlyEmotionLogs,
+    monthly: (params: EmotionLogQueryParamsType) => ({
+      queryKey: [params],
+      queryFn: () => getMonthlyEmotionLogs(params),
     }),
   },
 
