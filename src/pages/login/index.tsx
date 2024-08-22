@@ -1,8 +1,7 @@
 import React from 'react';
 import { TextInput, PasswordInput, Button, Container, rem, ActionIcon } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
 import { LoginRequest, LoginRequestType } from '../../schema/authSchema';
-import { IconEyeCheck, IconEyeOff, IconX, IconCheck } from '@tabler/icons-react';
+import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
 import Logo from '../../assets/ico_logo.svg';
 import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
@@ -10,6 +9,7 @@ import { useLogin } from '../../hooks/authQuery';
 import { AxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm as useReactHookForm } from 'react-hook-form';
+import alertMessage from '../../utils/alertMessage';
 
 type ErrorResponse = {
   message: string;
@@ -17,9 +17,6 @@ type ErrorResponse = {
 };
 
 const Login: React.FC = () => {
-  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
-  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
-
   const initialValues: LoginRequestType = {
     email: '',
     password: '',
@@ -34,47 +31,14 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const loginMutation = useLogin({
     onSuccess: () => {
-      showNotification({
-        title: '로그인 완료되었습니다.',
-        message: '성공적으로 로그인되었습니다.',
-        icon: checkIcon,
-        color: 'teal',
-        autoClose: 2000,
-        styles: () => ({
-          root: {
-            position: 'fixed',
-            top: '10%',
-            right: '3%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '300px',
-            width: '40%',
-            maxWidth: '70%',
-          },
-        }),
-      });
+      alertMessage({ title: '로그인 완료되었습니다.', message: '성공적으로 로그인되었습니다.', color: 'green' });
+
       navigate('/');
     },
     onError: (error) => {
       const axiosError = error as AxiosError<ErrorResponse>;
       const response = axiosError.response?.data;
-      showNotification({
-        title: '죄송합니다. 다시 시도해주세요.',
-        message: '로그인 중 문제가 발생했습니다.',
-        icon: xIcon,
-        color: 'red',
-        autoClose: 2000,
-        styles: () => ({
-          root: {
-            position: 'fixed',
-            top: '10%',
-            right: '3%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '300px',
-            width: '40%',
-            maxWidth: '70%',
-          },
-        }),
-      });
+      alertMessage({ title: '죄송합니다. 다시 시도해주세요.', message: '로그인 중 문제가 발생했습니다.', color: 'red' });
       if (response?.details) {
         for (const [key, value] of Object.entries(response.details)) {
           form.setError(key as keyof LoginRequestType, {

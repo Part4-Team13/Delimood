@@ -5,10 +5,8 @@ import sad from '../assets/ico_face_sad.svg';
 import angry from '../assets/ico_face_angry.svg';
 import { useState, useEffect } from 'react';
 import { usePostEmotionLog } from '../hooks/useEmotionLogQuery';
-import { showNotification } from '@mantine/notifications';
-import { IconX } from '@tabler/icons-react';
-import { rem } from '@mantine/core';
 import { useGetMeQuery } from '../hooks/useUserQuery';
+import alertMessage from '../utils/alertMessage';
 
 const emotions = [
   { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },
@@ -60,30 +58,12 @@ interface EmotionListProps {
 }
 
 function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
-  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
   const { data: userData } = useGetMeQuery();
   const [selectedEmotion, setSelectedEmotion] = useState('');
   const [isHidden, setIsHidden] = useState(false);
   const mutation = usePostEmotionLog({
     onError: () => {
-      showNotification({
-        title: '죄송합니다. 다시 시도해주세요.',
-        message: '감정 등록에 실패했습니다.',
-        icon: xIcon,
-        color: 'red',
-        autoClose: 2000,
-        styles: () => ({
-          root: {
-            position: 'fixed',
-            top: '10%',
-            right: '3%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '300px',
-            width: '40%',
-            maxWidth: '70%',
-          },
-        }),
-      });
+      alertMessage({ title: '죄송합니다. 다시 시도해주세요.', message: '감정 등록에 실패했습니다.', color: 'red' });
     },
   });
 

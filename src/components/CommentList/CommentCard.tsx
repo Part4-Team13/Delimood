@@ -2,13 +2,13 @@ import timeFormatter from '../../utils/timeFormatter';
 import profileIcon from '../../assets/ico_profile.svg';
 import { useDeleteCommentMutation, usePatchCommentMutation } from '../../hooks/useCommentQuery';
 import React, { useRef, useState } from 'react';
-import { IconLock, IconX } from '@tabler/icons-react';
-import { showNotification } from '@mantine/notifications';
-import { Button, rem } from '@mantine/core';
+import { IconLock } from '@tabler/icons-react';
+import { Button } from '@mantine/core';
 import ProfileModal from '../Modal/profileModal';
 import DeleteModal from '../Modal/commentDeleteModal';
 import { PatchCommentType } from '../../schema/commentSchema';
 import { useQueryClient } from '@tanstack/react-query';
+import alertMessage from '../../utils/alertMessage';
 
 interface CommentCardProps {
   userId?: number;
@@ -22,7 +22,6 @@ interface CommentCardProps {
     nickname: string;
   };
 }
-const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
 function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
@@ -37,24 +36,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
   // onError 옵션
   const options = {
     onError: () => {
-      showNotification({
-        title: '실패했습니다.',
-        message: '죄송합니다. 다시 시도해주세요.',
-        icon: xIcon,
-        color: 'red',
-        autoClose: 2000,
-        styles: () => ({
-          root: {
-            position: 'fixed',
-            top: '10%',
-            right: '3%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '300px',
-            width: '40%',
-            maxWidth: '70%',
-          },
-        }),
-      });
+      alertMessage({ title: '실패했습니다.', message: '죄송합니다. 다시 시도해주세요.', color: 'red' });
     },
     onSuccess: () => {
       queryClient.invalidateQueries();

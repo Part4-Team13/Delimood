@@ -1,8 +1,9 @@
 import { rem } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { IconX } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
 
 interface AlertMessageProps {
   title: string;
@@ -14,7 +15,7 @@ function alertMessage({ title = '알림 메시지입니다.', message = '부가 
   const alert = showNotification({
     title,
     message,
-    icon: xIcon,
+    icon: color == 'red' ? xIcon : checkIcon,
     color,
     autoClose: 2000,
     styles: () => ({
