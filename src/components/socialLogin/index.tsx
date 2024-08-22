@@ -18,6 +18,7 @@ const SocialButton: React.FC<{ src: string; alt: string; href: string; hoverColo
   );
 };
 
+//NOTE : 사용자가 버튼을 클릭하면 해당 소셜로그인 페이지로 리디렉션됨.
 const SocialLogin: React.FC = () => {
   const state = uuidv4();
 

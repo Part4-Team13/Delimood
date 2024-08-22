@@ -2,6 +2,7 @@ import { PUBLIC_GOOGLE_CLIENT_ID, PUBLIC_GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_U
 import axios from 'axios';
 import httpClient from '.';
 
+//code를 사용하여 구글의 /token 엔드포인트로 POST 요청을 보내 id_token을 받아오는 함수
 const getGoogleIdToken = async (code: string) => {
   const response = await axios.post(
     'https://oauth2.googleapis.com/token',
@@ -20,6 +21,7 @@ const getGoogleIdToken = async (code: string) => {
   return response.data;
 };
 
+//위의 함수에서 id_token을 획득한 후, 이를 서버로 전달하여 로그인 처리를 진행함.
 const postGoogle = async (code: string) => {
   const tokenResponse = await getGoogleIdToken(code);
   const idToken = tokenResponse.id_token;
