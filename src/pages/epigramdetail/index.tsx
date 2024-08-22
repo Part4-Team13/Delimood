@@ -188,16 +188,18 @@ function EpigramDetail() {
                     <span>{likeCount}</span>
                   </button>
                 </li>
-                <li
-                  onClick={() => {
-                    window.open(data!.referenceUrl!, '_blank');
-                  }}
-                >
-                  <button className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'>
-                    <span> {data!.referenceTitle}</span>
-                    {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
-                  </button>
-                </li>
+                {data?.referenceTitle && (
+                  <li
+                    onClick={() => {
+                      window.open(data!.referenceUrl!, '_blank');
+                    }}
+                  >
+                    <button className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'>
+                      <span> {data!.referenceTitle}</span>
+                      {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
+                    </button>
+                  </li>
+                )}
               </ul>
             </div>
             <span className='absolute bottom-[-15px] w-screen h-[15px]' style={{ backgroundImage: `url(${img_zigzag})`, backgroundRepeat: 'repeat-x' }} />
