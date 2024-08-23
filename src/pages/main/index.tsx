@@ -22,8 +22,8 @@ export default function Main() {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
       navigate('/epigrams');
     } else {
       navigate('/login');
