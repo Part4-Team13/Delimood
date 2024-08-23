@@ -4,7 +4,7 @@ import { useDeleteCommentMutation, usePatchCommentMutation } from '../../hooks/u
 import React, { useRef, useState } from 'react';
 import { IconLock, IconX } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
-import { Button, rem } from '@mantine/core';
+import { Button, rem, Switch } from '@mantine/core';
 import ProfileModal from '../Modal/profileModal';
 import DeleteModal from '../Modal/commentDeleteModal';
 import { PatchCommentType } from '../../schema/commentSchema';
@@ -77,6 +77,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
     setIsPatching(true);
   };
   const handleInputChange = (e: React.SyntheticEvent) => {
+    console.log();
     e.stopPropagation();
     if (inputCheckRef.current && inputTextRef.current) {
       setCurrentData({ content: inputTextRef.current.value, isPrivate: inputCheckRef.current.checked });
@@ -132,8 +133,9 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
                   </button>
                 </div>
               ) : (
-                <span className='flex items-center gap-[3px] ml-auto'>
-                  <input type='checkbox' defaultChecked={isPrivate} onClick={(e) => handleInputChange(e)} ref={inputCheckRef} /> <span>비밀글</span>
+                <span className='flex items-center gap-[8px] ml-auto'>
+                  <Switch defaultChecked={isPrivate} color='#454545' id='commentPrivate' onChange={(e) => handleInputChange(e)} ref={inputCheckRef} />
+                  <label htmlFor='commentPrivate'>비밀글</label>
                 </span>
               )
             ) : null}
