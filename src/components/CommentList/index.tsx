@@ -88,7 +88,16 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
         {commentList &&
           commentList.map((comment) => (
             <li key={comment.id} onClick={(e) => onClickCard(e, comment.epigramId)} className={pathname === `/epigrams/${comment.epigramId}` ? 'cursor-default' : 'cursor-pointer hover:bg-blue-200'}>
-              <CommentCard userId={userId} id={comment.id} createdAt={comment.createdAt} content={comment.content} writer={comment.writer} isPrivate={comment.isPrivate} />
+              <CommentCard
+                userId={userId}
+                id={comment.id}
+                createdAt={comment.createdAt}
+                content={comment.content}
+                writer={comment.writer}
+                isPrivate={comment.isPrivate}
+                pathname={pathname}
+                epigramId={comment.epigramId}
+              />
             </li>
           ))}
       </ul>
