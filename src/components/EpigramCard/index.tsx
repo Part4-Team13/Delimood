@@ -16,7 +16,7 @@ function EpigramCard({ id, author, content, tags, isSeperated = false }: Epigram
     <>
       <div
         onClick={(e) => onClickEpigramCard(e)}
-        className={`relative font-paraph text-md tablet:text-lg desktop:text-2xl ${isSeperated ? 'w-[152px] tablet:w-[294px] desktop:w-[585px]' : 'w-[312px] tablet:w-[384px] desktop:w-[640px]'}`}
+        className={`relative font-paraph text-md tablet:text-lg desktop:text-2xl ${isSeperated ? 'w-[152px] tablet:w-[294px] desktop:w-[585px]' : 'w-[312px] tablet:w-[384px] desktop:w-[640px]'} ${tags.length == 0 ? 'mb-[24px] tablet:mb-[26px] desktop:mb-[32px]' : ''}`}
       >
         <div
           className={`shadow-epigramCard striped desktop:striped-desktop cursor-pointer rounded-[16px] p-[23px] flex flex-col overflow-hidden ${isSeperated ? 'h-[110px] tablet:h-[180px] desktop:h-[259px] justify-between' : ''}`}
