@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import postKakao from '../../apis/postKakao';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
@@ -12,8 +11,8 @@ const useKakaoLogin = () => {
     mutationFn: async (code: string) => {
       const data = await postKakao(code);
 
-      Cookies.set('accessToken', data.accessToken, { expires: new Date(Date.now() + 1800 * 1000) });
-      Cookies.set('refreshToken', data.refreshToken);
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
 
       return data;
     },

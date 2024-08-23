@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 
 import img_bg_top from '@/assets/img_bg_top.png';
 import ico_more_arrow_down from '@/assets/ico_more_arrow_down.svg';
@@ -23,7 +22,7 @@ export default function Main() {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    const accessToken = Cookies.get('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       navigate('/epigrams');
     } else {
