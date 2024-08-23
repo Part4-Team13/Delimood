@@ -76,7 +76,9 @@ export default function Demo() {
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
-            // 기본 payload 객체 생성
+            // NOTE: 태그에 #을 추가
+            const formattedTags = tags.map((tag) => `#${tag}`);
+
             const payload: {
               tags: string[];
               content: string;
@@ -85,7 +87,7 @@ export default function Demo() {
               referenceTitle?: string;
             } = {
               ...rest,
-              tags,
+              tags: formattedTags,
               content: rest.content,
               author: rest.author,
             };
