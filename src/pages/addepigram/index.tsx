@@ -70,7 +70,7 @@ export default function Demo() {
   });
 
   return (
-    <div className='w-[100vw] h-[100vh] bg-white'>
+    <div className=' h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
         <form
           onSubmit={form.onSubmit((values) => {
