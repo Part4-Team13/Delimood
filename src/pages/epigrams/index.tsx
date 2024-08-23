@@ -25,7 +25,6 @@ export default function Epigrams() {
 
   return (
     <>
-      <FixedButton />
       <div className='mt-[32px] desktop:mt-[120px] flex flex-col items-center justify-center mb-[114px]'>
         <Section title='오늘의 에피그램'>
           <TodayEpigram />
@@ -41,6 +40,7 @@ export default function Epigrams() {
         <Section title='최신 댓글' className='mt-[56px] desktop:mt-[140px]'>
           <AllCommentList />
         </Section>
+        <FixedButton />
       </div>
     </>
   );

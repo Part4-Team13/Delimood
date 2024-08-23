@@ -83,7 +83,6 @@ export default function Mypage() {
 
   return (
     <>
-      <FixedButton />
       <DeleteModal
         message='정말 로그아웃하실건가요?'
         secondaryMessage='다시 이용하시려면 로그인이 필요합니다.'
@@ -131,6 +130,7 @@ export default function Mypage() {
           {userId && activeTab === 'comments' && <MyCommentsList userId={userId} onTotalCountFetched={setTotalCommentsCount} />}
         </div>
       </div>
+      <FixedButton />
     </>
   );
 }
