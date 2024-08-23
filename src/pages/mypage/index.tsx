@@ -13,6 +13,7 @@ import MyEpigramList from './MyEpigramList';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { useGetMyCommentInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import DeleteModal from '../../components/Modal/commentDeleteModal';
+import FixedButton from '../../components/FixedButton';
 
 export default function Mypage() {
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
@@ -82,6 +83,7 @@ export default function Mypage() {
 
   return (
     <>
+      <FixedButton />
       <DeleteModal
         message='정말 로그아웃하실건가요?'
         secondaryMessage='다시 이용하시려면 로그인이 필요합니다.'
