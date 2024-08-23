@@ -15,7 +15,7 @@ function Header() {
   const accessToken = Cookies.get('accessToken');
 
   return (
-    <div className='bg-white flex h-[52px] px-[24px] tablet:h-[60px] tablet:px-[72px] desktop:px-[120px] desktop:h-[80px] items-center relative'>
+    <div className='bg-white flex h-[52px] px-[24px] tablet:h-[60px] tablet:px-[72px] desktop:px-[120px] desktop:h-[80px] items-center fixed left-0 right-0 top-0 z-50 shadow-epigramdetail'>
       <HeaderLeft pathNow={pathNow} navigate={navigate} />
       <HeaderMiddle pathNow={pathNow} navigate={navigate} />
       {accessToken ? <HeaderRight pathNow={pathNow} navigate={navigate} /> : <HeaderRightUnAuthenticated pathNow={pathNow} navigate={navigate} />}
