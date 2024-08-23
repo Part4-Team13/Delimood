@@ -10,9 +10,9 @@ import Layout from './layout/Layout';
 import EpigramBoard from './pages/epigramboard';
 import EpigramDetail from './pages/epigramdetail';
 import EditEpigram from './pages/editepigram';
-import LoginSocial from './pages/loginSocial/index';
-import GooglePage from './pages/loginSocial/googlepage';
-import NaverPage from './pages/loginSocial/naverPage';
+import GooglePage from './pages/loginSocialloading/googlePage';
+import KakaoPage from './pages/loginSocialloading/kakaoPage';
+import NaverPage from './pages/loginSocialloading/naverPage';
 
 function App() {
   return (
@@ -21,9 +21,6 @@ function App() {
         <Route index element={<Main />} />
         <Route path='signup' element={<Signup />} />
         <Route path='login' element={<Login />} />
-        <Route path='login/callback' element={<LoginSocial />} />
-        <Route path='login/callback/google' element={<GooglePage />} />
-        <Route path='login/callback/naver' element={<NaverPage />} />
         <Route path='epigrams' element={<Epigrams />} />
         <Route path='epigrams/:id' element={<EpigramDetail />} />
         <Route path='search' element={<Search />} />
@@ -32,6 +29,9 @@ function App() {
         <Route path='board' element={<EpigramBoard />} />
         <Route path='editepigram/:id' element={<EditEpigram />} />
       </Route>
+      <Route path='login/callback/kakao' element={<KakaoPage />} />
+      <Route path='login/callback/naver' element={<NaverPage />} />
+      <Route path='login/callback/google' element={<GooglePage />} />
     </Routes>
   );
 }
