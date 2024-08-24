@@ -4,7 +4,7 @@ import { useDeleteCommentMutation, usePatchCommentMutation } from '../../hooks/u
 import React, { useRef, useState } from 'react';
 import { IconLock, IconX } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
-import { Button, rem } from '@mantine/core';
+import { Button, rem, Switch } from '@mantine/core';
 import ProfileModal from '../Modal/profileModal';
 import DeleteModal from '../Modal/commentDeleteModal';
 import { PatchCommentType } from '../../schema/commentSchema';
@@ -21,10 +21,12 @@ interface CommentCardProps {
     image: string | null;
     nickname: string;
   };
+  pathname: string;
+  epigramId: number;
 }
 const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
 
-function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: CommentCardProps) {
+function CommentCard({ createdAt, id, content, writer, userId, isPrivate, pathname, epigramId }: CommentCardProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isPatching, setIsPatching] = useState<boolean>(false);
@@ -121,7 +123,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
                 <IconLock className='h-[14px] ml-[-10px] desktop:h-[20px] desktop:ml-[-5px]' />
               </span>
             )}
-            {userId === writer.id ? (
+            {userId === writer.id && pathname === `/epigrams/${epigramId}` ? (
               !isPatching ? (
                 <div className='text-[12px] leading-[18px] tablet:text-[14px] desktop:text-[18px] absolute top-0 right-0 flex gap-[16px] tablet:mt-[3px]'>
                   <button className='text-black-600 hover:underline cursor-pointer' onClick={(e) => handleClickPatch(e)}>
@@ -132,8 +134,8 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
                   </button>
                 </div>
               ) : (
-                <span className='flex items-center gap-[3px] ml-auto'>
-                  <input type='checkbox' defaultChecked={isPrivate} onClick={(e) => handleInputChange(e)} ref={inputCheckRef} /> <span>비밀글</span>
+                <span className='flex items-center ml-auto'>
+                  <Switch defaultChecked={isPrivate} color='#454545' id='commentPrivate' onChange={(e) => handleInputChange(e)} ref={inputCheckRef} label='비밀글' />
                 </span>
               )
             ) : null}

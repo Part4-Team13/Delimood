@@ -83,7 +83,12 @@ const UserProfile = () => {
   return (
     <div className='-mt-[40px] desktop:-mt-[60px] flex flex-col gap-2 items-center desktop:gap-4'>
       <div className='relative'>
-        <img src={profileImage || profileIcon} alt='프로필 이미지' className='w-[80px] h-[80px] rounded-full border-2 border-blue-300 desktop:w-[120px] desktop:h-[120px]' />
+        <img
+          src={profileImage || profileIcon}
+          alt='프로필 이미지'
+          className='w-[80px] h-[80px] rounded-full border-2 border-blue-300 desktop:w-[120px] desktop:h-[120px]'
+          style={{ objectFit: 'cover' }}
+        />
         <input type='file' accept='image/*' style={{ display: 'none' }} id='fileInput' onChange={handleImageUpload} />
         <ActionIcon
           onClick={() => {
