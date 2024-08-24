@@ -26,7 +26,7 @@ export default function Demo() {
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
 
-  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣기
+  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣음
   const handleRadioChange = (value: string) => {
     if (value === '직접 입력') {
       setPlaceholder('저자 이름 입력');
