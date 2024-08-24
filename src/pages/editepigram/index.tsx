@@ -3,22 +3,21 @@ import { useForm, isNotEmpty, hasLength } from '@mantine/form';
 import { Button, Group, TextInput, Input, Text, Textarea, Radio } from '@mantine/core';
 import HashTag from '../../components/HashTag';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
-import { useUpdateEpigramMutation, useGetEpigramDetailQuery } from '../../hooks/useEpigramQuery';
+import { useGetEpigramDetailQuery, useUpdateEpigramMutation } from '../../hooks/useEpigramQuery';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export default function EpigramEditPage() {
-  const { id } = useParams();
+export default function EditEpigram() {
+  const { id } = useParams<{ id: string }>(); // URL에서 에피그램 ID를 가져옵니다.
+  const { data: epigram, isLoading } = useGetEpigramDetailQuery(Number(id)); // 에피그램 데이터를 가져옵니다.
   const { data: userProfile } = useGetMeQuery();
-  const { data: epigram } = useGetEpigramDetailQuery(Number(id));
-  const updateEpigramMutation = useUpdateEpigramMutation(Number(id));
   const navigate = useNavigate();
 
   const form = useForm({
     initialValues: {
-      content: epigram?.content || '',
-      author: epigram?.author || '',
-      source: epigram?.referenceTitle || '',
-      sourceUrl: epigram?.referenceUrl || '',
+      content: '',
+      author: '',
+      source: '',
+      sourceUrl: '',
     },
     validate: {
       content: hasLength({ min: 1, max: 500 }, '500자 이내로 입력해주세요'),
@@ -26,11 +25,27 @@ export default function EpigramEditPage() {
     },
   });
 
-  // NOTE: 라디오 버튼 클릭에 따른 placeholder 값 변경 관리
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
+  const [newTag, setNewTag] = useState<string>('');
 
-  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣기
+  // NOTE: 에피그램 데이터 로드
+  useEffect(() => {
+    if (epigram) {
+      form.setValues({
+        content: epigram.content,
+        author: epigram.author,
+        source: epigram.referenceTitle || '',
+        sourceUrl: epigram.referenceUrl || '',
+      });
+      setTags(epigram.tags.map((tag) => tag.name));
+      setPlaceholder(epigram.author);
+      setDisabled(epigram.author === '알 수 없음' || epigram.author === userProfile?.nickname);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [epigram, userProfile]);
+
   const handleRadioChange = (value: string) => {
     if (value === '직접 입력') {
       setPlaceholder('저자 이름 입력');
@@ -47,20 +62,15 @@ export default function EpigramEditPage() {
     }
   };
 
-  const [tags, setTags] = useState<string[]>(epigram?.tags?.map((tag) => tag.name) || []);
-  const [newTag, setNewTag] = useState<string>('');
-
-  useEffect(() => {
-    if (epigram?.tags) {
-      setTags(epigram.tags.map((tag) => tag.name));
-    }
-  }, [epigram]);
-
   const addTag = () => {
     const trimmedTag = newTag.trim();
-    if (trimmedTag && !tags.includes(trimmedTag) && trimmedTag.length <= 10) {
-      if (tags.length < 3) {
-        setTags((prevTags) => [...prevTags, trimmedTag]);
+    if (trimmedTag && trimmedTag.length <= 10) {
+      const normalizedTag = trimmedTag.startsWith('#') ? trimmedTag.slice(1) : trimmedTag;
+      const tagExists = tags.some((tag) => (tag.startsWith('#') ? tag.slice(1) : tag) === normalizedTag);
+      if (tagExists) {
+        alert('이미 태그가 있습니다.');
+      } else if (tags.length < 3) {
+        setTags([...tags, trimmedTag]);
         setNewTag('');
       } else {
         alert('태그는 최대 3개까지만 추가할 수 있습니다.');
@@ -69,31 +79,76 @@ export default function EpigramEditPage() {
   };
 
   const removeTag = (indexToRemove: number) => {
-    setTags((prevTags) => prevTags.filter((_, index) => index !== indexToRemove));
+    setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
-  const handleSubmit = () => {
-    const { source, sourceUrl, ...rest } = form.values;
-    updateEpigramMutation.mutate(
-      {
-        ...rest,
-        referenceUrl: sourceUrl,
-        referenceTitle: source,
-        tags,
-      },
-      {
-        onSuccess: (data) => {
-          navigate(`/epigrams/${data.id}`);
-        },
-      },
-    );
-  };
+  const updateEpigramMutation = useUpdateEpigramMutation(Number(id), {
+    onSuccess: () => {
+      navigate(`/epigrams/${id}`);
+    },
+  });
+
+  const isFormValid = form.isValid();
+
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩 상태 처리
+  }
 
   return (
-    <div className='w-[100vw] h-[100vh] bg-white'>
+    <div className=' h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
-        <form onSubmit={form.onSubmit(handleSubmit)} className='tablet:w-[384px] desktop:w-[640px] w-[312px] vertical-align'>
-          <div className='desktop:text-2xl tablet:text-xl text-lg font-semibold mb-4 mt-[56px]'>에피그램 수정</div>
+        <form
+          onSubmit={form.onSubmit((values) => {
+            const { source, sourceUrl, ...rest } = values;
+
+            // NOTE: 태그에 #을 추가
+            const formattedTags = tags.map((tag) => {
+              return tag.startsWith('#') ? tag : `#${tag}`;
+            });
+
+            const payload: {
+              tags: string[];
+              content: string;
+              author: string;
+              referenceUrl?: string;
+              referenceTitle?: string;
+            } = {
+              ...rest,
+              tags: formattedTags,
+              content: rest.content,
+              author: rest.author,
+            };
+
+            // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
+            if (sourceUrl && /^https?:\/\/.+/.test(sourceUrl)) {
+              payload.referenceUrl = sourceUrl;
+            }
+
+            if (source) {
+              payload.referenceTitle = source;
+            }
+
+            // NOTE: 유효하지 않은 값을 가진 필드는 제거
+            if (payload.referenceUrl === '') {
+              delete payload.referenceUrl;
+            }
+            if (payload.referenceTitle === '') {
+              delete payload.referenceTitle;
+            }
+
+            updateEpigramMutation.mutate(
+              payload as {
+                tags: string[];
+                content: string;
+                author: string;
+                referenceUrl: string;
+                referenceTitle: string;
+              },
+            );
+          })}
+          className='tablet:w-[384px] desktop:w-[640px] w-[312px] vertical-align '
+        >
+          <div className='desktop:text-2xl tablet:text-xl text-lg font-semibold mb-4 mt-[56px]'>에피그램 만들기</div>
 
           <Textarea
             label='내용'
@@ -116,13 +171,13 @@ export default function EpigramEditPage() {
               error: 'text-state-alert text-state-alert desktop:text-lg text-sm mt-1 float-right',
             }}
           >
-            <Radio.Group defaultValue={epigram?.author === '알 수 없음' ? '알 수 없음' : epigram?.author === userProfile?.nickname ? '본인' : '직접 입력'} onChange={handleRadioChange}>
+            <Radio.Group defaultValue='직접 입력' onChange={handleRadioChange}>
               <Group mt='xl'>
                 <Radio
                   value='직접 입력'
                   label='직접 입력'
                   classNames={{
-                    label: 'desktop:text-xl text-lg desktop:mt-[-6px] mt-[-5px]',
+                    label: 'desktop:text-xl text-lg desktop:mt-[-6px] mt-[-5px] ',
                   }}
                 />
                 <Radio
@@ -163,7 +218,7 @@ export default function EpigramEditPage() {
             {...form.getInputProps('source')}
             classNames={{
               input:
-                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
               label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
             }}
           />
@@ -201,9 +256,12 @@ export default function EpigramEditPage() {
           <Group justify='flex-center' mt='md' className='mb-[59px]'>
             <Button
               type='submit'
-              className='desktop:w-[640px] desktop:h-[64px] desktop:text-xl tablet:w-[384px] tablet:h-[48px] w-[312px] h-[48px] text-lg rounded-xl bg-button-default hover:bg-button-hover mt-4 py-0 px-4'
+              disabled={!isFormValid}
+              className={`desktop:w-[640px] desktop:h-[64px] desktop:text-xl tablet:w-[384px] tablet:h-[48px] w-[312px] h-[48px] text-lg rounded-xl ${
+                isFormValid ? 'bg-button-default hover:bg-button-hover' : 'to-button-diabled text-white'
+              } mt-4 py-0 px-4`}
             >
-              수정 완료
+              작성 완료
             </Button>
           </Group>
         </form>
