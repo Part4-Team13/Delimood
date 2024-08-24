@@ -26,6 +26,7 @@ export default function Demo() {
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
 
+  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣기
   const handleRadioChange = (value: string) => {
     if (value === '직접 입력') {
       setPlaceholder('저자 이름 입력');
@@ -42,13 +43,21 @@ export default function Demo() {
     }
   };
 
+  // NOTE: 태그 상태 관리
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState<string>('');
 
   const addTag = () => {
     const trimmedTag = newTag.trim();
-    if (trimmedTag && !tags.includes(trimmedTag) && trimmedTag.length <= 10) {
-      if (tags.length < 3) {
+
+    if (trimmedTag && trimmedTag.length <= 10) {
+      // NOTE: 사용자가 #을 붙인 태그명과 #을 붙이지 않은 태그명의 중복 검사 실행
+      const normalizedTag = trimmedTag.startsWith('#') ? trimmedTag.slice(1) : trimmedTag;
+      const tagExists = tags.some((tag) => (tag.startsWith('#') ? tag.slice(1) : tag) === normalizedTag);
+
+      if (tagExists) {
+        alert('이미 태그가 있습니다.');
+      } else if (tags.length < 3) {
         setTags([...tags, trimmedTag]);
         setNewTag('');
       } else {
@@ -70,13 +79,16 @@ export default function Demo() {
   const isFormValid = form.isValid();
 
   return (
-    <div className='h-[100vh] bg-white'>
+    <div className=' h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
-            const formattedTags = tags.map((tag) => `#${tag}`);
+            // NOTE: 태그에 #을 추가
+            const formattedTags = tags.map((tag) => {
+              return tag.startsWith('#') ? tag : `#${tag}`;
+            });
 
             const payload: {
               tags: string[];
@@ -91,6 +103,7 @@ export default function Demo() {
               author: rest.author,
             };
 
+            // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
             if (sourceUrl && /^https?:\/\/.+/.test(sourceUrl)) {
               payload.referenceUrl = sourceUrl;
             }
@@ -99,6 +112,7 @@ export default function Demo() {
               payload.referenceTitle = source;
             }
 
+            // NOTE: 유효하지 않은 값을 가진 필드는 제거
             if (payload.referenceUrl === '') {
               delete payload.referenceUrl;
             }
@@ -126,7 +140,7 @@ export default function Demo() {
             withAsterisk
             {...form.getInputProps('content')}
             classNames={{
-              input: `desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px]  desktop:placeholder:text-xl placeholder:text-lg `,
+              input: `desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px] desktop:placeholder:text-xl placeholder:text-lg `,
               label: 'desktop:text-xl tablet:text-lg text-md mt-[40px]',
               error: 'text-state-alert text-state-alert desktop:text-lg text-sm mt-1 float-right',
             }}
