@@ -104,7 +104,7 @@ export default function Mypage() {
           <UserProfile />
           <button
             onClick={handleLogout}
-            className='h-[36px] w-[77px] desktop:h-[48px] desktop:w-[100px] desktop:text-xl mb-[56px] mt-[16px] desktop:mt-[24px] desktop:mb-[96px] rounded-[100px] text-sm font-normal bg-line-bright text-gray-300 '
+            className='h-[36px] w-[77px] desktop:h-[48px] desktop:w-[100px] desktop:text-xl mb-[56px] mt-[16px] desktop:mt-[24px] desktop:mb-[96px] rounded-[100px] text-sm font-normal bg-line-bright text-gray-300 hover:bg-gray-100'
           >
             로그아웃
           </button>
