@@ -1,5 +1,7 @@
 import { useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
-import like from '../../assets/ico_like.svg';
+import ico_bookmark_gray from '../../assets/ico_bookmark_gray.svg';
+import ico_bookmark_purple from '../../assets/ico_bookmark_purple.svg';
+import { Menu } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import alertMessage from '../AlertMessage';
@@ -46,12 +48,16 @@ function LikeButton({ id }: LikeButtonProps) {
   };
 
   return (
-    <button
-      onClick={(e) => onClickLikeButton(e)}
-      className={`w-[20px] tablet:w-[24px] rounded-full p-[2px] absolute  right-[6px] top-[6px] ${!liked ? 'bg-button-diabled hover:bg-button-hover' : 'bg-state-alert hover:bg-red'}`}
-    >
-      <img src={like} alt='좋아요' />
-    </button>
+    <Menu trigger='hover' position='top' offset={1} openDelay={500}>
+      <Menu.Target>
+        <button onClick={(e) => onClickLikeButton(e)} className={`w-[20px] tablet:w-[24px] rounded-full p-[2px] absolute right-[12px] top-[-10px]`}>
+          <img src={liked ? ico_bookmark_purple : ico_bookmark_gray} alt='좋아요' />
+        </button>
+      </Menu.Target>
+      <Menu.Dropdown className='rounded-[10px]'>
+        <Menu.Item className='text-xs p-[5px]'>{liked ? '좋아요 취소' : '좋아요'}</Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   );
 }
 

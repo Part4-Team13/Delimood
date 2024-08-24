@@ -5,7 +5,9 @@ function Layout() {
   return (
     <>
       <Header />
-      <Outlet />
+      <div className='overflow-hidden mt-[52px] tablet:mt-[60px] desktop:mt-[80px]'>
+        <Outlet />
+      </div>
     </>
   );
 }
