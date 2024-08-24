@@ -17,7 +17,7 @@ const buttonStyle = 'px-[28px] py-[10px] rounded-xl bg-button-default text-lg te
 const sectionStyle = 'mb-[196px] desktop:flex desktop:items-end desktop:gap-[80px]';
 const sectionImgStyle = 'mb-[40px] desktop:mb-0 desktop:shrink-0 desktop:max-w-[50%]';
 const sectionHeadingStyle = 'mb-[16px] font-bold text-2xl desktop:text-3xl';
-const sectionParagraphStyle = 'text-blue-600 desktop:text-2xl';
+const sectionParagraphStyle = 'text-purple-600 desktop:text-2xl';
 
 export default function Main() {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ export default function Main() {
           </button>
         </div>
         <div className={`${basicStyle} gap-[4px]`}>
-          <span className='text-xs text-blue-400 tablet:text-lg'>더 알아보기</span>
+          <span className='text-xs text-purple-400 tablet:text-lg'>더 알아보기</span>
           <img src={ico_more_arrow_down} alt='더보기 아이콘' />
         </div>
       </header>

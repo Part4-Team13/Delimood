@@ -42,7 +42,7 @@ function FixedButton({ text = '에피그램 만들기' }: ButtonProps) {
       {/* 기본으로 따라다니는 에피그램 만들기 버튼 */}
       <button
         onClick={handleClick}
-        className='bg-blue-900 flex items-center justify-center text-white  font-semibold rounded-full hover:bg-blue-800 text-md desktop:text-xl w-[145px] h-[48px] desktop:w-[194px] desktop:h-[64px]'
+        className='bg-purple-900 flex items-center justify-center text-white  font-semibold rounded-full hover:bg-purple-800 text-md desktop:text-xl w-[145px] h-[48px] desktop:w-[194px] desktop:h-[64px]'
       >
         <img src={plus} alt='Plus Icon' className='mr-1 w-6 h-6' />
         {text}
@@ -50,7 +50,10 @@ function FixedButton({ text = '에피그램 만들기' }: ButtonProps) {
 
       {/* 스크롤 버튼은 스크롤 시에만 보이게 */}
       {isScrollButtonVisible && (
-        <button onClick={scrollTop} className='bg-blue-900 text-white w-[48px] h-[48px] desktop:w-[64px] desktop:h-[64px] flex items-center justify-center rounded-full shadow-lg hover:bg-blue-800'>
+        <button
+          onClick={scrollTop}
+          className='bg-purple-900 text-white w-[48px] h-[48px] desktop:w-[64px] desktop:h-[64px] flex items-center justify-center rounded-full shadow-lg hover:bg-purple-800'
+        >
           <img src={arrowUp} alt='Arrow Up Icon' className='w-6 h-6' />
         </button>
       )}

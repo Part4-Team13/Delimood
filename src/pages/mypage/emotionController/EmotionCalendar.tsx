@@ -164,7 +164,7 @@ const EmotionCalendar = ({ data, year, month, onDateChange }: { data: { emotion:
               <img src={icon} alt={emotionNames[emotion]} style={{ width: isTablet ? '32px' : isDesktop ? '40px' : '24px', height: isTablet ? '32px' : isDesktop ? '40px' : '24px' }} />
             </Button>
           ))}
-          <ActionIcon onClick={handleReset} variant='subtle' className='w-[30px] h-[30px] desktop:w-[60px] desktop:h-[60px] text-blue-800 text-xs'>
+          <ActionIcon onClick={handleReset} variant='subtle' className='w-[30px] h-[30px] desktop:w-[60px] desktop:h-[60px] text-purple-800 text-xs'>
             필터 <br />
             해제
           </ActionIcon>

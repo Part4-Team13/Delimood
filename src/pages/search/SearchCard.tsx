@@ -37,16 +37,16 @@ const SearchCard: React.FC<CardProps> = ({ id, content, author, tags, searchTerm
 
   return (
     <div
-      className='hover:bg-blue-200 tablet:w-[384px] bg-white text-base font-normal border-b-1 desktop:text-xl border-b border-gray-100 min-w-[360px] w-[360px] desktop:w-[640px] px-[24px] py-[16px] gap-2 desktop:py-[24px] desktop:gap-4'
+      className='hover:bg-purple-200 tablet:w-[384px] bg-white text-base font-normal border-b-1 desktop:text-xl border-b border-gray-100 min-w-[360px] w-[360px] desktop:w-[640px] px-[24px] py-[16px] gap-2 desktop:py-[24px] desktop:gap-4'
       onClick={handleCardClick}
       style={{ cursor: 'pointer' }}
     >
       <div className='flex flex-col gap-1 text-black-600 font-paraph tablet:gap-2 desktop:gap-6'>
         <p>{highlight(content, searchTerm)}</p>
-        <p className='text-blue-400'>- {highlight(author, searchTerm)} -</p>
+        <p className='text-purple-400'>- {highlight(author, searchTerm)} -</p>
       </div>
 
-      <div className='flex justify-end space-x-[12px] text-blue-400 '>
+      <div className='flex justify-end space-x-[12px] text-purple-400 '>
         {tags.map((tag) => (
           <span key={tag.id}>{highlight(tag.name, searchTerm)}</span>
         ))}

@@ -66,8 +66,8 @@ function Modal({ isOpen, onClose, icon, message, secondaryMessage, buttons }: Mo
                 key={index}
                 className={`w-[140px] h-[48px] py-3 px-6 rounded-xl text-lg font-normal transition duration-300 tablet:text-lg tablet:w-[144px] tablet:h-[48px] desktop:text-xl desktop:font-semibold desktop:w-[180px] desktop:h-[58px] ${
                   button.variant === 'primary'
-                    ? 'border border-yellow-500 bg-white text-black hover:bg-blue-900 hover:text-white'
-                    : 'border border-yellow-500 bg-white text-black hover:bg-blue-200 hover:text-black'
+                    ? 'border border-yellow-500 bg-white text-black hover:bg-purple-900 hover:text-white'
+                    : 'border border-yellow-500 bg-white text-black hover:bg-purple-200 hover:text-black'
                 }`}
                 onClick={button.onClick}
               >

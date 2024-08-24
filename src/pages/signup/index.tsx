@@ -100,7 +100,7 @@ const SignUp: React.FC = () => {
             classNames={{
               root: 'tablet:text-sm desktop:text-base',
               label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
-              input: 'focus:border-black-600 focus:border-2 mt-[16px] h-[44px] bg-blue-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl',
+              input: 'focus:border-black-600 focus:border-2 mt-[16px] h-[44px] bg-purple-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl',
               error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
             }}
           />
@@ -112,7 +112,7 @@ const SignUp: React.FC = () => {
               error={form.formState.errors.password?.message}
               onBlur={() => form.trigger('password')}
               classNames={{
-                input: 'hover:border-black-600 hover:border-2 h-[44px] mt-[16px] bg-blue-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
+                input: 'hover:border-black-600 hover:border-2 h-[44px] mt-[16px] bg-purple-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
                 label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
                 error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
                 innerInput: 'px-3 w-full text-black tablet:px-4 desktop:text-xl ',
@@ -128,7 +128,7 @@ const SignUp: React.FC = () => {
               onBlur={() => form.trigger('passwordConfirmation')}
               classNames={{
                 root: 'mt-[10px] tablet:mt-[16px]',
-                input: 'hover:border-black-600 hover:border-2 h-[44px] mt-[16px] bg-blue-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
+                input: 'hover:border-black-600 hover:border-2 h-[44px] mt-[16px] bg-purple-200 rounded-2xl tablet:mt-[20px] desktop:h-[64px]',
                 error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
                 innerInput: 'px-3 w-full text-black tablet:px-4 desktop:text-xl ',
                 section: 'absolute right-4',
@@ -145,7 +145,7 @@ const SignUp: React.FC = () => {
             onBlur={() => form.trigger('nickname')}
             classNames={{
               label: 'pl-1 font-medium text-sm tablet:text-base desktop:text-xl',
-              input: 'focus:border-black-600 focus:border-2 mt-[16px] h-[44px] bg-blue-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl',
+              input: 'focus:border-black-600 focus:border-2 mt-[16px] h-[44px] bg-purple-200 rounded-2xl px-3 w-full text-black tablet:mt-[20px] tablet:px-4 desktop:h-[64px] desktop:text-xl',
               error: 'pl-2 text-state-alert text-xs font-normal mt-[8px] tablet:text-sm desktop:text-base',
             }}
           />
@@ -160,7 +160,7 @@ const SignUp: React.FC = () => {
           </Button>
         </form>
       </Container>
-      <div className='mt-2.5 text-sm font-medium text-blue-400 w-[312px] tablet:w-[384px] desktop:w-[640px] flex justify-end tablet:text-base desktop:text-xl'>
+      <div className='mt-2.5 text-sm font-medium text-purple-400 w-[312px] tablet:w-[384px] desktop:w-[640px] flex justify-end tablet:text-base desktop:text-xl'>
         이미 가입하셨나요?
         <button className='ml-1 underline text-black-500' onClick={() => navigate('/login')}>
           로그인하기

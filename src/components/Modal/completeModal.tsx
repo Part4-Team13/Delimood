@@ -27,8 +27,8 @@ function Modal({ isOpen, onClose, message, button }: ModalProps) {
             <button
               className={`px-7 rounded-xl font-semibold transition duration-300 text-lg w-[240px] h-[48px] desktop:w-[288px] desktop:h-[64px] desktop:text-xl ${
                 button.variant === 'primary'
-                  ? 'border border-yellow-500 bg-white text-black hover:bg-blue-900 hover:text-white'
-                  : 'border border-yellow-500 bg-white text-black hover:bg-blue-200 hover:text-black'
+                  ? 'border border-yellow-500 bg-white text-black hover:bg-purple-900 hover:text-white'
+                  : 'border border-yellow-500 bg-white text-black hover:bg-purple-200 hover:text-black'
               }`}
               onClick={button.onClick}
             >

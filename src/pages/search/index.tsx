@@ -104,14 +104,14 @@ const Search = () => {
           }}
           classNames={{
             root: 'm-5 tablet:w-[384px] min-w-[312px] desktop:w-[640px]',
-            input: 'rounded-none border-0 border-b-2 border-blue-800 text-base font-normal h-[52px] tablet:h-[60px] desktop:h-[80px] tablet:text-xl desktop:text-2xl desktop:border-b-4',
+            input: 'rounded-none border-0 border-b-2 border-purple-800 text-base font-normal h-[52px] tablet:h-[60px] desktop:h-[80px] tablet:text-xl desktop:text-2xl desktop:border-b-4',
           }}
           rightSection={<CloseButton aria-label='Clear input' onClick={() => setValue('')} style={{ display: value ? undefined : 'none' }} />}
         />
 
         {recentSearches.length > 0 && <RecentSearches onSearch={handleSearch} searches={recentSearches} />}
 
-        <div className='flex flex-col items-center justify-center font-medium text-blue-800'>
+        <div className='flex flex-col items-center justify-center font-medium text-purple-800'>
           {debounced.trim() === '' ? (
             <p>검색어를 입력해주세요.</p>
           ) : isLoading ? (

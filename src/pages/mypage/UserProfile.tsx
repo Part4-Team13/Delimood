@@ -90,7 +90,7 @@ const UserProfile = () => {
             const fileInput = document.getElementById('fileInput') as HTMLInputElement;
             fileInput?.click();
           }}
-          className='absolute bottom-0 right-0 text-white bg-blue-500'
+          className='absolute bottom-0 right-0 text-white bg-purple-500'
         >
           <IconCamera size={24} />
         </ActionIcon>
@@ -105,7 +105,7 @@ const UserProfile = () => {
                 placeholder='새 닉네임'
                 className='w-[200px] desktop:w-[250px] border-none'
                 classNames={{
-                  input: 'focus:border-black-600 focus:border-1 text-base bg-blue-200 rounded-xl px-3 text-base text-black-950',
+                  input: 'focus:border-black-600 focus:border-1 text-base bg-purple-200 rounded-xl px-3 text-base text-black-950',
                 }}
               />
               <Button onClick={handleConfirm} color='blue' className='p-3 rounded-full'>

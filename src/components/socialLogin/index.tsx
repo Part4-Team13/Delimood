@@ -13,10 +13,10 @@ const SocialButton: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
 const SocialLogin: React.FC = () => {
   return (
     <div className='my-[50px] w-[312px] tablet:w-[384px] desktop:w-[640px]'>
-      <h2 className='flex items-center text-xs font-normal text-blue-400 space-between desktop:text-xl'>
-        <span className='flex-grow mx-2 border-t border-blue-400' />
+      <h2 className='flex items-center text-xs font-normal text-purple-400 space-between desktop:text-xl'>
+        <span className='flex-grow mx-2 border-t border-purple-400' />
         SNS 계정으로 간편 로그인하기
-        <span className='flex-grow mx-2 border-t border-blue-400' />
+        <span className='flex-grow mx-2 border-t border-purple-400' />
       </h2>
 
       <div className='flex items-center justify-center gap-4 mt-[24px] desktop:mt-[40px]'>

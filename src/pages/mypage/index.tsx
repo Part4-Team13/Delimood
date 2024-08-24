@@ -110,7 +110,7 @@ export default function Mypage() {
           <div className='mb-[56px] tablet:mb-[60px] desktop:mb-[164px] flex flex-col gap-6 desktop:gap-12'>
             <div className='w-[344px] tablet:w-[384px] desktop:w-[640px] flex justify-between'>
               <h2 className='text-base font-semibold text-black-600 desktop:text-2xl'>오늘의 감정</h2>
-              <span className='text-base font-normal text-blue-400 tablet:mr-2 desktop:text-xl'>{today}</span>
+              <span className='text-base font-normal text-purple-400 tablet:mr-2 desktop:text-xl'>{today}</span>
             </div>
             <EmotionList />
           </div>

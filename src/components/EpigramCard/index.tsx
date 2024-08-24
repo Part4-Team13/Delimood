@@ -24,9 +24,9 @@ function EpigramCard({ id, author, content, tags, isSeperated = false }: Epigram
           <div className={`text-black-600 flex-shrink-0 ${isSeperated ? 'line-clamp-2 tablet:line-clamp-4 desktop:line-clamp-5' : 'min-h-[48px]'}`}>
             <p>{content}</p>
           </div>
-          <span className='ml-auto text-blue-400'>- {author} -</span>
+          <span className='ml-auto text-purple-400'>- {author} -</span>
         </div>
-        <ul className={`flex text-blue-400 ml-auto w-fit mt-[8px] ${isSeperated ? 'flex-col tablet:flex-row gap-0 tablet:gap-[12px] desktop:gap-[16px]' : 'flex-row gap-[8px]'}`}>
+        <ul className={`flex text-purple-400 ml-auto w-fit mt-[8px] ${isSeperated ? 'flex-col tablet:flex-row gap-0 tablet:gap-[12px] desktop:gap-[16px]' : 'flex-row gap-[8px]'}`}>
           {tags.map((tag) => (
             <li key={tag.id} className='cursor-default'>
               {tag.name}

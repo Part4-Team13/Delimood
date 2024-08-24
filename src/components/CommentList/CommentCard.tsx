@@ -153,7 +153,7 @@ function CommentCard({ createdAt, id, content, writer, userId, isPrivate }: Comm
               <Button
                 disabled={inputTextRef.current?.value.length === 0}
                 onClick={handleClickComplete}
-                className='flex-shrink-0 bg-blue-600 text-white p-[5px] rounded-[5px] disabled:bg-button-diabled'
+                className='flex-shrink-0 bg-purple-600 text-white p-[5px] rounded-[5px] disabled:bg-button-diabled'
               >
                 완료
               </Button>
