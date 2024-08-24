@@ -20,7 +20,7 @@ const highlight = (text: string, searchTerm: string) => {
   const parts = text.split(new RegExp(`(${searchTerm})`, 'gi'));
   return parts.map((part, index) =>
     part.toLowerCase() === searchTerm.toLowerCase() ? (
-      <span key={index} style={{ color: '#5195EE' }}>
+      <span key={index} style={{ color: '#8E80E3' }}>
         {part}
       </span>
     ) : (
