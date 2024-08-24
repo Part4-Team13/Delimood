@@ -5,16 +5,17 @@ import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-qu
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
-import { Notifications, showNotification } from '@mantine/notifications';
+import { Notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/charts/styles.css';
 import './index.css';
 import '../global.css';
+import alertMessage from './components/AlertMessage.tsx';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
-    onError: (e) => showNotification({ title: 'Error', message: e.message, color: 'red' }),
+    onError: (e) => alertMessage({ title: 'Error', message: e.message, color: 'red' }),
   }),
 });
 
