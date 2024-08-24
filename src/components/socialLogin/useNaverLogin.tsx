@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import postNaver from '../../apis/postNaver';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
@@ -12,8 +11,8 @@ const useNaverLogin = () => {
     mutationFn: async ({ code, state }: { code: string; state: string }) => {
       const data = await postNaver(code, state);
 
-      Cookies.set('accessToken', data.accessToken, { expires: new Date(Date.now() + 1800 * 1000) });
-      Cookies.set('refreshToken', data.refreshToken);
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
 
       return data;
     },
