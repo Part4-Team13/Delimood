@@ -18,13 +18,13 @@ export default {
       xs: ['12px', '18px'], // font-semibold : ["12px", "20px"]
     },
     colors: {
-      background: '#F5F7FA',
+      background: '#F9F5FA',
       state: {
         alert: '#FF6577',
       },
       line: {
         bright: '#F2F2F2',
-        darker: '#CFDBEA',
+        darker: '#E8CFEA',
       },
       button: {
         default: '#454545',
@@ -54,6 +54,18 @@ export default {
         950: '#1A212D',
         default: '#5195EE',
       },
+      purple: {
+        200: '#F0ECF4',
+        400: '#D7CBE1',
+        500: '#BEABCE',
+        600: '#A48BBC',
+        300: '#8B6AA9',
+        700: '#72528E',
+        800: '#58406E',
+        900: '#3E2D4E',
+        950: '#241A2D',
+        default: '#8E80E3',
+      },
       gray: {
         100: '#DEDEDE',
         200: '#C4C4C4',
@@ -64,7 +76,6 @@ export default {
       yellow: '#FBC85B',
       orange: '#E8AA26',
       green: '#48BB98',
-      purple: '#8E80E3',
       red: '#E46E80',
       brown: '#9A695E',
     },
