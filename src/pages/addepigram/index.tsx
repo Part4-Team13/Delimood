@@ -26,7 +26,6 @@ export default function Demo() {
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
 
-  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣기
   const handleRadioChange = (value: string) => {
     if (value === '직접 입력') {
       setPlaceholder('저자 이름 입력');
@@ -43,7 +42,6 @@ export default function Demo() {
     }
   };
 
-  // NOTE: 태그 상태 관리
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState<string>('');
 
@@ -69,14 +67,15 @@ export default function Demo() {
     },
   });
 
+  const isFormValid = form.isValid();
+
   return (
-    <div className=' h-[100vh] bg-white'>
+    <div className='h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
-            // NOTE: 태그에 #을 추가
             const formattedTags = tags.map((tag) => `#${tag}`);
 
             const payload: {
@@ -92,7 +91,6 @@ export default function Demo() {
               author: rest.author,
             };
 
-            // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
             if (sourceUrl && /^https?:\/\/.+/.test(sourceUrl)) {
               payload.referenceUrl = sourceUrl;
             }
@@ -101,7 +99,6 @@ export default function Demo() {
               payload.referenceTitle = source;
             }
 
-            // NOTE: 유효하지 않은 값을 가진 필드는 제거
             if (payload.referenceUrl === '') {
               delete payload.referenceUrl;
             }
@@ -129,7 +126,7 @@ export default function Demo() {
             withAsterisk
             {...form.getInputProps('content')}
             classNames={{
-              input: `desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px] desktop:placeholder:text-xl placeholder:text-lg `,
+              input: `desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px]  desktop:placeholder:text-xl placeholder:text-lg `,
               label: 'desktop:text-xl tablet:text-lg text-md mt-[40px]',
               error: 'text-state-alert text-state-alert desktop:text-lg text-sm mt-1 float-right',
             }}
@@ -229,7 +226,10 @@ export default function Demo() {
           <Group justify='flex-center' mt='md' className='mb-[59px]'>
             <Button
               type='submit'
-              className='desktop:w-[640px] desktop:h-[64px] desktop:text-xl tablet:w-[384px] tablet:h-[48px] w-[312px] h-[48px] text-lg rounded-xl bg-button-default hover:bg-button-hover mt-4 py-0 px-4'
+              disabled={!isFormValid}
+              className={`desktop:w-[640px] desktop:h-[64px] desktop:text-xl tablet:w-[384px] tablet:h-[48px] w-[312px] h-[48px] text-lg rounded-xl ${
+                isFormValid ? 'bg-button-default hover:bg-button-hover' : 'to-button-diabled text-white'
+              } mt-4 py-0 px-4`}
             >
               작성 완료
             </Button>
