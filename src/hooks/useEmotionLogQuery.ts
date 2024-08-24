@@ -3,21 +3,28 @@ import quries from '../apis/queries';
 import { EmotionLogRequestType } from '../schema/emotionLogSchema';
 import { postEmotionLog } from '../apis/emotionLog';
 import { MutationOptions } from '../types/query';
+import { EmotionLogQueryParamsType } from '../schema/emotionLogSchema';
+import { useGetMeQuery } from './useUserQuery';
 
 // 오늘의 감정 등록
-export const usePostEmotionLog = (options: MutationOptions<EmotionLogRequestType>) => {
+export const usePostEmotionLog = (params: EmotionLogQueryParamsType, options: MutationOptions<EmotionLogRequestType>) => {
   const queryClient = useQueryClient();
+  const { data: userData } = useGetMeQuery();
+
   return useMutation({
     mutationFn: (request: EmotionLogRequestType) => postEmotionLog(request),
     ...options,
     onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries(quries.emotionLogs.today());
+      if (userData?.id) {
+        queryClient.invalidateQueries(quries.emotionLogs.monthly(params));
+      }
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context);
       }
     },
   });
 };
+
 // NOTE: 사용 방법
 // const mutation = usePostEmotionLog({
 //   onSuccess: (data, variables, context) => {
@@ -27,15 +34,24 @@ export const usePostEmotionLog = (options: MutationOptions<EmotionLogRequestType
 // mutation.mutate({ emotion: 'happy' });
 
 // 오늘의 감정 조회
-export const useGetTodayEmotionLog = () => {
-  return useQuery(quries.emotionLogs.today());
+export const useGetTodayEmotionLog = (params: EmotionLogQueryParamsType) => {
+  const { queryKey, queryFn } = quries.emotionLogs.today(params);
+
+  return useQuery({
+    queryKey,
+    queryFn,
+    enabled: !!params.userId,
+  });
 };
+
 // NOTE: 사용 방법
 // const { data, error, isLoading } = useGetTodayEmotionLog();
 
 // 월간 감정 조회
-export const useGetMonthlyEmotionLogs = () => {
-  return useQuery(quries.emotionLogs.monthly());
+export const useGetMonthlyEmotionLogs = (params: EmotionLogQueryParamsType) => {
+  return useQuery(quries.emotionLogs.monthly(params));
 };
+
 // NOTE: 사용 방법
-// const { data, error, isLoading } = useGetMonthlyEmotionLog();
+// const params = { userId: 110, year: 2024, month: 8 } as const;
+// const { data, error, isLoading } = useGetMonthlyEmotionLogs(params);

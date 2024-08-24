@@ -1,8 +1,8 @@
 import * as z from 'zod';
 
 export const PatchMeRequest = z.object({
-  image: z.string().url(),
-  nickname: z.string(),
+  image: z.string().url().optional(),
+  nickname: z.string().optional(),
 });
 
 export const IdSchema = z.object({
