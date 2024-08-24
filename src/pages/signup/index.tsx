@@ -153,7 +153,7 @@ const SignUp: React.FC = () => {
           <Button
             type='submit'
             mt='md'
-            className={`h-[44px] rounded-2xl px-3 w-full text-white text-base font-semibold desktop:h-[64px] desktop:text-xl ${isFormValid ? 'bg-black-500 hover:bg-black-500' : 'bg-blue-300'}`}
+            className={`h-[44px] rounded-2xl px-3 w-full text-white text-base font-semibold desktop:h-[64px] desktop:text-xl ${isFormValid ? 'bg-black-500 hover:bg-black-500' : 'bg-purple-300'}`}
             disabled={!isFormValid}
           >
             가입하기

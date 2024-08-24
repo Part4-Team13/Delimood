@@ -86,7 +86,7 @@ const UserProfile = () => {
         <img
           src={profileImage || profileIcon}
           alt='프로필 이미지'
-          className='w-[80px] h-[80px] rounded-full border-2 border-blue-300 desktop:w-[120px] desktop:h-[120px]'
+          className='w-[80px] h-[80px] rounded-full border-2 border-purple-300 desktop:w-[120px] desktop:h-[120px]'
           style={{ objectFit: 'cover' }}
         />
         <input type='file' accept='image/*' style={{ display: 'none' }} id='fileInput' onChange={handleImageUpload} />

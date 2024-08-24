@@ -30,7 +30,7 @@ export default {
         default: '#454545',
         hover: '#373737',
         click: '#2B2B2B',
-        diabled: '#CBD3E1',
+        diabled: '#D7CBE1',
       },
       insert: '#050505',
       black: {
@@ -56,10 +56,10 @@ export default {
       },
       purple: {
         200: '#F0ECF4',
-        400: '#D7CBE1',
-        500: '#BEABCE',
-        600: '#A48BBC',
-        300: '#8B6AA9',
+        300: '#D7CBE1',
+        400: '#BEABCE',
+        500: '#A48BBC',
+        600: '#8B6AA9',
         700: '#72528E',
         800: '#58406E',
         900: '#3E2D4E',
@@ -87,7 +87,7 @@ export default {
       },
       boxShadow: {
         mypage: '0 0 36px rgba(0, 0, 0, 0.05)',
-        epigramCard: '0 3px 12px rgba(0, 0, 0, 0.04)',
+        epigramCard: '0 3px 12px rgba(100, 0, 256, 0.04)',
         epigramdetail: '0 3px 20px rgba(0, 0, 0, 0.04)',
       },
     },

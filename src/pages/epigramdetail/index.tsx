@@ -173,7 +173,7 @@ function EpigramDetail() {
                         <img src={ico_more_vertical} alt='에피그램 수정' className='w-[24px] cursor-pointer' />
                       </button>
                     </Menu.Target>
-                    <Menu.Dropdown className='bg-background rounded-[16px] border-[1px] border-blue-300'>
+                    <Menu.Dropdown className='bg-background rounded-[16px] border-[1px] border-purple-300'>
                       <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={() => navigate(`/editepigram/${epigramId}`)}>
                         수정하기
                       </Menu.Item>
