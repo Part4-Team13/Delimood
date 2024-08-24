@@ -87,8 +87,17 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
       <ul className='mx-auto bg-yellow-300 w-fit'>
         {commentList &&
           commentList.map((comment) => (
-            <li key={comment.id} onClick={(e) => onClickCard(e, comment.epigramId)} className={pathname === `/epigrams/${comment.epigramId}` ? 'cursor-default' : 'cursor-pointer hover:bg-purple-200'}>
-              <CommentCard userId={userId} id={comment.id} createdAt={comment.createdAt} content={comment.content} writer={comment.writer} isPrivate={comment.isPrivate} />
+            <li key={comment.id} onClick={(e) => onClickCard(e, comment.epigramId)} className={pathname === `/epigrams/${comment.epigramId}` ? 'cursor-default' : 'cursor-pointer hover:bg-blue-200'}>
+              <CommentCard
+                userId={userId}
+                id={comment.id}
+                createdAt={comment.createdAt}
+                content={comment.content}
+                writer={comment.writer}
+                isPrivate={comment.isPrivate}
+                pathname={pathname}
+                epigramId={comment.epigramId}
+              />
             </li>
           ))}
       </ul>
