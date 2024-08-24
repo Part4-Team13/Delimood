@@ -5,3 +5,15 @@
 body{
     background-color: #F5F7FA;
 }
+
+.mantine-Calendar-calendarHeaderControlIcon {
+    width: 50% !important;
+    height: 50% !important;
+}
+
+@media (min-width: 1280px) {
+    .mantine-Calendar-calendarHeaderControlIcon {
+        width: 80% !important;
+        height: 80% !important; 
+    }
+}
