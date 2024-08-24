@@ -10,6 +10,9 @@ import Layout from './layout/Layout';
 import EpigramBoard from './pages/epigramboard';
 import EpigramDetail from './pages/epigramdetail';
 import EditEpigram from './pages/editepigram';
+import GooglePage from './pages/loginSocialloading/googlePage';
+import KakaoPage from './pages/loginSocialloading/kakaoPage';
+import NaverPage from './pages/loginSocialloading/naverPage';
 
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
         <Route path='board' element={<EpigramBoard />} />
         <Route path='editepigram/:id' element={<EditEpigram />} />
       </Route>
+      <Route path='login/callback/kakao' element={<KakaoPage />} />
+      <Route path='login/callback/naver' element={<NaverPage />} />
+      <Route path='login/callback/google' element={<GooglePage />} />
     </Routes>
   );
 }

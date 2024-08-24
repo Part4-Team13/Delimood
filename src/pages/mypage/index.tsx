@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { rem, Loader } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
-import { IconCheck } from '@tabler/icons-react';
+import { Loader } from '@mantine/core';
 import EmotionController from './emotionController';
 import EmotionList from '../../components/EmotionList';
 import dayjs from 'dayjs';
@@ -13,10 +11,10 @@ import MyEpigramList from './MyEpigramList';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { useGetMyCommentInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import DeleteModal from '../../components/Modal/commentDeleteModal';
+import alertMessage from '../../components/AlertMessage';
 import FixedButton from '../../components/FixedButton';
 
 export default function Mypage() {
-  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />;
   const navigate = useNavigate();
   const today = dayjs().format('YYYY.MM.DD');
 
@@ -49,24 +47,7 @@ export default function Mypage() {
     Cookies.remove('accessToken');
     Cookies.remove('refreshToken');
 
-    showNotification({
-      title: '성공적으로 로그아웃되었습니다.',
-      message: '다시 이용하시려면 로그인부탁드립니다.',
-      icon: checkIcon,
-      color: 'teal',
-      autoClose: 2000,
-      styles: () => ({
-        root: {
-          position: 'fixed',
-          top: '10%',
-          right: '3%',
-          transform: 'translate(-50%, -50%)',
-          minWidth: '300px',
-          width: '40%',
-          maxWidth: '70%',
-        },
-      }),
-    });
+    alertMessage({ title: '성공적으로 로그아웃되었습니다.', message: '다시 이용하시려면 로그인부탁드립니다.', color: 'teal' });
 
     navigate('/login');
   };

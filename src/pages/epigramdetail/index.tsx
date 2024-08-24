@@ -7,18 +7,16 @@ import CommentList from '../../components/CommentList';
 import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import { useDeleteEpigramMutation, useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
-import { Button, Menu, rem, Switch } from '@mantine/core';
+import { Button, Menu, Switch } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import { usePostCommentMutation } from '../../hooks/useCommentQuery';
-import { showNotification } from '@mantine/notifications';
-import { IconX } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import img_zigzag from '../../assets/img_zigzag.png';
 import Modal from '../../components/Modal/commentDeleteModal';
 
 import img_magnifier from '../../assets/img_magnifier.png';
 
-const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+import alertMessage from '../../components/AlertMessage';
 
 function EpigramDetail() {
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
@@ -48,24 +46,7 @@ function EpigramDetail() {
 
   const options = {
     onError: () => {
-      showNotification({
-        title: '실패했습니다.',
-        message: '죄송합니다. 다시 시도해주세요.',
-        icon: xIcon,
-        color: 'red',
-        autoClose: 2000,
-        styles: () => ({
-          root: {
-            position: 'fixed',
-            top: '10%',
-            right: '3%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '300px',
-            width: '40%',
-            maxWidth: '70%',
-          },
-        }),
-      });
+      alertMessage({ title: '실패했습니다.', message: '죄송합니다. 다시 시도해주세요.', color: 'red' });
     },
     onSettled: () => {
       queryClient.invalidateQueries();
@@ -116,24 +97,7 @@ function EpigramDetail() {
   const deleteEpigram = () => {
     deleteEpigramMutation.mutate();
     navigate('/epigrams');
-    showNotification({
-      title: '삭제하였습니다.',
-      message: '아쉽네요!',
-      icon: xIcon,
-      color: 'green',
-      autoClose: 2000,
-      styles: () => ({
-        root: {
-          position: 'fixed',
-          top: '10%',
-          right: '3%',
-          transform: 'translate(-50%, -50%)',
-          minWidth: '300px',
-          width: '40%',
-          maxWidth: '70%',
-        },
-      }),
-    });
+    alertMessage({ title: '삭제하였습니다.', message: '아쉽네요!', color: 'green' });
   };
 
   if (userData) userData.image = userData.image ? userData.image : ico_profile;

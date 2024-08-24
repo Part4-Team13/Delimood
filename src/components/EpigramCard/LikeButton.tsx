@@ -1,13 +1,10 @@
-import { showNotification } from '@mantine/notifications';
 import { useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
 import ico_bookmark_gray from '../../assets/ico_bookmark_gray.svg';
 import ico_bookmark_purple from '../../assets/ico_bookmark_purple.svg';
-import { IconX } from '@tabler/icons-react';
-import { Menu, rem } from '@mantine/core';
+import { Menu } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-
-const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+import alertMessage from '../AlertMessage';
 
 interface LikeButtonProps {
   id: number;
@@ -26,24 +23,7 @@ function LikeButton({ id }: LikeButtonProps) {
 
   const options = {
     onError: () => {
-      showNotification({
-        title: '실패했습니다.',
-        message: '죄송합니다. 다시 시도해주세요.',
-        icon: xIcon,
-        color: 'red',
-        autoClose: 2000,
-        styles: () => ({
-          root: {
-            position: 'fixed',
-            top: '10%',
-            right: '3%',
-            transform: 'translate(-50%, -50%)',
-            minWidth: '300px',
-            width: '40%',
-            maxWidth: '70%',
-          },
-        }),
-      });
+      alertMessage({ title: '실패했습니다.', message: '죄송합니다. 다시 시도해주세요.', color: 'red' });
     },
     onSettled: () => {
       queryClient.invalidateQueries();
