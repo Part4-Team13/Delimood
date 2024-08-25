@@ -26,7 +26,7 @@ export default function Demo() {
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
 
-  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣음
+  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣기
   const handleRadioChange = (value: string) => {
     if (value === '직접 입력') {
       setPlaceholder('저자 이름 입력');
@@ -104,8 +104,11 @@ export default function Demo() {
             };
 
             // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
-            if (sourceUrl && /^https?:\/\/.+/.test(sourceUrl)) {
-              payload.referenceUrl = sourceUrl;
+            if (sourceUrl && !/^https?:\/\/.+/.test(sourceUrl)) {
+              alert('http:// 또는 https://로 시작하는 URL을 입력해주세요.');
+              return; // NOTE: 유효하지 않은 경우 폼 제출 중지
+            } else if (sourceUrl) {
+              payload.referenceUrl = sourceUrl; // NOTE: URL이 유효한 경우만 추가
             }
 
             if (source) {

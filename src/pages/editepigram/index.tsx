@@ -120,8 +120,11 @@ export default function EditEpigram() {
             };
 
             // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
-            if (sourceUrl && /^https?:\/\/.+/.test(sourceUrl)) {
-              payload.referenceUrl = sourceUrl;
+            if (sourceUrl && !/^https?:\/\/.+/.test(sourceUrl)) {
+              alert('http:// 또는 https://로 시작하는 URL을 입력해주세요.');
+              return; // NOTE: 유효하지 않은 경우 폼 제출 중지
+            } else if (sourceUrl) {
+              payload.referenceUrl = sourceUrl; // NOTE: URL이 유효한 경우만 추가
             }
 
             if (source) {
