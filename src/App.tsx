@@ -1,33 +1,116 @@
+import { FC, lazy, PropsWithChildren, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Main from './pages/main';
-import Signup from './pages/signup';
-import Login from './pages/login';
-import GooglePage from './pages/loginSocialloading/googlePage';
-import KakaoPage from './pages/loginSocialloading/kakaoPage';
-import NaverPage from './pages/loginSocialloading/naverPage';
-import Epigrams from './pages/epigrams';
-import Search from './pages/search';
-import Addepigram from './pages/addepigram';
-import Mypage from './pages/mypage';
-import Layout from './layout/Layout';
-import EpigramBoard from './pages/epigramboard';
-import EpigramDetail from './pages/epigramdetail';
-import EditEpigram from './pages/editepigram';
+import Loading from './components/Loading';
+import { ErrorBoundary } from 'react-error-boundary';
+import Error from './components/Error';
+
+const Main = lazy(() => import('./pages/main'));
+const Signup = lazy(() => import('./pages/signup'));
+const Login = lazy(() => import('./pages/login'));
+const GooglePage = lazy(() => import('./pages/loginSocialloading/googlePage'));
+const KakaoPage = lazy(() => import('./pages/loginSocialloading/kakaoPage'));
+const NaverPage = lazy(() => import('./pages/loginSocialloading/naverPage'));
+const Epigrams = lazy(() => import('./pages/epigrams'));
+const Search = lazy(() => import('./pages/search'));
+const Addepigram = lazy(() => import('./pages/addepigram'));
+const Mypage = lazy(() => import('./pages/mypage'));
+const Layout = lazy(() => import('./layout/Layout'));
+const EpigramBoard = lazy(() => import('./pages/epigramboard'));
+const EpigramDetail = lazy(() => import('./pages/epigramdetail'));
+const EditEpigram = lazy(() => import('./pages/editepigram'));
 
 function App() {
+  const SuspenseWrapper: FC<PropsWithChildren> = ({ children }) => {
+    return (
+      <ErrorBoundary fallback={<Error />}>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+      </ErrorBoundary>
+    );
+  };
+
   return (
     <Routes>
       <Route path='/' element={<Layout />}>
-        <Route index element={<Main />} />
-        <Route path='signup' element={<Signup />} />
-        <Route path='login' element={<Login />} />
-        <Route path='epigrams' element={<Epigrams />} />
-        <Route path='epigrams/:id' element={<EpigramDetail />} />
-        <Route path='search' element={<Search />} />
-        <Route path='addepigram' element={<Addepigram />} />
-        <Route path='mypage' element={<Mypage />} />
-        <Route path='board' element={<EpigramBoard />} />
-        <Route path='editepigram/:id' element={<EditEpigram />} />
+        <Route
+          index
+          element={
+            <SuspenseWrapper>
+              <Main />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='signup'
+          element={
+            <SuspenseWrapper>
+              <Signup />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='login'
+          element={
+            <SuspenseWrapper>
+              <Login />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='epigrams'
+          element={
+            <SuspenseWrapper>
+              <Epigrams />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='epigrams/:id'
+          element={
+            <SuspenseWrapper>
+              <EpigramDetail />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='search'
+          element={
+            <SuspenseWrapper>
+              <Search />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='addepigram'
+          element={
+            <SuspenseWrapper>
+              <Addepigram />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='mypage'
+          element={
+            <SuspenseWrapper>
+              <Mypage />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='board'
+          element={
+            <SuspenseWrapper>
+              <EpigramBoard />
+            </SuspenseWrapper>
+          }
+        />
+        <Route
+          path='editepigram/:id'
+          element={
+            <SuspenseWrapper>
+              <EditEpigram />
+            </SuspenseWrapper>
+          }
+        />
       </Route>
       <Route path='login/callback/kakao' element={<KakaoPage />} />
       <Route path='login/callback/naver' element={<NaverPage />} />
