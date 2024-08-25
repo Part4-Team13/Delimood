@@ -100,9 +100,27 @@ export default function EditEpigram() {
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
+            // NOTE: 출처 제목과 URL 모두 비어 있을 경우 알림
+            if (!source && !sourceUrl) {
+              alert('출처 제목과 출처 URL을 모두 입력해 주세요.');
+              return;
+            }
+
+            // NOTE: 출처 제목과 URL 모두 비어 있을 경우 알림
+            if (!source && !sourceUrl) {
+              alert('출처 제목과 출처 URL을 모두 입력해 주세요.');
+              return;
+            }
+
             // NOTE: 출처 제목만 입력된 경우 URL 입력 요청
             if (source && !sourceUrl) {
               alert('출처 제목을 입력한 경우, 출처 URL도 입력해 주세요.');
+              return;
+            }
+
+            // NOTE: URL만 입력된 경우 출처 제목 입력 요청
+            if (!source && sourceUrl) {
+              alert('출처 URL을 입력한 경우, 출처 제목도 입력해 주세요.');
               return;
             }
 
@@ -154,7 +172,7 @@ export default function EditEpigram() {
           })}
           className='tablet:w-[384px] desktop:w-[640px] w-[312px] vertical-align '
         >
-          <div className='desktop:text-2xl tablet:text-xl text-lg font-semibold mb-4 mt-[56px]'>에피그램 만들기</div>
+          <div className='desktop:text-2xl tablet:text-xl text-lg font-semibold mb-4 mt-[56px]'>에피그램 수정</div>
 
           <Textarea
             label='내용'
@@ -221,7 +239,8 @@ export default function EditEpigram() {
             label='출처'
             placeholder='출처 제목 입력'
             mt='md'
-            {...form.getInputProps('source')}
+            value={form.values.source}
+            onChange={(e) => form.setFieldValue('source', e.currentTarget.value)}
             classNames={{
               input:
                 'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
@@ -267,7 +286,7 @@ export default function EditEpigram() {
                 isFormValid ? 'bg-button-default hover:bg-button-hover' : 'to-button-diabled text-white'
               } mt-4 py-0 px-4`}
             >
-              작성 완료
+              수정 완료
             </Button>
           </Group>
         </form>

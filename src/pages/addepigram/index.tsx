@@ -84,10 +84,27 @@ export default function Demo() {
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
+            // NOTE: 출처 제목과 URL 모두 비어 있을 경우 알림
+            if (!source && !sourceUrl) {
+              alert('출처 제목과 출처 URL을 모두 입력해 주세요.');
+              return;
+            }
+
+            // NOTE: 출처 제목과 URL 모두 비어 있을 경우 알림
+            if (!source && !sourceUrl) {
+              alert('출처 제목과 출처 URL을 모두 입력해 주세요.');
+              return;
+            }
 
             // NOTE: 출처 제목만 입력된 경우 URL 입력 요청
             if (source && !sourceUrl) {
               alert('출처 제목을 입력한 경우, 출처 URL도 입력해 주세요.');
+              return;
+            }
+
+            // NOTE: URL만 입력된 경우 출처 제목 입력 요청
+            if (!source && sourceUrl) {
+              alert('출처 URL을 입력한 경우, 출처 제목도 입력해 주세요.');
               return;
             }
 
