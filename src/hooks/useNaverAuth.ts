@@ -7,15 +7,15 @@ const useNaverAuth = () => {
   const location = useLocation();
   const { mutate: NaverLogin } = useNaverLogin();
 
-  const params = new URLSearchParams(location.search);
-  const code = params.get('code');
-  const state = params.get('state');
-
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const code = params.get('code');
+    const state = params.get('state');
+
     if (code && state) {
       NaverLogin({ code, state });
     }
-  }, [code, state, NaverLogin]);
+  }, [location.search, NaverLogin]);
 
   return null;
 };
