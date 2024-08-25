@@ -1,6 +1,8 @@
 import { FC, lazy, PropsWithChildren, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Loading from './components/Loading';
+import { ErrorBoundary } from 'react-error-boundary';
+import Error from './components/Error';
 
 const Main = lazy(() => import('./pages/main'));
 const Signup = lazy(() => import('./pages/signup'));
@@ -19,7 +21,11 @@ const EditEpigram = lazy(() => import('./pages/editepigram'));
 
 function App() {
   const SuspenseWrapper: FC<PropsWithChildren> = ({ children }) => {
-    return <Suspense fallback={<Loading />}>{children} </Suspense>;
+    return (
+      <ErrorBoundary fallback={<Error />}>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+      </ErrorBoundary>
+    );
   };
 
   return (
