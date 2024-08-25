@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import useKakaoLogin from '../components/socialLogin/useKakaoLogin';
 
@@ -7,15 +7,17 @@ import useKakaoLogin from '../components/socialLogin/useKakaoLogin';
 const useKakaoAuth = () => {
   const location = useLocation();
   const { mutate: kakaoLogin } = useKakaoLogin();
+  const [hasRequested, setHasRequested] = useState(false);
 
   const params = new URLSearchParams(location.search);
   const code = params.get('code');
 
   useEffect(() => {
-    if (code) {
+    if (code && !hasRequested) {
       kakaoLogin(code);
+      setHasRequested(true);
     }
-  }, [code, kakaoLogin]);
+  }, [code, kakaoLogin, hasRequested]);
 
   return null;
 };

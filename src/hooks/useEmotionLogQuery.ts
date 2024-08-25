@@ -35,8 +35,15 @@ export const usePostEmotionLog = (params: EmotionLogQueryParamsType, options: Mu
 
 // 오늘의 감정 조회
 export const useGetTodayEmotionLog = (params: EmotionLogQueryParamsType) => {
-  return useQuery(quries.emotionLogs.today(params));
+  const { queryKey, queryFn } = quries.emotionLogs.today(params);
+
+  return useQuery({
+    queryKey,
+    queryFn,
+    enabled: !!params.userId,
+  });
 };
+
 // NOTE: 사용 방법
 // const { data, error, isLoading } = useGetTodayEmotionLog();
 

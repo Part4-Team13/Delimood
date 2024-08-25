@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { LoginRequestType, LoginResponseType, SignUpRequestType, SignUpResponseType } from '../schema/authSchema';
 import { signIn, signUp } from '../apis/auth';
 import { MutationOptions } from '../types/query';
-import Cookies from 'js-cookie';
 
 export const useSignUp = (options: MutationOptions<SignUpRequestType, SignUpResponseType>) => {
   return useMutation({
@@ -17,8 +16,8 @@ export const useLogin = (options: MutationOptions<LoginRequestType, LoginRespons
     mutationFn: (data: LoginRequestType) => signIn(data),
     ...options,
     onSuccess: (data, ...args) => {
-      Cookies.set('accessToken', data.accessToken, { expires: new Date(Date.now() + 1800 * 1000) });
-      Cookies.set('refreshToken', data.refreshToken);
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
 
       if (options?.onSuccess) {
         options.onSuccess(data, ...args);

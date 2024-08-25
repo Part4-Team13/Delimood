@@ -1,5 +1,4 @@
 import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import HeaderLeft from './HeaderLeft';
 import HeaderMiddle from './HeaderMiddle';
 import { HeaderRight, HeaderRightUnAuthenticated } from './HeaderRight';
@@ -15,7 +14,7 @@ function Header() {
 
   const { pathname: pathNow } = useLocation();
   const navigate = useNavigate();
-  const accessToken = Cookies.get('accessToken');
+  const refreshToken = localStorage.getItem('refreshToken');
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -43,7 +42,7 @@ function Header() {
     >
       <HeaderLeft pathNow={pathNow} navigate={navigate} />
       <HeaderMiddle pathNow={pathNow} navigate={navigate} />
-      {accessToken ? <HeaderRight pathNow={pathNow} navigate={navigate} /> : <HeaderRightUnAuthenticated pathNow={pathNow} navigate={navigate} />}
+      {refreshToken ? <HeaderRight pathNow={pathNow} navigate={navigate} /> : <HeaderRightUnAuthenticated pathNow={pathNow} navigate={navigate} />}
     </div>
   );
 }

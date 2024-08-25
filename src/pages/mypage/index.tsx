@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { Loader } from '@mantine/core';
 import EmotionController from './emotionController';
 import EmotionList from '../../components/EmotionList';
@@ -44,8 +43,8 @@ export default function Mypage() {
   };
 
   const confirmLogout = () => {
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
 
     alertMessage({ title: '성공적으로 로그아웃되었습니다.', message: '다시 이용하시려면 로그인부탁드립니다.', color: 'teal' });
 
@@ -54,7 +53,7 @@ export default function Mypage() {
 
   if (isUserLoading) {
     return (
-      <div className='items-center justify-center flex h-screen'>
+      <div className='flex items-center justify-center h-screen'>
         <Loader color='cyan' size='lg' />
       </div>
     );

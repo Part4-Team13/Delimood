@@ -76,9 +76,14 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
     },
   );
 
-  const { data: todayEmotion, refetch } = useGetTodayEmotionLog({
-    userId: userData?.id || 0,
-  });
+  const { data: todayEmotion, refetch } = useGetTodayEmotionLog(userData?.id ? { userId: userData.id } : { userId: 0 });
+
+  // useEffect를 사용하여 userData가 존재할 때만 refetch를 호출하도록 설정.
+  useEffect(() => {
+    if (userData?.id) {
+      refetch();
+    }
+  }, [userData, refetch]);
 
   useEffect(() => {
     if (todayEmotion) {
