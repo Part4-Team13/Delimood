@@ -7,8 +7,8 @@ import { useGetEpigramDetailQuery, useUpdateEpigramMutation } from '../../hooks/
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function EditEpigram() {
-  const { id } = useParams<{ id: string }>(); // URL에서 에피그램 ID를 가져옵니다.
-  const { data: epigram, isLoading } = useGetEpigramDetailQuery(Number(id)); // 에피그램 데이터를 가져옵니다.
+  const { id } = useParams<{ id: string }>();
+  const { data: epigram, isLoading } = useGetEpigramDetailQuery(Number(id));
   const { data: userProfile } = useGetMeQuery();
   const navigate = useNavigate();
 
@@ -30,7 +30,6 @@ export default function EditEpigram() {
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState<string>('');
 
-  // NOTE: 에피그램 데이터 로드
   useEffect(() => {
     if (epigram) {
       form.setValues({
@@ -91,20 +90,24 @@ export default function EditEpigram() {
   const isFormValid = form.isValid();
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 상태 처리
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className=' h-[100vh] bg-white'>
+    <div className='h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
+            // NOTE: 출처 제목만 입력된 경우 URL 입력 요청
+            if (source && !sourceUrl) {
+              alert('출처 제목을 입력한 경우, 출처 URL도 입력해 주세요.');
+              return;
+            }
+
             // NOTE: 태그에 #을 추가
-            const formattedTags = tags.map((tag) => {
-              return tag.startsWith('#') ? tag : `#${tag}`;
-            });
+            const formattedTags = tags.map((tag) => (tag.startsWith('#') ? tag : `#${tag}`));
 
             const payload: {
               tags: string[];
@@ -119,12 +122,12 @@ export default function EditEpigram() {
               author: rest.author,
             };
 
-            // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
+            // NOTE: sourceUrl이 유효한 URL인지 확인
             if (sourceUrl && !/^https?:\/\/.+/.test(sourceUrl)) {
               alert('http:// 또는 https://로 시작하는 URL을 입력해주세요.');
-              return; // NOTE: 유효하지 않은 경우 폼 제출 중지
+              return;
             } else if (sourceUrl) {
-              payload.referenceUrl = sourceUrl; // NOTE: URL이 유효한 경우만 추가
+              payload.referenceUrl = sourceUrl;
             }
 
             if (source) {

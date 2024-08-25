@@ -85,6 +85,12 @@ export default function Demo() {
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
+            // NOTE: 출처 제목만 입력된 경우 URL 입력 요청
+            if (source && !sourceUrl) {
+              alert('출처 제목을 입력한 경우, 출처 URL도 입력해 주세요.');
+              return;
+            }
+
             // NOTE: 태그에 #을 추가
             const formattedTags = tags.map((tag) => {
               return tag.startsWith('#') ? tag : `#${tag}`;
