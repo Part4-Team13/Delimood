@@ -34,7 +34,7 @@ httpClient.interceptors.response.use(
     if (statusCode === 401 || statusCode === 403) {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) throw new Error('refreshToken 문제발생!');
+        if (!refreshToken || statusCode === 403) throw new Error('Authorization error or token problem!');
 
         // NOTE : refreshToken 토큰을 사용하여 새로운 accessToken 토큰 요청
         const response = await axios.post(`${REACT_APP_API_URL}/auth/refresh-token`, { refreshToken });

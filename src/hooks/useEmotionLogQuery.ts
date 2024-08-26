@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import quries from '../apis/queries';
 import { EmotionLogRequestType } from '../schema/emotionLogSchema';
 import { postEmotionLog } from '../apis/emotionLog';
@@ -49,7 +49,7 @@ export const useGetTodayEmotionLog = (params: EmotionLogQueryParamsType) => {
 
 // 월간 감정 조회
 export const useGetMonthlyEmotionLogs = (params: EmotionLogQueryParamsType) => {
-  return useQuery(quries.emotionLogs.monthly(params));
+  return useSuspenseQuery(quries.emotionLogs.monthly(params));
 };
 
 // NOTE: 사용 방법

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader } from '@mantine/core';
 import EmotionController from './emotionController';
 import EmotionList from '../../components/EmotionList';
 import dayjs from 'dayjs';
@@ -12,6 +11,7 @@ import { useGetMyCommentInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import DeleteModal from '../../components/Modal/commentDeleteModal';
 import alertMessage from '../../components/AlertMessage';
 import FixedButton from '../../components/FixedButton';
+import SuspenseWrapper from '../../components/SuspenseWrapper';
 
 export default function Mypage() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function Mypage() {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-  const { data: userData, isLoading: isUserLoading } = useGetMeQuery();
+  const { data: userData } = useGetMeQuery();
   const [activeTab, setActiveTab] = useState<'epigrams' | 'comments'>('epigrams');
   const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0);
   const [totalEpigramsCount, setTotalEpigramsCount] = useState<number>(0);
@@ -51,14 +51,6 @@ export default function Mypage() {
     navigate('/login');
   };
 
-  if (isUserLoading) {
-    return (
-      <div className='flex items-center justify-center h-screen'>
-        <Loader color='cyan' size='lg' />
-      </div>
-    );
-  }
-
   const userId = userData?.id;
 
   return (
@@ -81,7 +73,9 @@ export default function Mypage() {
       />
       <div className='flex flex-col mb-[114px] tablet:mb-[241px] desktop:mb-[395px] gap-14 desktop:gap-24'>
         <div className='flex flex-col items-center justify-center bg-white mt-[64px] desktop:mt-[128px] shadow-mypage rounded-[24px]'>
-          <UserProfile />
+          <SuspenseWrapper>
+            <UserProfile />
+          </SuspenseWrapper>
           <button
             onClick={handleLogout}
             className='h-[36px] w-[77px] desktop:h-[48px] desktop:w-[100px] desktop:text-xl mb-[56px] mt-[16px] desktop:mt-[24px] desktop:mb-[96px] rounded-[100px] text-sm font-normal bg-line-bright text-gray-300 hover:bg-gray-100'

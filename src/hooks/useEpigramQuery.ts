@@ -30,7 +30,7 @@ export const useGetEpigramListQuery = (params: PaginationRequest, options?: UseQ
 
 // 오늘의 에피그램 조회
 export const useGetTodayEpigramQuery = (options?: UseQueryOptions<EpigramDetailType>) => {
-  return useQuery<EpigramDetailType>({
+  return useSuspenseQuery<EpigramDetailType>({
     queryKey: quries.epigrams.todayEpigram().queryKey,
     queryFn: getTodayEpigram,
     ...options,

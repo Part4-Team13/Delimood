@@ -4,6 +4,7 @@ import EmotionList from '../../components/EmotionList';
 import AllEpigramList from './allEpigramList';
 import AllCommentList from './allCommentList';
 import FixedButton from '../../components/FixedButton';
+import SuspenseWrapper from '../../components/SuspenseWrapper';
 
 export default function Epigrams() {
   type SectionProps = {
@@ -27,7 +28,9 @@ export default function Epigrams() {
     <>
       <div className='mt-[32px] desktop:mt-[120px] flex flex-col items-center justify-center mb-[114px]'>
         <Section title='오늘의 에피그램'>
-          <TodayEpigram />
+          <SuspenseWrapper>
+            <TodayEpigram />
+          </SuspenseWrapper>
         </Section>
         {isEmotionSectionVisible && (
           <Section title='오늘의 감정은 어떤가요?' className='mt-[56px] desktop:mt-[140px]'>
