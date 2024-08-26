@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import quries from '../apis/queries';
 import { PaginationRequest } from '../schema/epigramSchema';
 import { getCommentList, getComments } from '../apis/comment';
@@ -15,7 +15,7 @@ export const useGetAllCommentsInfiniteQuery = (params: PaginationRequest) => {
 };
 
 export const useGetEpigramCommentsInfiniteQuery = (id: number, params: PaginationRequest) => {
-  return useInfiniteQuery({
+  return useSuspenseInfiniteQuery({
     queryKey: quries.epigrams.comments(id, params).queryKey,
     queryFn: ({ pageParam = 1 }) => getCommentList(id, { ...params, cursor: pageParam }),
     initialPageParam: 0,

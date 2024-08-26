@@ -1,10 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import quries from '../apis/queries';
 import { GetUserReponseType, GetUserRequestType, PatchMeRequestType, GetUserCommentRequestType } from '../schema/userSchema';
 import { MutationOptions } from '../types/query';
 import { updateMe, updateImage } from '../apis/user';
 
-export const useGetMeQuery = () => useQuery(quries.user.getMe());
+export const useGetMeQuery = () => useSuspenseQuery(quries.user.getMe());
 
 export const useMeQuery = () => useQuery(quries.user.getMe());
 

@@ -81,15 +81,14 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
         <div className='mx-auto w-fit'>
           <div className='flex justify-between text-lg desktop:text-xl'>
             <ul className='flex gap-[16px] text-blue-400 cursor-default'>
-              {data &&
-                data.tags.map((tag) => (
-                  <li key={tag.id}>
-                    {tag.name.startsWith('#') ? '' : '#'}
-                    {tag.name}
-                  </li>
-                ))}
+              {data.tags.map((tag) => (
+                <li key={tag.id}>
+                  {tag.name.startsWith('#') ? '' : '#'}
+                  {tag.name}
+                </li>
+              ))}
             </ul>
-            {userId === data?.writerId && (
+            {userId === data.writerId && (
               <Menu>
                 <Menu.Target>
                   <button>
@@ -107,12 +106,8 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
               </Menu>
             )}
           </div>
-          {data && (
-            <>
-              <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px] w-[312px] tablet:w-[384px] desktop:w-[640px] cursor-default'>{data!.content}</p>
-              <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl cursor-default'>- {data!.author} -</span>
-            </>
-          )}
+          <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px] w-[312px] tablet:w-[384px] desktop:w-[640px] cursor-default'>{data!.content}</p>
+          <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl cursor-default'>- {data!.author} -</span>
           <ul className='flex gap-[8px] justify-center items-center mt-[32px] desktop:mt-[36px]'>
             <li>
               <button
@@ -123,15 +118,15 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
                 <span>{likeCount}</span>
               </button>
             </li>
-            {data?.referenceTitle && (
+            {data.referenceTitle && (
               <li
                 onClick={() => {
                   window.open(data!.referenceUrl!, '_blank');
                 }}
               >
                 <button className='text-gray-300 bg-line-bright hover:bg-gray-100 rounded-[100px] flex items-center text-md desktop:text-xl p-[6px_14px] h-fit cursor-pointer'>
-                  <span> {data!.referenceTitle}</span>
-                  {data!.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
+                  <span> {data.referenceTitle}</span>
+                  {data.referenceUrl && <img src={ico_external_link} alt='새 창으로 이동' className='w-[20px] desktop:w-[36px]' />}
                 </button>
               </li>
             )}
