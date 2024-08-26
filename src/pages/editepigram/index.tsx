@@ -7,8 +7,8 @@ import { useGetEpigramDetailQuery, useUpdateEpigramMutation } from '../../hooks/
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function EditEpigram() {
-  const { id } = useParams<{ id: string }>(); // URL에서 에피그램 ID를 가져옵니다.
-  const { data: epigram, isLoading } = useGetEpigramDetailQuery(Number(id)); // 에피그램 데이터를 가져옵니다.
+  const { id } = useParams<{ id: string }>();
+  const { data: epigram, isLoading } = useGetEpigramDetailQuery(Number(id));
   const { data: userProfile } = useGetMeQuery();
   const navigate = useNavigate();
 
@@ -22,6 +22,8 @@ export default function EditEpigram() {
     validate: {
       content: hasLength({ min: 1, max: 500 }, '500자 이내로 입력해주세요'),
       author: isNotEmpty('저자를 입력해주세요.'),
+      source: isNotEmpty('출처 제목을 입력해주세요.'),
+      sourceUrl: isNotEmpty('URL을 입력해주세요.'),
     },
   });
 
@@ -30,7 +32,6 @@ export default function EditEpigram() {
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState<string>('');
 
-  // NOTE: 에피그램 데이터 로드
   useEffect(() => {
     if (epigram) {
       form.setValues({
@@ -62,11 +63,16 @@ export default function EditEpigram() {
     }
   };
 
+  // NOTE: 태그 상태 관리
+
   const addTag = () => {
     const trimmedTag = newTag.trim();
+
     if (trimmedTag && trimmedTag.length <= 10) {
+      // NOTE: 사용자가 #을 붙인 태그명과 #을 붙이지 않은 태그명의 중복 검사 실행
       const normalizedTag = trimmedTag.startsWith('#') ? trimmedTag.slice(1) : trimmedTag;
       const tagExists = tags.some((tag) => (tag.startsWith('#') ? tag.slice(1) : tag) === normalizedTag);
+
       if (tagExists) {
         alert('이미 태그가 있습니다.');
       } else if (tags.length < 3) {
@@ -91,11 +97,11 @@ export default function EditEpigram() {
   const isFormValid = form.isValid();
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 상태 처리
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className=' h-[100vh] bg-white'>
+    <div className='h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
         <form
           onSubmit={form.onSubmit((values) => {
@@ -120,8 +126,11 @@ export default function EditEpigram() {
             };
 
             // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
-            if (sourceUrl && /^https?:\/\/.+/.test(sourceUrl)) {
-              payload.referenceUrl = sourceUrl;
+            if (sourceUrl && !/^https?:\/\/.+/.test(sourceUrl)) {
+              alert('http:// 또는 https://로 시작하는 URL을 입력해주세요.');
+              return; // NOTE: 유효하지 않은 경우 폼 제출 중지
+            } else if (sourceUrl) {
+              payload.referenceUrl = sourceUrl; // NOTE: URL이 유효한 경우만 추가
             }
 
             if (source) {
@@ -148,7 +157,7 @@ export default function EditEpigram() {
           })}
           className='tablet:w-[384px] desktop:w-[640px] w-[312px] vertical-align '
         >
-          <div className='desktop:text-2xl tablet:text-xl text-lg font-semibold mb-4 mt-[56px]'>에피그램 만들기</div>
+          <div className='desktop:text-2xl tablet:text-xl text-lg font-semibold mb-4 mt-[56px]'>에피그램 수정</div>
 
           <Textarea
             label='내용'
@@ -210,29 +219,31 @@ export default function EditEpigram() {
               }}
             />
           </Input.Wrapper>
+          <Input.Wrapper>
+            <TextInput
+              label='출처'
+              withAsterisk
+              placeholder='출처 제목 입력'
+              mt='md'
+              value={form.values.source}
+              onChange={(e) => form.setFieldValue('source', e.currentTarget.value)}
+              classNames={{
+                input:
+                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
+                label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
+              }}
+            />
 
-          <TextInput
-            label='출처'
-            placeholder='출처 제목 입력'
-            mt='md'
-            {...form.getInputProps('source')}
-            classNames={{
-              input:
-                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
-              label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
-            }}
-          />
-
-          <Input
-            placeholder='URL (ex. https://www.website.com)'
-            mt='md'
-            {...form.getInputProps('sourceUrl')}
-            classNames={{
-              input:
-                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
-            }}
-          />
-
+            <Input
+              placeholder='URL (ex. https://www.website.com)'
+              mt='md'
+              {...form.getInputProps('sourceUrl')}
+              classNames={{
+                input:
+                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+              }}
+            />
+          </Input.Wrapper>
           <Text className='desktop:text-xl tablet:text-lg text-md mt-[54px]'>태그</Text>
           <div className='mt-4'>
             <Input
@@ -261,7 +272,7 @@ export default function EditEpigram() {
                 isFormValid ? 'bg-button-default hover:bg-button-hover' : 'to-button-diabled text-white'
               } mt-4 py-0 px-4`}
             >
-              작성 완료
+              수정 완료
             </Button>
           </Group>
         </form>

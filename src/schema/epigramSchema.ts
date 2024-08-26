@@ -86,8 +86,8 @@ export const EpigramDetail = z.object({
 /* Patch 에피그램 작성 */
 export const UpdateEpigramRequest = z.object({
   tags: z.array(TagName).max(3),
-  referenceUrl: z.string().url(),
-  referenceTitle: z.string().max(100),
+  referenceUrl: z.string().url().optional(),
+  referenceTitle: z.string().max(100).optional(),
   author: Author,
   content: Content,
 });
