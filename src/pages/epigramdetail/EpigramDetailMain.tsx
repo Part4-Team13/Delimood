@@ -112,7 +112,7 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
             <li>
               <button
                 onClick={onClickLikeButton}
-                className={`flex gap-[4px] text-white rounded-[100px] items-center h-fit p-[6px_14px] cursor-pointer ${like ? 'bg-state-alert hover:bg-red' : 'bg-button-default hover:bg-button-hover'}`}
+                className={`flex gap-[4px] text-white rounded-[100px] items-center h-fit p-[6px_14px] cursor-pointer ${like ? 'bg-purple-300 hover:bg-purple-400' : 'bg-button-default hover:bg-button-hover'}`}
               >
                 <img src={ico_like} alt='좋아요' className='w-[20px] desktop:w-[36px]' />
                 <span>{likeCount}</span>
