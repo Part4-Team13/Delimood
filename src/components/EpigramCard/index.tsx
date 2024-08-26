@@ -19,7 +19,7 @@ function EpigramCard({ id, author, content, tags, isSeperated = false }: Epigram
         className={`relative font-paraph text-md tablet:text-lg desktop:text-2xl ${isSeperated ? 'w-[152px] tablet:w-[294px] desktop:w-[585px]' : 'w-[312px] tablet:w-[384px] desktop:w-[640px]'} ${tags.length == 0 ? 'mb-[24px] tablet:mb-[26px] desktop:mb-[32px]' : ''}`}
       >
         <div
-          className={`shadow-epigramCard striped desktop:striped-desktop cursor-pointer rounded-[16px] p-[23px] flex flex-col overflow-hidden ${isSeperated ? 'h-[110px] tablet:h-[180px] desktop:h-[259px] justify-between' : ''}`}
+          className={`shadow-epigramCard striped desktop:striped-desktop cursor-pointer rounded-[16px] p-[23px] flex flex-col overflow-hidden transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg ${isSeperated ? 'h-[110px] tablet:h-[180px] desktop:h-[259px] justify-between' : ''}`}
         >
           <div className={`text-black-600 flex-shrink-0 ${isSeperated ? 'line-clamp-2 tablet:line-clamp-4 desktop:line-clamp-5' : 'min-h-[48px]'}`}>
             <p>{content}</p>
