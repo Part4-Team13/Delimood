@@ -1,7 +1,6 @@
 import { Button, Switch } from '@mantine/core';
 import { useRef, useState } from 'react';
 import { usePostCommentMutation } from '../../hooks/useCommentQuery';
-import alertMessage from '../../components/AlertMessage';
 import { useQueryClient } from '@tanstack/react-query';
 
 function AddComment({ id, userImage }: { id: number; userImage: string }) {
@@ -13,9 +12,6 @@ function AddComment({ id, userImage }: { id: number; userImage: string }) {
   const queryClient = useQueryClient();
 
   const options = {
-    onError: () => {
-      alertMessage({ title: '실패했습니다.', message: '죄송합니다. 다시 시도해주세요.', color: 'red' });
-    },
     onSettled: () => {
       queryClient.invalidateQueries();
     },

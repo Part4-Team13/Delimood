@@ -17,9 +17,6 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
 
   const queryClient = useQueryClient();
   const options = {
-    onError: () => {
-      alertMessage({ title: '실패했습니다.', message: '죄송합니다. 다시 시도해주세요.', color: 'red' });
-    },
     onSettled: () => {
       queryClient.invalidateQueries();
       if (data) {
