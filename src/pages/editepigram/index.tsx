@@ -22,6 +22,8 @@ export default function EditEpigram() {
     validate: {
       content: hasLength({ min: 1, max: 500 }, '500자 이내로 입력해주세요'),
       author: isNotEmpty('저자를 입력해주세요.'),
+      source: isNotEmpty('출처 제목을 입력해주세요.'),
+      sourceUrl: isNotEmpty('URL을 입력해주세요.'),
     },
   });
 
@@ -61,11 +63,16 @@ export default function EditEpigram() {
     }
   };
 
+  // NOTE: 태그 상태 관리
+
   const addTag = () => {
     const trimmedTag = newTag.trim();
+
     if (trimmedTag && trimmedTag.length <= 10) {
+      // NOTE: 사용자가 #을 붙인 태그명과 #을 붙이지 않은 태그명의 중복 검사 실행
       const normalizedTag = trimmedTag.startsWith('#') ? trimmedTag.slice(1) : trimmedTag;
       const tagExists = tags.some((tag) => (tag.startsWith('#') ? tag.slice(1) : tag) === normalizedTag);
+
       if (tagExists) {
         alert('이미 태그가 있습니다.');
       } else if (tags.length < 3) {
@@ -100,32 +107,10 @@ export default function EditEpigram() {
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
-            // NOTE: 출처 제목과 URL 모두 비어 있을 경우 알림
-            if (!source && !sourceUrl) {
-              alert('출처 제목과 출처 URL을 모두 입력해 주세요.');
-              return;
-            }
-
-            // NOTE: 출처 제목과 URL 모두 비어 있을 경우 알림
-            if (!source && !sourceUrl) {
-              alert('출처 제목과 출처 URL을 모두 입력해 주세요.');
-              return;
-            }
-
-            // NOTE: 출처 제목만 입력된 경우 URL 입력 요청
-            if (source && !sourceUrl) {
-              alert('출처 제목을 입력한 경우, 출처 URL도 입력해 주세요.');
-              return;
-            }
-
-            // NOTE: URL만 입력된 경우 출처 제목 입력 요청
-            if (!source && sourceUrl) {
-              alert('출처 URL을 입력한 경우, 출처 제목도 입력해 주세요.');
-              return;
-            }
-
             // NOTE: 태그에 #을 추가
-            const formattedTags = tags.map((tag) => (tag.startsWith('#') ? tag : `#${tag}`));
+            const formattedTags = tags.map((tag) => {
+              return tag.startsWith('#') ? tag : `#${tag}`;
+            });
 
             const payload: {
               tags: string[];
@@ -140,12 +125,12 @@ export default function EditEpigram() {
               author: rest.author,
             };
 
-            // NOTE: sourceUrl이 유효한 URL인지 확인
+            // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
             if (sourceUrl && !/^https?:\/\/.+/.test(sourceUrl)) {
               alert('http:// 또는 https://로 시작하는 URL을 입력해주세요.');
-              return;
+              return; // NOTE: 유효하지 않은 경우 폼 제출 중지
             } else if (sourceUrl) {
-              payload.referenceUrl = sourceUrl;
+              payload.referenceUrl = sourceUrl; // NOTE: URL이 유효한 경우만 추가
             }
 
             if (source) {
@@ -234,30 +219,31 @@ export default function EditEpigram() {
               }}
             />
           </Input.Wrapper>
+          <Input.Wrapper>
+            <TextInput
+              label='출처'
+              withAsterisk
+              placeholder='출처 제목 입력'
+              mt='md'
+              value={form.values.source}
+              onChange={(e) => form.setFieldValue('source', e.currentTarget.value)}
+              classNames={{
+                input:
+                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
+                label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
+              }}
+            />
 
-          <TextInput
-            label='출처'
-            placeholder='출처 제목 입력'
-            mt='md'
-            value={form.values.source}
-            onChange={(e) => form.setFieldValue('source', e.currentTarget.value)}
-            classNames={{
-              input:
-                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
-              label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
-            }}
-          />
-
-          <Input
-            placeholder='URL (ex. https://www.website.com)'
-            mt='md'
-            {...form.getInputProps('sourceUrl')}
-            classNames={{
-              input:
-                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
-            }}
-          />
-
+            <Input
+              placeholder='URL (ex. https://www.website.com)'
+              mt='md'
+              {...form.getInputProps('sourceUrl')}
+              classNames={{
+                input:
+                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+              }}
+            />
+          </Input.Wrapper>
           <Text className='desktop:text-xl tablet:text-lg text-md mt-[54px]'>태그</Text>
           <div className='mt-4'>
             <Input

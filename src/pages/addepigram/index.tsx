@@ -20,6 +20,8 @@ export default function Demo() {
     validate: {
       content: hasLength({ min: 1, max: 500 }, '500자 이내로 입력해주세요'),
       author: isNotEmpty('저자를 입력해주세요.'),
+      source: isNotEmpty('출처 제목을 입력해주세요.'),
+      sourceUrl: isNotEmpty('URL을 입력해주세요.'),
     },
   });
 
@@ -84,17 +86,6 @@ export default function Demo() {
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
-            // NOTE: 출처 제목과 URL 모두 비어 있을 경우 알림
-            if (!source && !sourceUrl) {
-              alert('출처 제목과 출처 URL을 모두 입력해 주세요.');
-              return;
-            }
-
-            // NOTE: 출처 제목과 URL 모두 비어 있을 경우 알림
-            if (!source && !sourceUrl) {
-              alert('출처 제목과 출처 URL을 모두 입력해 주세요.');
-              return;
-            }
 
             // NOTE: 출처 제목만 입력된 경우 URL 입력 요청
             if (source && !sourceUrl) {
@@ -221,27 +212,31 @@ export default function Demo() {
             />
           </Input.Wrapper>
 
-          <TextInput
-            label='출처'
-            placeholder='출처 제목 입력'
-            mt='md'
-            {...form.getInputProps('source')}
-            classNames={{
-              input:
-                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
-              label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
-            }}
-          />
+          <Input.Wrapper>
+            <TextInput
+              label='출처'
+              placeholder='출처 제목 입력'
+              withAsterisk
+              mt='md'
+              value={form.values.source}
+              onChange={(e) => form.setFieldValue('source', e.currentTarget.value)}
+              classNames={{
+                input:
+                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
+                label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
+              }}
+            />
 
-          <Input
-            placeholder='URL (ex. https://www.website.com)'
-            mt='md'
-            {...form.getInputProps('sourceUrl')}
-            classNames={{
-              input:
-                'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
-            }}
-          />
+            <Input
+              placeholder='URL (ex. https://www.website.com)'
+              mt='md'
+              {...form.getInputProps('sourceUrl')}
+              classNames={{
+                input:
+                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+              }}
+            />
+          </Input.Wrapper>
 
           <Text className='desktop:text-xl tablet:text-lg text-md mt-[54px]'>태그</Text>
           <div className='mt-4'>
