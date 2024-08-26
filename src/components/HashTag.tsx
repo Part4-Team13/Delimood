@@ -13,7 +13,7 @@ function HashTag({ tags, removeTag, onTagClick }: HashTagProps) {
             <span className={`p-1 text-base tablet:text-xl desktop:text-2xl font-normal ${onTagClick ? 'cursor-pointer' : ''}`} onClick={() => onTagClick?.(tag)}>
               {tag}
             </span>
-            <button onClick={() => removeTag(idx)} className='ml-2 text-xl text-button-default'>
+            <button type='button' onClick={() => removeTag(idx)} className='ml-2 text-xl text-button-default'>
               &times;
             </button>
           </div>

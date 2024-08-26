@@ -39,7 +39,7 @@ export const useGetTodayEpigramQuery = (options?: UseQueryOptions<EpigramDetailT
 
 // 에피그램 상세 조회
 export const useGetEpigramDetailQuery = (id: number, options?: UseQueryOptions<EpigramDetailType>) => {
-  return useQuery<EpigramDetailType>({
+  return useSuspenseQuery<EpigramDetailType>({
     queryKey: quries.epigrams.detailEpigram(id).queryKey,
     queryFn: () => getEpigramDetail(id),
     ...options,

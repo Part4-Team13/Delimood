@@ -12,6 +12,8 @@ const useNaverAuth = () => {
     const code = params.get('code');
     const state = params.get('state');
 
+    console.log(code, state);
+
     if (code && state) {
       NaverLogin({ code, state });
     }

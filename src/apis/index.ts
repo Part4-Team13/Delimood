@@ -30,7 +30,7 @@ httpClient.interceptors.response.use(
     const originalRequest = error.config;
     const statusCode = error.response?.status;
 
-    // NOTE : 인증 오류 401 에러가 발생한 경우
+    // NOTE : 인증 오류 401, 403 에러가 발생한 경우
     if (statusCode === 401 || statusCode === 403) {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -46,10 +46,10 @@ httpClient.interceptors.response.use(
         return httpClient(originalRequest);
       } catch (refreshError) {
         //Refactor : refreshToken이 만료되었거나 다른 오류 발생 시 로그아웃 처리, 알림 메시지 후 로그인 창으로 이동
-        alertMessage({ title: '로그인이 만료되었습니다.', message: '다시 로그인부탁드립니다.', color: 'red' });
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         window.location.href = '/login';
+        alertMessage({ title: '로그인 기록이 만료되었습니다.', message: '다시 로그인 부탁드립니다.', color: 'red' });
       }
     }
 
