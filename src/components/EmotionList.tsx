@@ -19,7 +19,7 @@ const emotions = [
 const colorMap: { [color: string]: string } = {
   yellow: 'border-yellow',
   green: 'border-green',
-  purple: 'border-purple',
+  purple: 'border-purple-default',
   blue: 'border-blue-default',
   red: 'border-red',
 };

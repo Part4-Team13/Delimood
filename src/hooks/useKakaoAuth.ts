@@ -12,6 +12,8 @@ const useKakaoAuth = () => {
   const params = new URLSearchParams(location.search);
   const code = params.get('code');
 
+  console.log(code);
+
   useEffect(() => {
     if (code && !hasRequested) {
       kakaoLogin(code);
