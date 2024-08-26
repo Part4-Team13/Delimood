@@ -5,7 +5,7 @@ import { useGetMeQuery, useUpdateMe, useUpdateImage } from '../../hooks/useUserQ
 import profileIcon from '../../assets/ico_profile.svg';
 
 const UserProfile = () => {
-  const { data, isLoading, error } = useGetMeQuery();
+  const { data } = useGetMeQuery();
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [newNickname, setNewNickname] = useState<string>('');
   const [editing, setEditing] = useState<boolean>(false);
@@ -44,9 +44,6 @@ const UserProfile = () => {
       setNewNickname(data.nickname);
     }
   }, [data]);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
 
   const userNickname = data?.nickname || '사용자 닉네임';
 
