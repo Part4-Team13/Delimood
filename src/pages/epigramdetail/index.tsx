@@ -3,7 +3,6 @@ import ico_like from '../../assets/ico_like.svg';
 import ico_external_link from '../../assets/ico_external_link.svg';
 import ico_more_vertical from '../../assets/ico_more_vertical.svg';
 import ico_profile from '../../assets/ico_profile.svg';
-import CommentList from '../../components/CommentList';
 import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import { useDeleteEpigramMutation, useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
@@ -13,10 +12,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import img_zigzag from '../../assets/img_zigzag.png';
 import Modal from '../../components/Modal/commentDeleteModal';
 
-import img_magnifier from '../../assets/img_magnifier.png';
-
 import alertMessage from '../../components/AlertMessage';
 import AddComment from './AddComment';
+import EpigramCommentList from './EpigramCommentList';
 
 function EpigramDetail() {
   const [likeCount, setLikeCount] = useState<number>(0);
@@ -27,7 +25,7 @@ function EpigramDetail() {
   const { id } = useParams();
   const epigramId: number = Number(id);
   const { data: userData } = useGetMeQuery();
-  const { data: commentData, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
+  const { data: commentData } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
   const { data, isLoading, isFetched } = useGetEpigramDetailQuery(epigramId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -157,18 +155,8 @@ function EpigramDetail() {
               <>
                 <div className='text-lg desktop:text-xl font-bold w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto mb-[16px] tablet:mb-[24px]'>댓글({commentData?.pages[0].totalCount})</div>
                 <AddComment id={epigramId} userImage={userData.image} />
+                <EpigramCommentList epigramId={epigramId} userId={userData.id} />
               </>
-            )}
-
-            {commentData?.pages[0].totalCount == 0 ? (
-              <div className='cursor-default flex flex-col w-fit mx-auto items-center gap-[8px] desktop:gap-[24px] mb-[294px] mt-[80px] tablet:mb-[210px] desktop:mb-[232px] desktop:mt-[124px]'>
-                <img src={img_magnifier} alt='돋보기 아이콘' className='w-[96px] desktop:w-[144px]' />
-                <p className='text-center text-md desktop:text-xl'>
-                  아직 댓글이 없어요! <br />첫 번째 댓글 작성자가 되어보세요.
-                </p>
-              </div>
-            ) : (
-              <CommentList data={commentData} fetchNextPage={fetchNextPage} isFetching={isFetching} isInfiniteScroll userId={userData?.id} />
             )}
           </div>
         </div>
