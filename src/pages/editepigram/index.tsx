@@ -101,8 +101,8 @@ export default function EditEpigram() {
   }
 
   return (
-    <div className='h-[100vh] bg-white'>
-      <div className='flex items-center bg-white justify-center'>
+    <div className='min-h-screen overflow-y-auto bg-white'>
+      <div className='flex items-center justify-center bg-white'>
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
