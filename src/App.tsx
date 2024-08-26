@@ -2,6 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 import Main from './pages/main';
 import Signup from './pages/signup';
 import Login from './pages/login';
+import GooglePage from './pages/loginSocialloading/googlePage';
+import KakaoPage from './pages/loginSocialloading/kakaoPage';
+import NaverPage from './pages/loginSocialloading/naverPage';
 import Epigrams from './pages/epigrams';
 import Search from './pages/search';
 import Addepigram from './pages/addepigram';
@@ -10,9 +13,6 @@ import Layout from './layout/Layout';
 import EpigramBoard from './pages/epigramboard';
 import EpigramDetail from './pages/epigramdetail';
 import EditEpigram from './pages/editepigram';
-import GooglePage from './pages/loginSocialloading/googlePage';
-import KakaoPage from './pages/loginSocialloading/kakaoPage';
-import NaverPage from './pages/loginSocialloading/naverPage';
 
 function App() {
   return (
