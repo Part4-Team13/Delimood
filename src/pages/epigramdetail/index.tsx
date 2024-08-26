@@ -17,16 +17,14 @@ function EpigramDetail() {
 
   return (
     <>
-      <div className='overflow-hidden'>
-        {userData && (
-          <>
-            <EpigramDetailMain epigramId={epigramId} userId={userData?.id} />
-            <div className='text-lg desktop:text-xl font-bold w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto mb-[16px] tablet:mb-[24px]'>댓글({commentData?.pages[0].totalCount})</div>
-            <AddComment id={epigramId} userImage={userData.image} />
-            <EpigramCommentList epigramId={epigramId} userId={userData.id} />
-          </>
-        )}
-      </div>
+      {userData && (
+        <div className='overflow-hidden'>
+          <EpigramDetailMain epigramId={epigramId} userId={userData?.id} />
+          <div className='text-lg desktop:text-xl font-bold w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto mb-[16px] tablet:mb-[24px]'>댓글({commentData?.pages[0].totalCount})</div>
+          <AddComment id={epigramId} userImage={userData.image} />
+          <EpigramCommentList epigramId={epigramId} userId={userData.id} />
+        </div>
+      )}
     </>
   );
 }
