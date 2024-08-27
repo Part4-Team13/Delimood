@@ -97,8 +97,8 @@ const DemoContent = () => {
   const isFormValid = form.isValid();
 
   return (
-    <div className='h-[100vh] bg-white'>
-      <div className='flex items-center bg-white justify-center'>
+    <div className='min-h-screen overflow-y-auto bg-white'>
+      <div className='flex items-center justify-center bg-white'>
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
@@ -173,7 +173,7 @@ const DemoContent = () => {
             withAsterisk
             {...form.getInputProps('content')}
             classNames={{
-              input: `desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px] desktop:placeholder:text-xl placeholder:text-lg `,
+              input: `focus:border-black-600 focus:border-2 desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px] desktop:placeholder:text-xl placeholder:text-lg `,
               label: 'desktop:text-xl tablet:text-lg text-md mt-[40px]',
               error: 'text-state-alert text-state-alert desktop:text-lg text-sm mt-1 float-right',
             }}
@@ -223,7 +223,7 @@ const DemoContent = () => {
               disabled={disabled}
               classNames={{
                 input:
-                  'desktop:w-[640px] desktop:h-[64px] desktop:placeholder:text-xl desktop:text-xl text-lg placeholder:text-lg rounded-[12px] mt-[24px] py-[0px] px-[16px] desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px',
+                  'focus:border-black-600 focus:border-2 desktop:w-[640px] desktop:h-[64px] desktop:placeholder:text-xl desktop:text-xl text-lg placeholder:text-lg rounded-[12px] mt-[24px] py-[0px] px-[16px] desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px',
               }}
             />
           </Input.Wrapper>
@@ -238,7 +238,7 @@ const DemoContent = () => {
               onChange={(e) => form.setFieldValue('source', e.currentTarget.value)}
               classNames={{
                 input:
-                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
+                  'focus:border-black-600 focus:border-2 desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
                 label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
               }}
             />
@@ -249,7 +249,7 @@ const DemoContent = () => {
               {...form.getInputProps('sourceUrl')}
               classNames={{
                 input:
-                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+                  'focus:border-black-600 focus:border-2 desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
               }}
             />
           </Input.Wrapper>
@@ -268,7 +268,7 @@ const DemoContent = () => {
               }}
               classNames={{
                 input:
-                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+                  'focus:border-black-600 focus:border-2 desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
               }}
             />
             <HashTag tags={tags} removeTag={removeTag} />

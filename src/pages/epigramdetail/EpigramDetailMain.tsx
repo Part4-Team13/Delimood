@@ -20,7 +20,6 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
   const queryClient = useQueryClient();
   const options = {
     onSuccess: () => {
-      console.log(data.isLiked);
       queryClient.invalidateQueries();
       setLike((prev) => !prev);
     },
@@ -98,7 +97,7 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
             )}
           </div>
           <p className='text-2xl font-paraph my-[16px] tablet:my-[24px] desktop:my-[32px] w-[312px] tablet:w-[384px] desktop:w-[640px] cursor-default'>{data!.content}</p>
-          <span className='text-blue-400 font-paraph block text-right text-lg tablet:text-xl desktop:text-2xl cursor-default'>- {data!.author} -</span>
+          <span className='block text-lg text-right text-blue-400 cursor-default font-paraph tablet:text-xl desktop:text-2xl'>- {data!.author} -</span>
           <ul className='flex gap-[8px] justify-center items-center mt-[32px] desktop:mt-[36px]'>
             <li>
               <button

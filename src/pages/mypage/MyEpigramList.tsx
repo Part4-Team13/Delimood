@@ -14,12 +14,12 @@ const MyEpigramList: React.FC<MyEpigramListProps> = ({ userId, onTotalCountFetch
   const { data, fetchNextPage, isFetching } = useGetEpigramListInfiniteQuery({ limit: 3, writerId: userId });
 
   useEffect(() => {
-    if (data?.pages?.[0]?.totalCount !== undefined) {
+    if (data.pages?.[0].totalCount) {
       onTotalCountFetched(data.pages[0].totalCount);
     }
   }, [data, onTotalCountFetched]);
 
-  const isEmpty = data?.pages?.[0]?.totalCount === 0;
+  const isEmpty = data.pages?.[0].totalCount === 0;
 
   const navigate = useNavigate();
   const onClickMyEpigramList = () => {

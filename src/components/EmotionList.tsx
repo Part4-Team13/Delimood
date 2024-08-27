@@ -59,40 +59,33 @@ interface EmotionListProps {
 
 function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
   const [selectedEmotion, setSelectedEmotion] = useState<string>('');
-  const { data: userData, isLoading: userLoading } = useGetMeQuery();
+  const { data: userData } = useGetMeQuery();
 
   const [isHidden, setIsHidden] = useState(false);
   const mutation = usePostEmotionLog(
-    { userId: userData?.id || 0, year: new Date().getFullYear(), month: new Date().getMonth() + 1 },
+    { userId: userData.id, year: new Date().getFullYear(), month: new Date().getMonth() + 1 },
     {
+      onSuccess: () => {
+        alertMessage({ title: '오늘 하루도 화이팅하시고, 행복한 하루되세요', message: '감정 등록에 성공했습니다.', color: 'teal' });
+      },
       onError: () => {
         alertMessage({ title: '죄송합니다. 다시 시도해주세요.', message: '감정 등록에 실패했습니다.', color: 'red' });
-      },
-      onSuccess: () => {
-        if (userData?.id) {
-          refetch();
-        }
       },
     },
   );
 
-  const { data: todayEmotion, refetch } = useGetTodayEmotionLog(userData?.id ? { userId: userData.id } : { userId: 0 });
+  const { data: todayEmotion } = useGetTodayEmotionLog({ userId: userData.id });
 
-  // useEffect를 사용하여 userData가 존재할 때만 refetch를 호출하도록 설정.
-  useEffect(() => {
-    if (userData?.id) {
-      refetch();
-    }
-  }, [userData, refetch]);
-
+  //NOTE:이미 등록된 감정 불러와서 테두리 표시해주기
   useEffect(() => {
     if (todayEmotion) {
       setSelectedEmotion(todayEmotion.emotion);
     }
   }, [todayEmotion]);
 
+  //NOTE:에피그램 페이지에서 감정 등록 후 컴포넌트 숨기기
   useEffect(() => {
-    if (!hideAfterPost || !userData) return;
+    if (!hideAfterPost) return;
 
     const lastPostDateKey = `lastPostDate_${userData.id}`;
     const lastPostDate = localStorage.getItem(lastPostDateKey);
@@ -107,11 +100,11 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
 
   const emotionCardClick = (emotion: string) => {
     setSelectedEmotion(emotion);
-    if (userData?.id) {
+    if (userData.id) {
       mutation.mutate({ emotion });
     }
 
-    if (hideAfterPost && userData) {
+    if (hideAfterPost) {
       const today = new Date().toISOString().split('T')[0];
       const lastPostDateKey = `lastPostDate_${userData.id}`;
       localStorage.setItem(lastPostDateKey, today);
@@ -122,10 +115,6 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
 
   if (isHidden) {
     return null;
-  }
-
-  if (userLoading) {
-    return <div>Loading...</div>;
   }
 
   return (

@@ -4,20 +4,16 @@ import { EmotionLogRequestType } from '../schema/emotionLogSchema';
 import { postEmotionLog } from '../apis/emotionLog';
 import { MutationOptions } from '../types/query';
 import { EmotionLogQueryParamsType } from '../schema/emotionLogSchema';
-import { useGetMeQuery } from './useUserQuery';
 
 // 오늘의 감정 등록
 export const usePostEmotionLog = (params: EmotionLogQueryParamsType, options: MutationOptions<EmotionLogRequestType>) => {
   const queryClient = useQueryClient();
-  const { data: userData } = useGetMeQuery();
 
   return useMutation({
     mutationFn: (request: EmotionLogRequestType) => postEmotionLog(request),
     ...options,
     onSuccess: (data, variables, context) => {
-      if (userData?.id) {
-        queryClient.invalidateQueries(quries.emotionLogs.monthly(params));
-      }
+      queryClient.invalidateQueries(quries.emotionLogs.monthly(params));
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context);
       }
@@ -40,7 +36,6 @@ export const useGetTodayEmotionLog = (params: EmotionLogQueryParamsType) => {
   return useQuery({
     queryKey,
     queryFn,
-    enabled: !!params.userId,
   });
 };
 
