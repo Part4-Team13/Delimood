@@ -44,6 +44,7 @@ const DemoContent = () => {
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
 
+  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣기
   const handleRadioChange = (value: string) => {
     if (value === '직접 입력') {
       setPlaceholder('저자 이름 입력');
@@ -60,6 +61,7 @@ const DemoContent = () => {
     }
   };
 
+  // NOTE: 태그 상태 관리
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState<string>('');
 
@@ -67,6 +69,7 @@ const DemoContent = () => {
     const trimmedTag = newTag.trim();
 
     if (trimmedTag && trimmedTag.length <= 10) {
+      // NOTE: 사용자가 #을 붙인 태그명과 #을 붙이지 않은 태그명의 중복 검사 실행
       const normalizedTag = trimmedTag.startsWith('#') ? trimmedTag.slice(1) : trimmedTag;
       const tagExists = tags.some((tag) => (tag.startsWith('#') ? tag.slice(1) : tag) === normalizedTag);
 
@@ -100,16 +103,19 @@ const DemoContent = () => {
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
+            // NOTE: 출처 제목만 입력된 경우 URL 입력 요청
             if (source && !sourceUrl) {
               alert('출처 제목을 입력한 경우, 출처 URL도 입력해 주세요.');
               return;
             }
 
+            // NOTE: URL만 입력된 경우 출처 제목 입력 요청
             if (!source && sourceUrl) {
               alert('출처 URL을 입력한 경우, 출처 제목도 입력해 주세요.');
               return;
             }
 
+            // NOTE: 태그에 #을 추가
             const formattedTags = tags.map((tag) => {
               return tag.startsWith('#') ? tag : `#${tag}`;
             });
@@ -127,17 +133,19 @@ const DemoContent = () => {
               author: rest.author,
             };
 
+            // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
             if (sourceUrl && !/^https?:\/\/.+/.test(sourceUrl)) {
               alert('http:// 또는 https://로 시작하는 URL을 입력해주세요.');
-              return;
+              return; // NOTE: 유효하지 않은 경우 폼 제출 중지
             } else if (sourceUrl) {
-              payload.referenceUrl = sourceUrl;
+              payload.referenceUrl = sourceUrl; // NOTE: URL이 유효한 경우만 추가
             }
 
             if (source) {
               payload.referenceTitle = source;
             }
 
+            // NOTE: 유효하지 않은 값을 가진 필드는 제거
             if (payload.referenceUrl === '') {
               delete payload.referenceUrl;
             }
