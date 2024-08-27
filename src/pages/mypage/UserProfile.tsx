@@ -31,8 +31,7 @@ const UserProfile = () => {
     onSuccess: (updatedData) => {
       setProfileImage(updatedData.image);
     },
-    onError: (error) => {
-      console.error('Error :', error);
+    onError: () => {
       setErrorMessage('이미지 업로드 중 오류가 발생했습니다.');
     },
   });
