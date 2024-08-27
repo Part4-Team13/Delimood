@@ -76,14 +76,16 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
 
   const { data: todayEmotion } = useGetTodayEmotionLog({ userId: userData.id });
 
+  //NOTE:이미 등록된 감정 불러와서 테두리 표시해주기
   useEffect(() => {
     if (todayEmotion) {
       setSelectedEmotion(todayEmotion.emotion);
     }
   }, [todayEmotion]);
 
+  //NOTE:에피그램 페이지에서 감정 등록 후 컴포넌트 숨기기
   useEffect(() => {
-    if (!hideAfterPost || !userData) return;
+    if (!hideAfterPost) return;
 
     const lastPostDateKey = `lastPostDate_${userData.id}`;
     const lastPostDate = localStorage.getItem(lastPostDateKey);
@@ -102,7 +104,7 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
       mutation.mutate({ emotion });
     }
 
-    if (hideAfterPost && userData) {
+    if (hideAfterPost) {
       const today = new Date().toISOString().split('T')[0];
       const lastPostDateKey = `lastPostDate_${userData.id}`;
       localStorage.setItem(lastPostDateKey, today);
