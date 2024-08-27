@@ -26,12 +26,12 @@ export default function Mypage() {
 
   const { data: commentData } = useGetMyCommentInfiniteQuery({
     limit: 1,
-    id: userData?.id ?? -1,
+    id: userData.id,
   });
 
   //NOTE : 댓글 데이터가 로드되면 총 댓글 수를 업데이트
   useEffect(() => {
-    if (userData?.id && commentData?.pages?.[0]?.totalCount !== undefined) {
+    if (userData.id && commentData?.pages?.[0]?.totalCount !== undefined) {
       setTotalCommentsCount(commentData.pages[0].totalCount);
     } else {
       setTotalCommentsCount(0);
@@ -50,8 +50,6 @@ export default function Mypage() {
 
     navigate('/login');
   };
-
-  const userId = userData?.id;
 
   return (
     <>
@@ -102,8 +100,8 @@ export default function Mypage() {
               내 댓글<span> ({totalCommentsCount})</span>
             </button>
           </div>
-          {userId && activeTab === 'epigrams' && <MyEpigramList userId={userId} onTotalCountFetched={setTotalEpigramsCount} />}
-          {userId && activeTab === 'comments' && <MyCommentsList userId={userId} onTotalCountFetched={setTotalCommentsCount} />}
+          {activeTab === 'epigrams' && <MyEpigramList userId={userData.id} onTotalCountFetched={setTotalEpigramsCount} />}
+          {activeTab === 'comments' && <MyCommentsList userId={userData.id} onTotalCountFetched={setTotalCommentsCount} />}
         </div>
       </div>
       <FixedButton />

@@ -15,7 +15,7 @@ export const usePostEmotionLog = (params: EmotionLogQueryParamsType, options: Mu
     mutationFn: (request: EmotionLogRequestType) => postEmotionLog(request),
     ...options,
     onSuccess: (data, variables, context) => {
-      if (userData?.id) {
+      if (userData.id) {
         queryClient.invalidateQueries(quries.emotionLogs.monthly(params));
       }
       if (options?.onSuccess) {
@@ -40,7 +40,6 @@ export const useGetTodayEmotionLog = (params: EmotionLogQueryParamsType) => {
   return useQuery({
     queryKey,
     queryFn,
-    enabled: !!params.userId,
   });
 };
 

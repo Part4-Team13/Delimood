@@ -45,7 +45,7 @@ const UserProfile = () => {
     }
   }, [data]);
 
-  const userNickname = data?.nickname || '사용자 닉네임';
+  const userNickname = data.nickname;
 
   //프로필 이미지 업로드 핸들러
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +61,7 @@ const UserProfile = () => {
 
   const handleCancel = () => {
     setEditing(false);
-    setNewNickname(data?.nickname || '사용자 닉네임');
+    setNewNickname(data.nickname);
     setErrorMessage(null);
   };
 
