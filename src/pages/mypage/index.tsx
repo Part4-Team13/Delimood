@@ -48,7 +48,7 @@ export default function Mypage() {
 
     alertMessage({ title: '성공적으로 로그아웃되었습니다.', message: '다시 이용하시려면 로그인부탁드립니다.', color: 'teal' });
 
-    navigate('/login');
+    navigate('/');
   };
 
   return (
