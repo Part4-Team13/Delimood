@@ -5,7 +5,7 @@ import { useGetEpigramCommentsInfiniteQuery } from '../../hooks/useInfiniteQuery
 function EpigramCommentList({ epigramId, userId }: { epigramId: number; userId: number }) {
   const { data: commentData, fetchNextPage, isFetching } = useGetEpigramCommentsInfiniteQuery(epigramId, { limit: 4 });
 
-  if (commentData?.pages[0].totalCount == 0) {
+  if (commentData.pages[0].totalCount == 0) {
     return (
       <div className='cursor-default flex flex-col w-fit mx-auto items-center gap-[8px] desktop:gap-[24px] mb-[294px] mt-[80px] tablet:mb-[210px] desktop:mb-[232px] desktop:mt-[124px]'>
         <img src={img_magnifier} alt='돋보기 아이콘' className='w-[96px] desktop:w-[144px]' />

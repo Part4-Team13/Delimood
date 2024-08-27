@@ -24,7 +24,7 @@ export const useGetEpigramCommentsInfiniteQuery = (id: number, params: Paginatio
 };
 
 export const useGetMyCommentInfiniteQuery = (params: GetUserCommentRequestType) => {
-  return useInfiniteQuery({
+  return useSuspenseInfiniteQuery({
     queryKey: quries.user.getUserComment(params).queryKey,
     queryFn: ({ pageParam = 1 }) => getUserComment({ ...params, cursor: pageParam }),
     initialPageParam: 0,

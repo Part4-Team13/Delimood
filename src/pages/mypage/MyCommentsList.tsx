@@ -14,12 +14,12 @@ const MyCommentsList: React.FC<MyCommentsListProps> = ({ userId, onTotalCountFet
   const { data, fetchNextPage, isFetching } = useGetMyCommentInfiniteQuery({ limit: 4, id: userId });
 
   useEffect(() => {
-    if (data?.pages?.[0]?.totalCount !== undefined) {
+    if (data.pages?.[0].totalCount !== undefined) {
       onTotalCountFetched(data.pages[0].totalCount);
     }
   }, [data, onTotalCountFetched]);
 
-  const isEmpty = data?.pages?.[0]?.totalCount === 0;
+  const isEmpty = data.pages?.[0].totalCount === 0;
 
   const navigate = useNavigate();
   const onClickMyEpigramList = () => {

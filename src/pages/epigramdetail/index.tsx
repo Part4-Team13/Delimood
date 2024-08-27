@@ -23,7 +23,7 @@ function EpigramDetail() {
       <SuspenseWrapper color='yellow'>
         <EpigramDetailMain epigramId={epigramId} userId={userData.id} />
       </SuspenseWrapper>
-      <div className='text-lg desktop:text-xl font-bold w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto mb-[16px] tablet:mb-[24px]'>댓글({commentData?.pages[0].totalCount})</div>
+      <div className='text-lg desktop:text-xl font-bold w-[312px] tablet:w-[384px] desktop:w-[640px] mx-auto mb-[16px] tablet:mb-[24px]'>댓글({commentData.pages[0].totalCount})</div>
       <SuspenseWrapper color='yellow'>
         <AddComment id={epigramId} userImage={userData.image} />
       </SuspenseWrapper>
