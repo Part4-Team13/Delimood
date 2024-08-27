@@ -33,7 +33,7 @@ const Login: React.FC = () => {
     onSuccess: () => {
       alertMessage({ title: '로그인 완료되었습니다.', message: '성공적으로 로그인되었습니다.', color: 'green' });
 
-      navigate('/');
+      navigate('/epigrams');
     },
     onError: (error) => {
       const axiosError = error as AxiosError<ErrorResponse>;
