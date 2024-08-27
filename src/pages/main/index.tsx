@@ -32,6 +32,11 @@ export default function Main() {
     }
   };
 
+  const onClickLearnMore = () => {
+    const el = document.getElementById('main');
+    el?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       <header
@@ -51,12 +56,12 @@ export default function Main() {
             시작하기
           </button>
         </div>
-        <div className={`${basicStyle} gap-[4px]`}>
+        <motion.div onClick={onClickLearnMore} animate={{ y: [0, 15, 0] }} transition={{ repeat: Infinity, duration: 1.5 }} className={`${basicStyle} gap-[4px]  cursor-pointer`}>
           <span className='text-xs text-blue-400 tablet:text-lg'>더 알아보기</span>
           <img src={ico_more_arrow_down} alt='더보기 아이콘' />
-        </div>
+        </motion.div>
       </header>
-      <main className={`${basicStyle} px-[24px] mt-[124px] tablet:px-[180px]`}>
+      <main id='main' className={`${basicStyle} px-[24px] mt-[124px] tablet:px-[180px]`}>
         <motion.section transition={{ duration: 0.5, delay: 0.2 }} initial={{ x: 200, opacity: 0 }} viewport={{ once: true }} whileInView={{ x: 0, opacity: 1 }} className={`${sectionStyle}`}>
           <img src={img_pr_epigram_medium} alt='에피그램 이미지' className={sectionImgStyle} />
           <div>
