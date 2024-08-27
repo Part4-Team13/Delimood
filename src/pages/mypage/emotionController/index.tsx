@@ -4,7 +4,6 @@ import EmotionCalendar from './EmotionCalendar';
 import EmotionChart from './EmotionChart';
 import { useGetMonthlyEmotionLogs } from '../../../hooks/useEmotionLogQuery';
 import { useGetMeQuery } from '../../../hooks/useUserQuery';
-import SuspenseWrapper from '../../../components/SuspenseWrapper';
 
 const today = dayjs();
 const initialYear = today.year();
@@ -25,11 +24,9 @@ export default function EmotionController() {
   };
 
   return (
-    <SuspenseWrapper>
-      <div className='flex flex-col justify-center items-center gap-14 tablet:gap-[60px] desktop:gap-[156px]'>
-        <EmotionCalendar data={data || []} year={year} month={month} onDateChange={handleDateChange} />
-        <EmotionChart data={data || []} />
-      </div>
-    </SuspenseWrapper>
+    <div className='flex flex-col justify-center items-center gap-14 tablet:gap-[60px] desktop:gap-[156px]'>
+      <EmotionCalendar data={data || []} year={year} month={month} onDateChange={handleDateChange} />
+      <EmotionChart data={data || []} />
+    </div>
   );
 }

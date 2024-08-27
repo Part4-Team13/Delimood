@@ -89,7 +89,9 @@ export default function Mypage() {
             </div>
             <EmotionList />
           </div>
-          <EmotionController />
+          <SuspenseWrapper>
+            <EmotionController />
+          </SuspenseWrapper>
         </div>
         <div className='flex flex-col items-center justify-center gap-6 tablet:gap-8 desktop:gap-12'>
           <div className='w-[312px] tablet:w-[384px] desktop:w-[640px] flex flex-end gap-4 desktop:gap-6 font-semibold text-base desktop:text-2xl'>
