@@ -46,8 +46,6 @@ const Login: React.FC = () => {
             message: value.message,
           });
         }
-      } else {
-        console.error('로그인 실패:', error);
       }
     },
   });

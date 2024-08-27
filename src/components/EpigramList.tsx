@@ -22,9 +22,6 @@ function EpigramList({ isWide = false, data, isLoading, fetchNextPage, buttonTex
       data.pages[0].totalCount === allEpigrams.length ? setShowButton(false) : setShowButton(true);
       return allEpigrams;
     });
-    if (isLoading) {
-      console.log('loading');
-    }
   }, [data, isLoading]);
 
   const handleClickViewMore = () => {
