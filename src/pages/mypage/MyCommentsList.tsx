@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGetMyCommentInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import CommentList from '../../components/CommentList';
 import Search from '../../assets/ico_mypage_search.svg';
+import SuspenseWrapper from '../../components/SuspenseWrapper';
 
 interface MyCommentsListProps {
   userId: number;
@@ -14,12 +15,10 @@ const MyCommentsList: React.FC<MyCommentsListProps> = ({ userId, onTotalCountFet
   const { data, fetchNextPage, isFetching } = useGetMyCommentInfiniteQuery({ limit: 4, id: userId });
 
   useEffect(() => {
-    if (data.pages?.[0].totalCount !== undefined) {
-      onTotalCountFetched(data.pages[0].totalCount);
-    }
+    onTotalCountFetched(data.pages[0].totalCount);
   }, [data, onTotalCountFetched]);
 
-  const isEmpty = data.pages?.[0].totalCount === 0;
+  const isEmpty = data.pages[0].totalCount === 0;
 
   const navigate = useNavigate();
   const onClickMyEpigramList = () => {
@@ -45,7 +44,9 @@ const MyCommentsList: React.FC<MyCommentsListProps> = ({ userId, onTotalCountFet
           </div>
         </div>
       ) : (
-        <CommentList data={data} fetchNextPage={fetchNextPage} isFetching={isFetching} userId={userId} isInfiniteScroll={false} buttonText='최신 댓글 더보기' />
+        <SuspenseWrapper>
+          <CommentList data={data} fetchNextPage={fetchNextPage} isFetching={isFetching} userId={userId} isInfiniteScroll={false} buttonText='최신 댓글 더보기' />
+        </SuspenseWrapper>
       )}
     </div>
   );

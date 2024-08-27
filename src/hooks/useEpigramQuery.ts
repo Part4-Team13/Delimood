@@ -1,4 +1,4 @@
-import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, useQueryClient, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, useQueryClient, useSuspenseQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import {
   PostEpigramRequestType,
   PostEpigramResponseType,

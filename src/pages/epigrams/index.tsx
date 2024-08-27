@@ -41,7 +41,9 @@ export default function Epigrams() {
           <AllEpigramList />
         </Section>
         <Section title='최신 댓글' className='mt-[56px] desktop:mt-[140px]'>
-          <AllCommentList />
+          <SuspenseWrapper>
+            <AllCommentList />
+          </SuspenseWrapper>
         </Section>
         <FixedButton />
       </div>

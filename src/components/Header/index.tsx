@@ -2,7 +2,8 @@ import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
 import HeaderLeft from './HeaderLeft';
 import HeaderMiddle from './HeaderMiddle';
 import { HeaderRight, HeaderRightUnAuthenticated } from './HeaderRight';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import ico_sad from '../../assets/ico_sad.svg';
 
 export interface HeaderButtonsProps {
   pathNow: string;
@@ -42,7 +43,9 @@ function Header() {
     >
       <HeaderLeft pathNow={pathNow} navigate={navigate} />
       <HeaderMiddle pathNow={pathNow} navigate={navigate} />
-      {refreshToken ? <HeaderRight pathNow={pathNow} navigate={navigate} /> : <HeaderRightUnAuthenticated pathNow={pathNow} navigate={navigate} />}
+      <Suspense fallback={<img src={ico_sad} alt='잠시만 기다려주세요' />}>
+        {refreshToken ? <HeaderRight pathNow={pathNow} navigate={navigate} /> : <HeaderRightUnAuthenticated pathNow={pathNow} navigate={navigate} />}
+      </Suspense>
     </div>
   );
 }
