@@ -1,14 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useForm, isNotEmpty, hasLength } from '@mantine/form';
 import { Button, Group, TextInput, Input, Text, Textarea, Radio } from '@mantine/core';
 import HashTag from '../../components/HashTag';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { useGetEpigramDetailQuery, useUpdateEpigramMutation } from '../../hooks/useEpigramQuery';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
-export default function EditEpigram() {
+// NOTE: 렌더링 및 비동기 에러 처리
+const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => (
+  <div role='alert'>
+    <p>문제가 발생했습니다.</p>
+    <pre>{error.message}</pre>
+    <button onClick={resetErrorBoundary}>다시 시도하기</button>
+  </div>
+);
+
+const EditEpigram = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: epigram, isLoading } = useGetEpigramDetailQuery(Number(id));
+  const { data: epigram } = useGetEpigramDetailQuery(Number(id));
   const { data: userProfile } = useGetMeQuery();
   const navigate = useNavigate();
 
@@ -64,7 +74,6 @@ export default function EditEpigram() {
   };
 
   // NOTE: 태그 상태 관리
-
   const addTag = () => {
     const trimmedTag = newTag.trim();
 
@@ -95,10 +104,6 @@ export default function EditEpigram() {
   });
 
   const isFormValid = form.isValid();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className='min-h-screen overflow-y-auto bg-white'>
@@ -279,4 +284,16 @@ export default function EditEpigram() {
       </div>
     </div>
   );
+};
+
+function EditEpigramWrapper() {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <EditEpigram />
+      </Suspense>
+    </ErrorBoundary>
+  );
 }
+
+export default EditEpigramWrapper;
