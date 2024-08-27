@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useState } from 'react';
 import { useForm, isNotEmpty, hasLength } from '@mantine/form';
 import { Button, Group, TextInput, Input, Text, Textarea, Radio } from '@mantine/core';
@@ -6,7 +8,21 @@ import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { usePostEpigramMutation } from '../../hooks/useEpigramQuery';
 import { useNavigate } from 'react-router-dom';
 
-export default function Demo() {
+interface ErrorFallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
+
+// NOTE: 렌더링 및 비동기 에러 처리
+const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary }) => (
+  <div role='alert'>
+    <p>문제가 발생했습니다.</p>
+    <pre>{error.message}</pre>
+    <button onClick={resetErrorBoundary}>다시 시도하기</button>
+  </div>
+);
+
+const DemoContent = () => {
   const { data: userProfile } = useGetMeQuery();
   const navigate = useNavigate();
 
@@ -28,7 +44,6 @@ export default function Demo() {
   const [placeholder, setPlaceholder] = useState('저자 이름 입력');
   const [disabled, setDisabled] = useState(false);
 
-  // NOTE: 사용자 닉네임 데이터 값 받아와서 input placeholder로 넣기
   const handleRadioChange = (value: string) => {
     if (value === '직접 입력') {
       setPlaceholder('저자 이름 입력');
@@ -45,7 +60,6 @@ export default function Demo() {
     }
   };
 
-  // NOTE: 태그 상태 관리
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState<string>('');
 
@@ -53,7 +67,6 @@ export default function Demo() {
     const trimmedTag = newTag.trim();
 
     if (trimmedTag && trimmedTag.length <= 10) {
-      // NOTE: 사용자가 #을 붙인 태그명과 #을 붙이지 않은 태그명의 중복 검사 실행
       const normalizedTag = trimmedTag.startsWith('#') ? trimmedTag.slice(1) : trimmedTag;
       const tagExists = tags.some((tag) => (tag.startsWith('#') ? tag.slice(1) : tag) === normalizedTag);
 
@@ -81,25 +94,22 @@ export default function Demo() {
   const isFormValid = form.isValid();
 
   return (
-    <div className=' h-[100vh] bg-white'>
+    <div className='h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
         <form
           onSubmit={form.onSubmit((values) => {
             const { source, sourceUrl, ...rest } = values;
 
-            // NOTE: 출처 제목만 입력된 경우 URL 입력 요청
             if (source && !sourceUrl) {
               alert('출처 제목을 입력한 경우, 출처 URL도 입력해 주세요.');
               return;
             }
 
-            // NOTE: URL만 입력된 경우 출처 제목 입력 요청
             if (!source && sourceUrl) {
               alert('출처 URL을 입력한 경우, 출처 제목도 입력해 주세요.');
               return;
             }
 
-            // NOTE: 태그에 #을 추가
             const formattedTags = tags.map((tag) => {
               return tag.startsWith('#') ? tag : `#${tag}`;
             });
@@ -117,19 +127,17 @@ export default function Demo() {
               author: rest.author,
             };
 
-            // NOTE: sourceUrl이 유효한 URL이면 payload에 추가
             if (sourceUrl && !/^https?:\/\/.+/.test(sourceUrl)) {
               alert('http:// 또는 https://로 시작하는 URL을 입력해주세요.');
-              return; // NOTE: 유효하지 않은 경우 폼 제출 중지
+              return;
             } else if (sourceUrl) {
-              payload.referenceUrl = sourceUrl; // NOTE: URL이 유효한 경우만 추가
+              payload.referenceUrl = sourceUrl;
             }
 
             if (source) {
               payload.referenceTitle = source;
             }
 
-            // NOTE: 유효하지 않은 값을 가진 필드는 제거
             if (payload.referenceUrl === '') {
               delete payload.referenceUrl;
             }
@@ -272,5 +280,15 @@ export default function Demo() {
         </form>
       </div>
     </div>
+  );
+};
+
+export default function Demo() {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<div>Loading user profile...</div>}>
+        <DemoContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
