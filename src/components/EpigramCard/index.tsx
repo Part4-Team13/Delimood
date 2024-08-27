@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GetEpigramListType } from '../../schema/epigramSchema';
 import LikeButton from './LikeButton';
+import SuspenseWrapper from '../SuspenseWrapper';
 
 type EpigramCardProps = Pick<GetEpigramListType, 'id' | 'author' | 'content' | 'tags'> & { isSeperated: boolean };
 
@@ -34,7 +35,9 @@ function EpigramCard({ id, author, content, tags, isSeperated = false }: Epigram
             </li>
           ))}
         </ul>
-        <LikeButton id={id} />
+        <SuspenseWrapper>
+          <LikeButton id={id} />
+        </SuspenseWrapper>
       </div>
     </>
   );

@@ -5,24 +5,24 @@ import ico_external_link from '../../assets/ico_external_link.svg';
 import img_zigzag from '../../assets/img_zigzag.png';
 import { useDeleteEpigramMutation, useGetEpigramDetailQuery, usePostEpigramLikeDeleteMutation, usePostEpigramLikeMutation } from '../../hooks/useEpigramQuery';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Modal from '../../components/Modal/commentDeleteModal';
 import alertMessage from '../../components/AlertMessage';
 import { useQueryClient } from '@tanstack/react-query';
 
 function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: number }) {
-  const [likeCount, setLikeCount] = useState<number>(0);
-  const [like, setLike] = useState<boolean>(false);
+  const { data } = useGetEpigramDetailQuery(epigramId);
+
+  const [likeCount, setLikeCount] = useState<number>(data.likeCount);
+  const [like, setLike] = useState<boolean>(data.isLiked);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const options = {
-    onSettled: () => {
+    onSuccess: () => {
+      console.log(data.isLiked);
       queryClient.invalidateQueries();
-      if (data) {
-        setLike(data.isLiked);
-        setLikeCount(data.likeCount);
-      }
+      setLike((prev) => !prev);
     },
   };
 
@@ -30,30 +30,24 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
   const deleteLikeMutation = usePostEpigramLikeDeleteMutation(epigramId, options);
   const deleteEpigramMutation = useDeleteEpigramMutation(epigramId);
 
-  const { data } = useGetEpigramDetailQuery(epigramId);
-
   //NOTE : 좋아요 관련
-  useEffect(() => {
-    if (data) {
-      setLike(data.isLiked);
-      setLikeCount(data.likeCount);
-    }
-  }, [data, likeCount, like, queryClient]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setLike(data.isLiked);
+  //     setLikeCount(data.likeCount);
+  //   }
+  // }, [data, likeCount, like, queryClient]);
 
   const navigate = useNavigate();
 
   const onClickLikeButton = () => {
-    if (data) {
-      if (!data.isLiked) {
-        likeMutation.mutate();
-      } else {
-        deleteLikeMutation.mutate();
-      }
+    if (!data.isLiked) {
+      likeMutation.mutate();
+      setLikeCount((prev) => prev + 1);
+    } else {
+      deleteLikeMutation.mutate();
+      setLikeCount((prev) => prev - 1);
     }
-  };
-
-  const onClickDeleteEpigram = () => {
-    setIsModalOpen(true);
   };
 
   const deleteEpigram = () => {
@@ -96,7 +90,7 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
                   <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={() => navigate(`/editepigram/${epigramId}`)}>
                     수정하기
                   </Menu.Item>
-                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={onClickDeleteEpigram}>
+                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={() => setIsModalOpen(true)}>
                     삭제하기
                   </Menu.Item>
                 </Menu.Dropdown>

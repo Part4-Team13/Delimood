@@ -14,7 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
  */
 
 interface CommentListProps {
-  data: InfiniteData<CommentResponseType> | undefined;
+  data: InfiniteData<CommentResponseType>;
   fetchNextPage: () => void;
   isFetching: boolean;
   userId?: number;
@@ -39,18 +39,16 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
 
   // NOTE : 데이터 fetch 시 리스트 업데이트
   useEffect(() => {
-    if (data) {
-      const allComments = data.pages.flatMap((page) => page.list || []);
-      setCommentList(() => {
-        data.pages[0].totalCount === allComments.length ? setLoadMore(false) : setLoadMore(true);
-        return allComments;
-      });
-    }
+    const allComments = data.pages.flatMap((page) => page.list || []);
+    setCommentList(() => {
+      data.pages[0].totalCount === allComments.length ? setLoadMore(false) : setLoadMore(true);
+      return allComments;
+    });
   }, [data]);
 
   // 무한스크롤 로직
   useEffect(() => {
-    if (data && isInfiniteScroll && loadMore && !isFetching) {
+    if (isInfiniteScroll && loadMore && !isFetching) {
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -85,21 +83,20 @@ function CommentList({ data, fetchNextPage, isFetching, userId, isInfiniteScroll
   return (
     <div>
       <ul className='mx-auto bg-yellow-300 w-fit'>
-        {commentList &&
-          commentList.map((comment) => (
-            <li key={comment.id} onClick={(e) => onClickCard(e, comment.epigramId)} className={pathname === `/epigrams/${comment.epigramId}` ? 'cursor-default' : 'cursor-pointer hover:bg-purple-50'}>
-              <CommentCard
-                userId={userId}
-                id={comment.id}
-                createdAt={comment.createdAt}
-                content={comment.content}
-                writer={comment.writer}
-                isPrivate={comment.isPrivate}
-                pathname={pathname}
-                epigramId={comment.epigramId}
-              />
-            </li>
-          ))}
+        {commentList.map((comment) => (
+          <li key={comment.id} onClick={(e) => onClickCard(e, comment.epigramId)} className={pathname === `/epigrams/${comment.epigramId}` ? 'cursor-default' : 'cursor-pointer hover:bg-purple-50'}>
+            <CommentCard
+              userId={userId}
+              id={comment.id}
+              createdAt={comment.createdAt}
+              content={comment.content}
+              writer={comment.writer}
+              isPrivate={comment.isPrivate}
+              pathname={pathname}
+              epigramId={comment.epigramId}
+            />
+          </li>
+        ))}
       </ul>
       {!isInfiniteScroll ? (
         loadMore && (

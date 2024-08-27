@@ -9,6 +9,8 @@ import img_pr_examples from '@/assets/img_pr_examples.png';
 import img_bg_bottom from '@/assets/img_bg_bottom.png';
 import img_paraph from '@/assets/img_paraph.png';
 
+import { motion } from 'framer-motion';
+
 const basicStyle = 'flex flex-col items-center';
 
 const buttonStyle = 'px-[28px] py-[10px] rounded-xl bg-button-default text-lg text-white desktop:px-[108px] desktop:py-[16px] desktop:text-xl hover:bg-button-hover';
@@ -30,6 +32,11 @@ export default function Main() {
     }
   };
 
+  const onClickLearnMore = () => {
+    const el = document.getElementById('main');
+    el?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       <header
@@ -49,13 +56,13 @@ export default function Main() {
             시작하기
           </button>
         </div>
-        <div className={`${basicStyle} gap-[4px]`}>
+        <motion.div onClick={onClickLearnMore} animate={{ y: [0, 15, 0] }} transition={{ repeat: Infinity, duration: 1.5 }} className={`${basicStyle} gap-[4px]  cursor-pointer`}>
           <span className='text-xs text-blue-400 tablet:text-lg'>더 알아보기</span>
           <img src={ico_more_arrow_down} alt='더보기 아이콘' />
-        </div>
+        </motion.div>
       </header>
-      <main className={`${basicStyle} px-[24px] mt-[124px] tablet:px-[180px]`}>
-        <section className={sectionStyle}>
+      <main id='main' className={`${basicStyle} px-[24px] mt-[124px] tablet:px-[180px]`}>
+        <motion.section transition={{ duration: 0.5, delay: 0.2 }} initial={{ x: 200, opacity: 0 }} viewport={{ once: true }} whileInView={{ x: 0, opacity: 1 }} className={`${sectionStyle}`}>
           <img src={img_pr_epigram_medium} alt='에피그램 이미지' className={sectionImgStyle} />
           <div>
             <h1 className={sectionHeadingStyle}>
@@ -67,8 +74,14 @@ export default function Main() {
               다른 사람들에게 전파하세요.
             </p>
           </div>
-        </section>
-        <section className={`${sectionStyle} text-right`}>
+        </motion.section>
+        <motion.section
+          transition={{ duration: 0.5, delay: 0.2 }}
+          initial={{ x: -200, opacity: 0 }}
+          viewport={{ once: true }}
+          whileInView={{ x: 0, opacity: 1 }}
+          className={`${sectionStyle} text-right`}
+        >
           <img src={img_pr_emotions_medium} alt='에피그램 이미지' className={`${sectionImgStyle} order-2 desktop:order-1`} />
           <div>
             <h1 className={sectionHeadingStyle}>
@@ -76,8 +89,14 @@ export default function Main() {
             </h1>
             <p className={sectionParagraphStyle}>태그를 통해 글을 모아 볼 수 있어요.</p>
           </div>
-        </section>
-        <section className={`${sectionStyle} mb-[280px]`}>
+        </motion.section>
+        <motion.section
+          transition={{ duration: 0.5, delay: 0.2 }}
+          initial={{ x: 200, opacity: 0 }}
+          viewport={{ once: true }}
+          whileInView={{ x: 0, opacity: 1 }}
+          className={`${sectionStyle} mb-[280px]`}
+        >
           <img src={img_pr_graph_medium} alt='감정 이미지' className={sectionImgStyle} />
           <div>
             <h1 className={sectionHeadingStyle}>
@@ -89,13 +108,19 @@ export default function Main() {
               감정을 확인해보세요.
             </p>
           </div>
-        </section>
-        <section className='mb-[22px] tablet:mb-[30px] desktop:mb-[60px]'>
+        </motion.section>
+        <motion.section
+          transition={{ duration: 0.5, delay: 0.2 }}
+          initial={{ y: 200, opacity: 0 }}
+          viewport={{ once: true }}
+          whileInView={{ y: 0, opacity: 1 }}
+          className='mb-[22px] tablet:mb-[30px] desktop:mb-[60px]'
+        >
           <h1 className='mb-[40px] font-bold text-2xl text-center desktop:text-3xl'>
             사용자들이 직접 <br /> 인용한 에피그램들
           </h1>
           <img src={img_pr_examples} alt='에피그램 이미지' className='w-full max-w-[640px]' />
-        </section>
+        </motion.section>
       </main>
       <footer
         className={`${basicStyle} justify-center h-[600px] overflow-hidden desktop:h-[1040px]`}
@@ -104,10 +129,12 @@ export default function Main() {
           backgroundSize: 'cover',
         }}
       >
-        <img src={img_paraph} alt='에피그램 텍스트 로고' className='mb-[32px] w-[122px] desktop:w-[184px] desktop:mb-[48px]' />
-        <button className={buttonStyle} onClick={handleButtonClick}>
-          시작하기
-        </button>
+        <motion.div transition={{ duration: 0.6, delay: 0.3 }} initial={{ opacity: 0 }} viewport={{ once: true }} whileInView={{ opacity: 1 }} className='flex flex-col items-center'>
+          <img src={img_paraph} alt='에피그램 텍스트 로고' className='mb-[32px] w-[122px] desktop:w-[184px] desktop:mb-[48px]' />
+          <button className={buttonStyle} onClick={handleButtonClick}>
+            시작하기
+          </button>
+        </motion.div>
       </footer>
     </>
   );
