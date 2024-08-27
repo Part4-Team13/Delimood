@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useState } from 'react';
 import { useForm, isNotEmpty, hasLength } from '@mantine/form';
 import { Button, Group, TextInput, Input, Text, Textarea, Radio } from '@mantine/core';
@@ -6,7 +8,21 @@ import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { usePostEpigramMutation } from '../../hooks/useEpigramQuery';
 import { useNavigate } from 'react-router-dom';
 
-export default function Demo() {
+interface ErrorFallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
+
+// NOTE: 렌더링 및 비동기 에러 처리
+const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary }) => (
+  <div role='alert'>
+    <p>문제가 발생했습니다.</p>
+    <pre>{error.message}</pre>
+    <button onClick={resetErrorBoundary}>다시 시도하기</button>
+  </div>
+);
+
+const DemoContent = () => {
   const { data: userProfile } = useGetMeQuery();
   const navigate = useNavigate();
 
@@ -81,7 +97,7 @@ export default function Demo() {
   const isFormValid = form.isValid();
 
   return (
-    <div className=' h-[100vh] bg-white'>
+    <div className='h-[100vh] bg-white'>
       <div className='flex items-center bg-white justify-center'>
         <form
           onSubmit={form.onSubmit((values) => {
@@ -272,5 +288,15 @@ export default function Demo() {
         </form>
       </div>
     </div>
+  );
+};
+
+export default function Demo() {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<div>Loading user profile...</div>}>
+        <DemoContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
