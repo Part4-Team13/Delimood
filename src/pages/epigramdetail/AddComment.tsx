@@ -12,7 +12,7 @@ function AddComment({ id, userImage }: { id: number; userImage: string }) {
   const queryClient = useQueryClient();
 
   const options = {
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries();
     },
   };
