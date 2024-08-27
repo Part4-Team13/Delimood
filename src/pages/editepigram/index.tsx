@@ -18,7 +18,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetError
 
 const EditEpigram = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: epigram, isLoading } = useGetEpigramDetailQuery(Number(id));
+  const { data: epigram } = useGetEpigramDetailQuery(Number(id));
   const { data: userProfile } = useGetMeQuery();
   const navigate = useNavigate();
 
@@ -104,10 +104,6 @@ const EditEpigram = () => {
   });
 
   const isFormValid = form.isValid();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className='min-h-screen overflow-y-auto bg-white'>
