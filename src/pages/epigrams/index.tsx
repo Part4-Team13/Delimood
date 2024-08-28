@@ -33,7 +33,7 @@ export default function Epigrams() {
         </Section>
         {isEmotionSectionVisible && (
           <Section title='오늘의 감정은 어떤가요?' className='mt-[56px] desktop:mt-[140px]'>
-            <EmotionList hideAfterPost={true} onHide={() => setIsEmotionSectionVisible(false)} />
+            <EmotionList hideAfterPost={true} onHide={() => setIsEmotionSectionVisible(false)} autoClose={false} />
           </Section>
         )}
         <Section title='최신 에피그램' className='mt-[56px] desktop:mt-[140px]'>
