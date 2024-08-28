@@ -100,8 +100,10 @@ export default function Mypage() {
               내 댓글<span> ({totalCommentsCount})</span>
             </button>
           </div>
-          {activeTab === 'epigrams' && <MyEpigramList userId={userData.id} onTotalCountFetched={setTotalEpigramsCount} />}
-          {activeTab === 'comments' && <MyCommentsList userId={userData.id} onTotalCountFetched={setTotalCommentsCount} />}
+          <SuspenseWrapper>
+            {activeTab === 'epigrams' && <MyEpigramList userId={userData.id} onTotalCountFetched={setTotalEpigramsCount} />}
+            {activeTab === 'comments' && <MyCommentsList userId={userData.id} onTotalCountFetched={setTotalCommentsCount} />}
+          </SuspenseWrapper>
         </div>
       </div>
       <FixedButton />

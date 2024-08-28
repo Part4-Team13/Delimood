@@ -58,7 +58,6 @@ interface EmotionListProps {
 }
 
 function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
-  const [selectedEmotion, setSelectedEmotion] = useState<string>('');
   const { data: userData } = useGetMeQuery();
 
   const [isHidden, setIsHidden] = useState(false);
@@ -76,13 +75,6 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
 
   const { data: todayEmotion } = useGetTodayEmotionLog({ userId: userData.id });
 
-  //NOTE:이미 등록된 감정 불러와서 테두리 표시해주기
-  useEffect(() => {
-    if (todayEmotion) {
-      setSelectedEmotion(todayEmotion.emotion);
-    }
-  }, [todayEmotion]);
-
   //NOTE:에피그램 페이지에서 감정 등록 후 컴포넌트 숨기기
   useEffect(() => {
     if (!hideAfterPost) return;
@@ -99,10 +91,7 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
   }, [hideAfterPost, onHide, userData]);
 
   const emotionCardClick = (emotion: string) => {
-    setSelectedEmotion(emotion);
-    if (userData.id) {
-      mutation.mutate({ emotion });
-    }
+    mutation.mutate({ emotion });
 
     if (hideAfterPost) {
       const today = new Date().toISOString().split('T')[0];
@@ -121,7 +110,14 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
     <ul className='flex gap-[16px] items-center justify-center'>
       {emotions.map((emotion, index) => (
         <li key={index}>
-          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.emotion === selectedEmotion} onClick={emotionCardClick} emotion={emotion.emotion} />
+          <EmotionCard
+            icon={emotion.icon}
+            describe={emotion.describe}
+            color={emotion.color}
+            isSelected={emotion.emotion === todayEmotion.emotion}
+            onClick={emotionCardClick}
+            emotion={emotion.emotion}
+          />
         </li>
       ))}
     </ul>
