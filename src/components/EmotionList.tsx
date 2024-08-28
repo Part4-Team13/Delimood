@@ -3,12 +3,12 @@ import smiling from '../assets/ico_face_smiling.svg';
 import thinking from '../assets/ico_face_thinking.svg';
 import sad from '../assets/ico_face_sad.svg';
 import angry from '../assets/ico_face_angry.svg';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { usePostEmotionLog, useGetTodayEmotionLog } from '../hooks/useEmotionLogQuery';
 import { useGetMeQuery } from '../hooks/useUserQuery';
 import alertMessage from './AlertMessage';
 
-const emotions = [
+const EMOTIONS = [
   { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },
   { icon: smiling, describe: '기쁨', color: 'green', emotion: 'HAPPY' },
   { icon: thinking, describe: '고민', color: 'purple', emotion: 'WORRIED' },
@@ -61,6 +61,7 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
   const { data: userData } = useGetMeQuery();
 
   const [isHidden, setIsHidden] = useState(false);
+
   const mutation = usePostEmotionLog(
     { userId: userData.id, year: new Date().getFullYear(), month: new Date().getMonth() + 1 },
     {
@@ -74,6 +75,14 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
   );
 
   const { data: todayEmotion } = useGetTodayEmotionLog({ userId: userData.id });
+
+  const isSelected = useCallback(
+    (emotionVal: string) => {
+      const emotionToCompare = todayEmotion?.emotion;
+      return emotionVal === emotionToCompare;
+    },
+    [todayEmotion?.emotion],
+  );
 
   //NOTE:에피그램 페이지에서 감정 등록 후 컴포넌트 숨기기
   useEffect(() => {
@@ -108,16 +117,9 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
 
   return (
     <ul className='flex gap-[16px] items-center justify-center'>
-      {emotions.map((emotion, index) => (
+      {EMOTIONS.map((emotion, index) => (
         <li key={index}>
-          <EmotionCard
-            icon={emotion.icon}
-            describe={emotion.describe}
-            color={emotion.color}
-            isSelected={emotion.emotion === todayEmotion.emotion}
-            onClick={emotionCardClick}
-            emotion={emotion.emotion}
-          />
+          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={isSelected(emotion.emotion)} onClick={emotionCardClick} emotion={emotion.emotion} />
         </li>
       ))}
     </ul>

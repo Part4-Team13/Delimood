@@ -23,14 +23,6 @@ export const usePostEmotionLog = (params: EmotionLogQueryParamsType, options: Mu
   });
 };
 
-// NOTE: 사용 방법
-// const mutation = usePostEmotionLog({
-//   onSuccess: (data, variables, context) => {
-//     // 감정 등록 후 실행할 코드
-//   },
-// });
-// mutation.mutate({ emotion: 'happy' });
-
 // 오늘의 감정 조회
 export const useGetTodayEmotionLog = (params: EmotionLogQueryParamsType) => {
   const { queryKey, queryFn } = quries.emotionLogs.today(params);
@@ -41,14 +33,7 @@ export const useGetTodayEmotionLog = (params: EmotionLogQueryParamsType) => {
   });
 };
 
-// NOTE: 사용 방법
-// const { data, error, isLoading } = useGetTodayEmotionLog();
-
 // 월간 감정 조회
 export const useGetMonthlyEmotionLogs = (params: EmotionLogQueryParamsType) => {
   return useSuspenseQuery(quries.emotionLogs.monthly(params));
 };
-
-// NOTE: 사용 방법
-// const params = { userId: 110, year: 2024, month: 8 } as const;
-// const { data, error, isLoading } = useGetMonthlyEmotionLogs(params);
