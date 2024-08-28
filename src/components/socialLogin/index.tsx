@@ -41,13 +41,13 @@ const SocialLogin: React.FC = () => {
           src={Google}
           alt='Google'
           href={`https://accounts.google.com/o/oauth2/auth?client_id=${PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`}
-          hoverColor='#DB4437'
+          hoverColor='#E58A7D'
         />
         <SocialButton
           src={Naver}
           alt='Naver'
           href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${PUBLIC_NAVER_CLIENT_ID}&redirect_uri=${NAVER_REDIRECT_URI}&state=${state}`}
-          hoverColor='#3CBB3C'
+          hoverColor='#A8E0A8'
         />
       </div>
     </div>

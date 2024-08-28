@@ -49,12 +49,19 @@ export default function Main() {
       >
         <div className={`${basicStyle} mb-[168px] text-center tablet:mb-[106px] desktop:mb-[214px]`}>
           <h1 className='mb-[8px] text-2xl font-paraph text-black-500 tablet:text-3xl tablet:mb-[24px] desktop:mb-[40px]'>
-            나만 갖고 있기엔 <br /> 아까운 글이 있지 않나요?
+            오늘의 하루를 <br /> 기록해보는건 어떨까요?
           </h1>
-          <span className='mb-[24px] text-md font-paraph text-black-300 tablet:text-xl tablet:mb-[32px] desktop:mb-[48px]'>다른 사람들과 감정을 공유해보세요.</span>
-          <button className={buttonStyle} onClick={handleButtonClick}>
+          <span className='mb-[24px] text-md font-paraph text-black-300 tablet:text-xl tablet:mb-[32px] desktop:mb-[48px]'>오늘의 감정을 다른 사람들과 공유해보세요.</span>
+          <motion.button
+            className={buttonStyle}
+            onClick={handleButtonClick}
+            initial={{ scale: 1 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
             시작하기
-          </button>
+          </motion.button>
         </div>
         <motion.div onClick={onClickLearnMore} animate={{ y: [0, 15, 0] }} transition={{ repeat: Infinity, duration: 1.5 }} className={`${basicStyle} gap-[4px]  cursor-pointer`}>
           <span className='text-xs text-blue-400 tablet:text-lg'>더 알아보기</span>
@@ -131,9 +138,16 @@ export default function Main() {
       >
         <motion.div transition={{ duration: 0.6, delay: 0.3 }} initial={{ opacity: 0 }} viewport={{ once: true }} whileInView={{ opacity: 1 }} className='flex flex-col items-center'>
           <img src={img_paraph} alt='에피그램 텍스트 로고' className='mb-[32px] w-[122px] desktop:w-[184px] desktop:mb-[48px]' />
-          <button className={buttonStyle} onClick={handleButtonClick}>
+          <motion.button
+            className={buttonStyle}
+            onClick={handleButtonClick}
+            initial={{ scale: 1 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
             시작하기
-          </button>
+          </motion.button>
         </motion.div>
       </footer>
     </>
