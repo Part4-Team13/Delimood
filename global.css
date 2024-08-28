@@ -46,3 +46,47 @@
 		resize: none
 	}
 }
+
+@layer utilities {
+	.bounce {
+	  animation: bounce 2s infinite;
+	}
+  
+	.bounce-1 {
+	  animation: bounce 2s infinite;
+	  animation-delay: 0s;
+	}
+  
+	.bounce-2 {
+	  animation: bounce 2s infinite;
+	  animation-delay: 0.2s;
+	}
+  
+	.bounce-3 {
+	  animation: bounce 2s infinite;
+	  animation-delay: 0.4s;
+	}
+  
+	.bounce-4 {
+	  animation: bounce 2s infinite;
+	  animation-delay: 0.6s;
+	}
+  
+	.bounce-5 {
+	  animation: bounce 2s infinite;
+	  animation-delay: 0.8s;
+	}
+  
+	@keyframes bounce {
+	  0%, 20%, 50%, 80%, 100% {
+		transform: translateY(0);
+	  }
+	  40% {
+		transform: translateY(-30px);
+	  }
+	  60% {
+		transform: translateY(-15px);
+	  }
+	}
+  }
+  
