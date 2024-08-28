@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { TextInput, CloseButton } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useDebouncedValue } from '@mantine/hooks';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SearchCard from './SearchCard';
 import RecentSearches from './RecentSearches';
 import { useGetEpigramListInfiniteQuery } from '../../hooks/useEpigramQuery';
@@ -11,20 +11,12 @@ import { GetEpigramListType } from '../../schema/epigramSchema';
 
 const Search = () => {
   const SearchIcon = <IconSearch style={{ width: '20px', height: '20px' }} />;
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [value, setValue] = useState('');
   const [debounced] = useDebouncedValue(value, 200);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [epigrams, setEpigrams] = useState<GetEpigramListType[]>([]);
-
-  //NOTE : URL의 쿼리 파라미터에서 'query' 값을 읽어 검색어 상태를 업데이트
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const query = queryParams.get('query') || '';
-    setValue(query);
-  }, [location.search]);
 
   //NOTE : 로컬 스토리지에서 최근 검색어 읽기 위한 useEffect
   useEffect(() => {

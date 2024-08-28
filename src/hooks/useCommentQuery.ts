@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, UseQueryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { PostCommentType, PatchCommentType, DeleteCommentType, ListItemType, GetCommentsRequestType, CommentResponseType } from '../schema/commentSchema';
 import { getCommentList } from '../apis/comment';
 import { PaginationRequest } from '../schema/epigramSchema';
@@ -37,7 +37,7 @@ export const usePostCommentMutation = ({ epigramId, options }: UsePostCommentMut
 
 // 댓글 목록 조회
 export const useGetCommentsQuery = (params: GetCommentsRequestType) => {
-  return useQuery(quries.comments.getComments(params));
+  return useSuspenseQuery(quries.comments.getComments(params));
 };
 
 // 댓글 수정

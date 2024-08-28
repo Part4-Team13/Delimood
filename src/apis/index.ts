@@ -34,7 +34,7 @@ httpClient.interceptors.response.use(
     if (statusCode === 401 || statusCode === 403) {
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) throw new Error('refreshToken 문제발생!');
+        if (!refreshToken || statusCode === 403) throw new Error('Authorization error or token problem!');
 
         // NOTE : refreshToken 토큰을 사용하여 새로운 accessToken 토큰 요청
         const response = await axios.post(`${REACT_APP_API_URL}/auth/refresh-token`, { refreshToken });
@@ -48,8 +48,10 @@ httpClient.interceptors.response.use(
         //Refactor : refreshToken이 만료되었거나 다른 오류 발생 시 로그아웃 처리, 알림 메시지 후 로그인 창으로 이동
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        window.location.href = '/login';
         alertMessage({ title: '로그인 기록이 만료되었습니다.', message: '다시 로그인 부탁드립니다.', color: 'red' });
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1000);
       }
     }
 

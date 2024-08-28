@@ -1,4 +1,4 @@
-import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions, useQueryClient, useSuspenseQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import {
   PostEpigramRequestType,
   PostEpigramResponseType,
@@ -30,7 +30,7 @@ export const useGetEpigramListQuery = (params: PaginationRequest, options?: UseQ
 
 // 오늘의 에피그램 조회
 export const useGetTodayEpigramQuery = (options?: UseQueryOptions<EpigramDetailType>) => {
-  return useQuery<EpigramDetailType>({
+  return useSuspenseQuery<EpigramDetailType>({
     queryKey: quries.epigrams.todayEpigram().queryKey,
     queryFn: getTodayEpigram,
     ...options,
@@ -39,7 +39,7 @@ export const useGetTodayEpigramQuery = (options?: UseQueryOptions<EpigramDetailT
 
 // 에피그램 상세 조회
 export const useGetEpigramDetailQuery = (id: number, options?: UseQueryOptions<EpigramDetailType>) => {
-  return useQuery<EpigramDetailType>({
+  return useSuspenseQuery<EpigramDetailType>({
     queryKey: quries.epigrams.detailEpigram(id).queryKey,
     queryFn: () => getEpigramDetail(id),
     ...options,
@@ -88,7 +88,7 @@ export const useDeleteEpigramMutation = (id: number, options?: UseMutationOption
 
 // useInfiniteQuery 사용
 export const useGetEpigramListInfiniteQuery = (params: PaginationRequest) => {
-  return useInfiniteQuery<GetEpigramListResponseType>({
+  return useSuspenseInfiniteQuery<GetEpigramListResponseType>({
     queryKey: quries.epigrams.list(params).queryKey,
     queryFn: ({ pageParam = 0 }) => getEpigramList({ ...params, cursor: pageParam as number }),
     getNextPageParam: (lastPage) => lastPage.nextCursor,

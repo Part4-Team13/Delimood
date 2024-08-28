@@ -5,7 +5,7 @@ import { useGetMeQuery, useUpdateMe, useUpdateImage } from '../../hooks/useUserQ
 import profileIcon from '../../assets/ico_profile.svg';
 
 const UserProfile = () => {
-  const { data, isLoading, error } = useGetMeQuery();
+  const { data } = useGetMeQuery();
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [newNickname, setNewNickname] = useState<string>('');
   const [editing, setEditing] = useState<boolean>(false);
@@ -31,8 +31,7 @@ const UserProfile = () => {
     onSuccess: (updatedData) => {
       setProfileImage(updatedData.image);
     },
-    onError: (error) => {
-      console.error('Error :', error);
+    onError: () => {
       setErrorMessage('이미지 업로드 중 오류가 발생했습니다.');
     },
   });
@@ -45,10 +44,7 @@ const UserProfile = () => {
     }
   }, [data]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  const userNickname = data?.nickname || '사용자 닉네임';
+  const userNickname = data.nickname;
 
   //프로필 이미지 업로드 핸들러
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +60,7 @@ const UserProfile = () => {
 
   const handleCancel = () => {
     setEditing(false);
-    setNewNickname(data?.nickname || '사용자 닉네임');
+    setNewNickname(data.nickname);
     setErrorMessage(null);
   };
 
@@ -95,7 +91,7 @@ const UserProfile = () => {
             const fileInput = document.getElementById('fileInput') as HTMLInputElement;
             fileInput?.click();
           }}
-          className='absolute bottom-0 right-0 text-white bg-blue-500'
+          className='absolute bottom-0 right-0 text-white bg-blue-500 focus:bg-purple-200 hover:bg-purple-200'
         >
           <IconCamera size={24} />
         </ActionIcon>

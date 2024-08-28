@@ -1,14 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useForm, isNotEmpty, hasLength } from '@mantine/form';
 import { Button, Group, TextInput, Input, Text, Textarea, Radio } from '@mantine/core';
 import HashTag from '../../components/HashTag';
 import { useGetMeQuery } from '../../hooks/useUserQuery';
 import { useGetEpigramDetailQuery, useUpdateEpigramMutation } from '../../hooks/useEpigramQuery';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
 
-export default function EditEpigram() {
+// NOTE: 렌더링 및 비동기 에러 처리
+const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => (
+  <div role='alert'>
+    <p>문제가 발생했습니다.</p>
+    <pre>{error.message}</pre>
+    <button onClick={resetErrorBoundary}>다시 시도하기</button>
+  </div>
+);
+
+const EditEpigram = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: epigram, isLoading } = useGetEpigramDetailQuery(Number(id));
+  const { data: epigram } = useGetEpigramDetailQuery(Number(id));
   const { data: userProfile } = useGetMeQuery();
   const navigate = useNavigate();
 
@@ -64,7 +74,6 @@ export default function EditEpigram() {
   };
 
   // NOTE: 태그 상태 관리
-
   const addTag = () => {
     const trimmedTag = newTag.trim();
 
@@ -96,12 +105,8 @@ export default function EditEpigram() {
 
   const isFormValid = form.isValid();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className='h-[100vh] bg-white'>
+    <div className='min-h-screen overflow-y-auto bg-white'>
       <div className='flex items-center bg-white justify-center'>
         <form
           onSubmit={form.onSubmit((values) => {
@@ -165,7 +170,7 @@ export default function EditEpigram() {
             withAsterisk
             {...form.getInputProps('content')}
             classNames={{
-              input: `desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px] desktop:placeholder:text-xl placeholder:text-lg `,
+              input: `focus:border-black-600 focus:border-2 desktop:text-xl desktop:w-[640px] desktop:h-[148px] tablet:w-[384px] tablet:h-[132px] w-[312px] h-[132px] rounded-[12px] mt-[24px] py-[10px] px-[16px] desktop:placeholder:text-xl placeholder:text-lg `,
               label: 'desktop:text-xl tablet:text-lg text-md mt-[40px]',
               error: 'text-state-alert text-state-alert desktop:text-lg text-sm mt-1 float-right',
             }}
@@ -215,7 +220,7 @@ export default function EditEpigram() {
               disabled={disabled}
               classNames={{
                 input:
-                  'desktop:w-[640px] desktop:h-[64px] desktop:placeholder:text-xl desktop:text-xl text-lg placeholder:text-lg rounded-[12px] mt-[24px] py-[0px] px-[16px] desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px',
+                  'focus:border-black-600 focus:border-2 desktop:w-[640px] desktop:h-[64px] desktop:placeholder:text-xl desktop:text-xl text-lg placeholder:text-lg rounded-[12px] mt-[24px] py-[0px] px-[16px] desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px',
               }}
             />
           </Input.Wrapper>
@@ -229,7 +234,7 @@ export default function EditEpigram() {
               onChange={(e) => form.setFieldValue('source', e.currentTarget.value)}
               classNames={{
                 input:
-                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
+                  'focus:border-black-600 focus:border-2 desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg ',
                 label: 'desktop:text-xl tablet:text-lg text-md mt-[54px]',
               }}
             />
@@ -240,7 +245,7 @@ export default function EditEpigram() {
               {...form.getInputProps('sourceUrl')}
               classNames={{
                 input:
-                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+                  'focus:border-black-600 focus:border-2 desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
               }}
             />
           </Input.Wrapper>
@@ -258,7 +263,7 @@ export default function EditEpigram() {
               }}
               classNames={{
                 input:
-                  'desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
+                  'focus:border-black-600 focus:border-2 desktop:text-xl desktop:w-[640px] desktop:h-[64px] rounded-[12px] mt-[24px] py-[0px] px-[16px] placeholder:text-lg desktop:placeholder:text-xl tablet:w-[384px] tablet:h-[44px] w-[312px] h-44px text-lg',
               }}
             />
             <HashTag tags={tags} removeTag={removeTag} />
@@ -279,4 +284,16 @@ export default function EditEpigram() {
       </div>
     </div>
   );
+};
+
+function EditEpigramWrapper() {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <EditEpigram />
+      </Suspense>
+    </ErrorBoundary>
+  );
 }
+
+export default EditEpigramWrapper;

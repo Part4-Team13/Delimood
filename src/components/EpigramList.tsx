@@ -6,7 +6,7 @@ import { InfiniteData } from '@tanstack/react-query';
 
 interface EpigramListProps {
   isWide?: boolean;
-  data: InfiniteData<GetEpigramListResponseType> | undefined;
+  data: InfiniteData<GetEpigramListResponseType>;
   isLoading: boolean;
   fetchNextPage: () => void;
   buttonText?: string;
@@ -17,19 +17,15 @@ function EpigramList({ isWide = false, data, isLoading, fetchNextPage, buttonTex
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      const allEpigrams = data.pages.flatMap((page) => page.list || []);
-      setEpigramList(() => {
-        data.pages[0].totalCount === allEpigrams.length ? setShowButton(false) : setShowButton(true);
-        return allEpigrams;
-      });
-    }
-  }, [data]);
+    const allEpigrams = data.pages.flatMap((page) => page.list || []);
+    setEpigramList(() => {
+      data.pages[0].totalCount === allEpigrams.length ? setShowButton(false) : setShowButton(true);
+      return allEpigrams;
+    });
+  }, [data, isLoading]);
 
   const handleClickViewMore = () => {
-    if (data) {
-      fetchNextPage();
-    }
+    fetchNextPage();
   };
 
   return (

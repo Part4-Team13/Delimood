@@ -60,6 +60,13 @@ export default {
         300: '#ABABAB',
         400: '#919191',
       },
+      purple: {
+        100: '#E7D5E9',
+        200: '#D8B3D9',
+        300: '#C7ABCE',
+        400: '#A56FA2',
+        default: '#8E80E3',
+      },
       white: '#FFFFFF',
       yellow: '#FBC85B',
       orange: '#E8AA26',

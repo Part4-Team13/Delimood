@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader } from '@mantine/core';
 import EmotionController from './emotionController';
 import EmotionList from '../../components/EmotionList';
 import dayjs from 'dayjs';
@@ -12,6 +11,7 @@ import { useGetMyCommentInfiniteQuery } from '../../hooks/useInfiniteQuery';
 import DeleteModal from '../../components/Modal/commentDeleteModal';
 import alertMessage from '../../components/AlertMessage';
 import FixedButton from '../../components/FixedButton';
+import SuspenseWrapper from '../../components/SuspenseWrapper';
 
 export default function Mypage() {
   const navigate = useNavigate();
@@ -19,19 +19,19 @@ export default function Mypage() {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-  const { data: userData, isLoading: isUserLoading } = useGetMeQuery();
+  const { data: userData } = useGetMeQuery();
   const [activeTab, setActiveTab] = useState<'epigrams' | 'comments'>('epigrams');
   const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0);
   const [totalEpigramsCount, setTotalEpigramsCount] = useState<number>(0);
 
   const { data: commentData } = useGetMyCommentInfiniteQuery({
     limit: 1,
-    id: userData?.id ?? -1,
+    id: userData.id,
   });
 
   //NOTE : 댓글 데이터가 로드되면 총 댓글 수를 업데이트
   useEffect(() => {
-    if (userData?.id && commentData?.pages?.[0]?.totalCount !== undefined) {
+    if (commentData.pages?.[0].totalCount) {
       setTotalCommentsCount(commentData.pages[0].totalCount);
     } else {
       setTotalCommentsCount(0);
@@ -48,18 +48,8 @@ export default function Mypage() {
 
     alertMessage({ title: '성공적으로 로그아웃되었습니다.', message: '다시 이용하시려면 로그인부탁드립니다.', color: 'teal' });
 
-    navigate('/login');
+    navigate('/');
   };
-
-  if (isUserLoading) {
-    return (
-      <div className='flex items-center justify-center h-screen'>
-        <Loader color='cyan' size='lg' />
-      </div>
-    );
-  }
-
-  const userId = userData?.id;
 
   return (
     <>
@@ -81,7 +71,9 @@ export default function Mypage() {
       />
       <div className='flex flex-col mb-[114px] tablet:mb-[241px] desktop:mb-[395px] gap-14 desktop:gap-24'>
         <div className='flex flex-col items-center justify-center bg-white mt-[64px] desktop:mt-[128px] shadow-mypage rounded-[24px]'>
-          <UserProfile />
+          <SuspenseWrapper>
+            <UserProfile />
+          </SuspenseWrapper>
           <button
             onClick={handleLogout}
             className='h-[36px] w-[77px] desktop:h-[48px] desktop:w-[100px] desktop:text-xl mb-[56px] mt-[16px] desktop:mt-[24px] desktop:mb-[96px] rounded-[100px] text-sm font-normal bg-line-bright text-gray-300 hover:bg-gray-100'
@@ -95,7 +87,9 @@ export default function Mypage() {
             </div>
             <EmotionList />
           </div>
-          <EmotionController />
+          <SuspenseWrapper>
+            <EmotionController />
+          </SuspenseWrapper>
         </div>
         <div className='flex flex-col items-center justify-center gap-6 tablet:gap-8 desktop:gap-12'>
           <div className='w-[312px] tablet:w-[384px] desktop:w-[640px] flex flex-end gap-4 desktop:gap-6 font-semibold text-base desktop:text-2xl'>
@@ -106,8 +100,10 @@ export default function Mypage() {
               내 댓글<span> ({totalCommentsCount})</span>
             </button>
           </div>
-          {userId && activeTab === 'epigrams' && <MyEpigramList userId={userId} onTotalCountFetched={setTotalEpigramsCount} />}
-          {userId && activeTab === 'comments' && <MyCommentsList userId={userId} onTotalCountFetched={setTotalCommentsCount} />}
+          <SuspenseWrapper>
+            {activeTab === 'epigrams' && <MyEpigramList userId={userData.id} onTotalCountFetched={setTotalEpigramsCount} />}
+            {activeTab === 'comments' && <MyCommentsList userId={userData.id} onTotalCountFetched={setTotalCommentsCount} />}
+          </SuspenseWrapper>
         </div>
       </div>
       <FixedButton />
