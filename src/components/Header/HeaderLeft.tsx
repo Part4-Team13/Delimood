@@ -2,7 +2,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { HeaderButtonsProps } from '.';
 import { useEffect } from 'react';
 import { Drawer } from '@mantine/core';
-import logo from '../../assets/ico_logo.svg';
+import logo from '../../assets/ico_newLogo.svg';
 import menu from '../../assets/ico_gnb_menu.svg';
 
 export default function HeaderLeft({ pathNow, navigate }: HeaderButtonsProps) {
@@ -31,8 +31,8 @@ export default function HeaderLeft({ pathNow, navigate }: HeaderButtonsProps) {
       </Drawer>
 
       <ul className='flex items-center gap-[12px] tablet:gap-[24px] desktop:gap-[36px] mr-auto cursor-pointer'>
-        <li onClick={() => navigate('/epigrams')} className='w-[101px] desktop:w-[131px] h-[24px] tablet:h-[26px] desktop:h-[36px]'>
-          <button className='mr-[12px] w-full h-full'>
+        <li onClick={() => navigate('/epigrams')} className='mt-1 desktop:mt-2 w-[120px] desktop:w-[160px] h-[24px] tablet:h-[26px] desktop:h-[36px]'>
+          <button className='mr-[12px] w-full h-full flex items-center justify-center'>
             <img src={logo} alt='메인 페이지로' />
           </button>
         </li>

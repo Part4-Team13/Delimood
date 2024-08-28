@@ -2,7 +2,7 @@ import React from 'react';
 import { TextInput, PasswordInput, Button, Container, rem, ActionIcon } from '@mantine/core';
 import { LoginRequest, LoginRequestType } from '../../schema/authSchema';
 import { IconEyeCheck, IconEyeOff } from '@tabler/icons-react';
-import Logo from '../../assets/ico_logo.svg';
+import Logo from '../../assets/ico_newLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import SocialLogin from '../../components/socialLogin';
 import { useLogin } from '../../hooks/authQuery';
@@ -52,7 +52,7 @@ const Login: React.FC = () => {
 
   return (
     <div className='flex flex-col items-center justify-center mt-[110px] tablet:mt-[140px] desktop:mt-[160px]'>
-      <ActionIcon style={{ width: '172px', height: '48px', backgroundColor: 'transparent' }} onClick={() => navigate('/')}>
+      <ActionIcon style={{ width: '280px', height: '60px', backgroundColor: 'transparent' }} onClick={() => navigate('/')}>
         <img src={Logo} alt='Logo' />
       </ActionIcon>
       <Container className='flex items-center justify-center mt-[50px] tablet:mt-[60px]'>
