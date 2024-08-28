@@ -9,6 +9,7 @@ import { useState } from 'react';
 import Modal from '../../components/Modal/commentDeleteModal';
 import alertMessage from '../../components/AlertMessage';
 import { useQueryClient } from '@tanstack/react-query';
+import quries from '../../apis/queries';
 
 function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: number }) {
   const { data } = useGetEpigramDetailQuery(epigramId);
@@ -27,15 +28,14 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
 
   const likeMutation = usePostEpigramLikeMutation(epigramId, options);
   const deleteLikeMutation = usePostEpigramLikeDeleteMutation(epigramId, options);
-  const deleteEpigramMutation = useDeleteEpigramMutation(epigramId);
-
-  //NOTE : 좋아요 관련
-  // useEffect(() => {
-  //   if (data) {
-  //     setLike(data.isLiked);
-  //     setLikeCount(data.likeCount);
-  //   }
-  // }, [data, likeCount, like, queryClient]);
+  const deleteEpigramMutation = useDeleteEpigramMutation(epigramId, {
+    onSuccess: async () => {
+      queryClient.removeQueries(quries.epigrams.detailEpigram(epigramId));
+      await queryClient.refetchQueries(quries.epigrams.list({ limit: 3 }));
+      navigate('/epigrams');
+      alertMessage({ title: '삭제하였습니다.', message: '아쉽네요!', color: 'green' });
+    },
+  });
 
   const navigate = useNavigate();
 
@@ -51,8 +51,6 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
 
   const deleteEpigram = () => {
     deleteEpigramMutation.mutate();
-    navigate('/epigrams');
-    alertMessage({ title: '삭제하였습니다.', message: '아쉽네요!', color: 'green' });
   };
 
   return (
