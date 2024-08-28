@@ -103,7 +103,7 @@ function EmotionList({ hideAfterPost = false, onHide, autoClose = 3000 }: Emotio
 
     if (selectedEmotion) {
       AlertEmotion({
-        title: `오늘의 감정은 "${selectedEmotion.describe}" 으로 저장됩니다`,
+        title: `오늘의 감정은 "${selectedEmotion.describe}" 입니다`,
         message: selectedEmotion.message,
         color: selectedEmotion.color,
         icon: selectedEmotion.icon,
