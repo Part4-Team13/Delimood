@@ -3,17 +3,18 @@ import smiling from '../assets/ico_face_smiling.svg';
 import thinking from '../assets/ico_face_thinking.svg';
 import sad from '../assets/ico_face_sad.svg';
 import angry from '../assets/ico_face_angry.svg';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { usePostEmotionLog, useGetTodayEmotionLog } from '../hooks/useEmotionLogQuery';
 import { useGetMeQuery } from '../hooks/useUserQuery';
 import alertMessage from './AlertMessage';
+import AlertEmotion from '../pages/epigrams/AlertEmotion';
 
-const emotions = [
-  { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED' },
-  { icon: smiling, describe: '기쁨', color: 'green', emotion: 'HAPPY' },
-  { icon: thinking, describe: '고민', color: 'purple', emotion: 'WORRIED' },
-  { icon: sad, describe: '슬픔', color: 'blue', emotion: 'SAD' },
-  { icon: angry, describe: '분노', color: 'red', emotion: 'ANGRY' },
+const EMOTIONS = [
+  { icon: heart, describe: '감동', color: 'yellow', emotion: 'MOVED', message: '특별한 감동이었기를 바랍니다. 그 순간이 마음에 오래 남길 바랍니다.' },
+  { icon: smiling, describe: '기쁨', color: 'green', emotion: 'HAPPY', message: '하루 동안 기쁨이 당신을 가득 채웠기를 바랍니다. 그 순간이 오래 기억되기를 바랍니다.' },
+  { icon: thinking, describe: '고민', color: 'purple', emotion: 'WORRIED', message: '현재의 고민에 해결의 실마리를 찾기를 바랍니다. 그 과정이 순조롭기를 바랍니다.' },
+  { icon: sad, describe: '슬픔', color: 'blue', emotion: 'SAD', message: '오늘의 슬픔이 조금이나마 치유되고, 행복한 바람이 불어오기를 바랍니다.' },
+  { icon: angry, describe: '분노', color: 'red', emotion: 'ANGRY', message: '오늘의 화가 나는 일이 하나의 희미한 먼지처럼 기억되기를 바랍니다. 편안해지기를 바랍니다.' },
 ];
 
 const colorMap: { [color: string]: string } = {
@@ -55,19 +56,17 @@ const EmotionCard: React.FC<EmotionCardProps> = ({ icon, describe, color, isSele
 interface EmotionListProps {
   hideAfterPost?: boolean;
   onHide?: () => void;
+  autoClose?: number | false;
 }
 
-function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
-  const [selectedEmotion, setSelectedEmotion] = useState<string>('');
+function EmotionList({ hideAfterPost = false, onHide, autoClose = 3000 }: EmotionListProps) {
   const { data: userData } = useGetMeQuery();
 
   const [isHidden, setIsHidden] = useState(false);
+
   const mutation = usePostEmotionLog(
     { userId: userData.id, year: new Date().getFullYear(), month: new Date().getMonth() + 1 },
     {
-      onSuccess: () => {
-        alertMessage({ title: '오늘 하루도 화이팅하시고, 행복한 하루되세요', message: '감정 등록에 성공했습니다.', color: 'teal' });
-      },
       onError: () => {
         alertMessage({ title: '죄송합니다. 다시 시도해주세요.', message: '감정 등록에 실패했습니다.', color: 'red' });
       },
@@ -76,12 +75,13 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
 
   const { data: todayEmotion } = useGetTodayEmotionLog({ userId: userData.id });
 
-  //NOTE:이미 등록된 감정 불러와서 테두리 표시해주기
-  useEffect(() => {
-    if (todayEmotion) {
-      setSelectedEmotion(todayEmotion.emotion);
-    }
-  }, [todayEmotion]);
+  const isSelected = useCallback(
+    (emotionVal: string) => {
+      const emotionToCompare = todayEmotion?.emotion;
+      return emotionVal === emotionToCompare;
+    },
+    [todayEmotion?.emotion],
+  );
 
   //NOTE:에피그램 페이지에서 감정 등록 후 컴포넌트 숨기기
   useEffect(() => {
@@ -99,10 +99,19 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
   }, [hideAfterPost, onHide, userData]);
 
   const emotionCardClick = (emotion: string) => {
-    setSelectedEmotion(emotion);
-    if (userData.id) {
-      mutation.mutate({ emotion });
+    const selectedEmotion = EMOTIONS.find((e) => e.emotion === emotion);
+
+    if (selectedEmotion) {
+      AlertEmotion({
+        title: `오늘의 감정은 "${selectedEmotion.describe}" 로 저장됩니다`,
+        message: selectedEmotion.message,
+        color: selectedEmotion.color,
+        icon: selectedEmotion.icon,
+        autoClose,
+      });
     }
+
+    mutation.mutate({ emotion });
 
     if (hideAfterPost) {
       const today = new Date().toISOString().split('T')[0];
@@ -119,9 +128,9 @@ function EmotionList({ hideAfterPost = false, onHide }: EmotionListProps) {
 
   return (
     <ul className='flex gap-[16px] items-center justify-center'>
-      {emotions.map((emotion, index) => (
+      {EMOTIONS.map((emotion, index) => (
         <li key={index}>
-          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={emotion.emotion === selectedEmotion} onClick={emotionCardClick} emotion={emotion.emotion} />
+          <EmotionCard icon={emotion.icon} describe={emotion.describe} color={emotion.color} isSelected={isSelected(emotion.emotion)} onClick={emotionCardClick} emotion={emotion.emotion} />
         </li>
       ))}
     </ul>

@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Loading from './components/Loading';
 import { ErrorBoundary } from 'react-error-boundary';
 import Error from './components/Error';
+import NotFound from './pages/notfound';
 
 const Main = lazy(() => import('./pages/main'));
 const Signup = lazy(() => import('./pages/signup'));
@@ -115,6 +116,7 @@ function App() {
       <Route path='login/callback/kakao' element={<KakaoPage />} />
       <Route path='login/callback/naver' element={<NaverPage />} />
       <Route path='login/callback/google' element={<GooglePage />} />
+      <Route path='*' element={<NotFound />} />
     </Routes>
   );
 }

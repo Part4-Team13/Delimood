@@ -84,10 +84,10 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
                   </button>
                 </Menu.Target>
                 <Menu.Dropdown className='bg-background rounded-[16px] border-[1px] border-blue-300'>
-                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={() => navigate(`/editepigram/${epigramId}`)}>
+                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px] rounded-xl' onClick={() => navigate(`/editepigram/${epigramId}`)}>
                     수정하기
                   </Menu.Item>
-                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px]' onClick={() => setIsModalOpen(true)}>
+                  <Menu.Item className='text-md desktop:text-xl p-[8px_24px] desktop:p-[12px_32px] rounded-xl' onClick={() => setIsModalOpen(true)}>
                     삭제하기
                   </Menu.Item>
                 </Menu.Dropdown>
