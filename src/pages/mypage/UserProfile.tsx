@@ -91,7 +91,7 @@ const UserProfile = () => {
             const fileInput = document.getElementById('fileInput') as HTMLInputElement;
             fileInput?.click();
           }}
-          className='absolute bottom-0 right-0 text-white bg-blue-500'
+          className='absolute bottom-0 right-0 text-white bg-blue-500 focus:bg-purple-200 hover:bg-purple-200'
         >
           <IconCamera size={24} />
         </ActionIcon>
