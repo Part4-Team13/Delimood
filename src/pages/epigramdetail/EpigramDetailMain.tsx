@@ -29,12 +29,10 @@ function EpigramDetailMain({ epigramId, userId }: { epigramId: number; userId: n
   const likeMutation = usePostEpigramLikeMutation(epigramId, options);
   const deleteLikeMutation = usePostEpigramLikeDeleteMutation(epigramId, options);
   const deleteEpigramMutation = useDeleteEpigramMutation(epigramId, {
-    onMutate: () => {
+    onSuccess: async () => {
       queryClient.removeQueries(quries.epigrams.detailEpigram(epigramId));
-      queryClient.refetchQueries(quries.epigrams.list({ limit: 3 }));
+      await queryClient.refetchQueries(quries.epigrams.list({ limit: 3 }));
       navigate('/epigrams');
-    },
-    onSuccess: () => {
       alertMessage({ title: '삭제하였습니다.', message: '아쉽네요!', color: 'green' });
     },
   });
